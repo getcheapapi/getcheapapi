@@ -28,7 +28,7 @@ $ getcheapapi quote keyword.volume --input @50-keywords.json
 would run: dataforseo keywords_data/google_ads/search_volume/live $0.09000
 ```
 
-同一个请求，规模不同：查 5 个关键词时 GoAnyAPI 便宜 6 倍；查 50 个时 DataForSEO 的批量接口更划算。这些你不用记，getcheapapi 每次调用都会比一遍，而且报价本身不花钱。
+同一个请求，规模不同：查 5 个关键词时 GoAnyAPI 便宜 6 倍；查 50 个时 DataForSEO 的批量接口更划算（分界线大约在 30 个）。这些你不用记，getcheapapi 每次调用都会比一遍，而且报价本身不花钱。
 
 ## 快速开始
 
@@ -67,18 +67,10 @@ mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheap
 ### 3. 直接提需求
 
 > “帮我查这 30 个关键词的月搜索量。”
+>
 > “搜一下 X 上这周讨论便宜 SERP API 的帖子。”
 
 Agent 会给每条路线报价，选最便宜的执行，最后告诉你花了多少。
-
-### 命令行（可选）
-
-写脚本或跑 CI 时，可以装命令行工具：
-
-```bash
-pip install git+https://github.com/getcheapapi/getcheapapi   # PyPI 版本即将发布
-getcheapapi caps -v
-```
 
 ## 能查什么
 
@@ -114,6 +106,8 @@ getcheapapi caps -v
 每次调用都记入本地账本，`getcheapapi spend` 能看到钱花在了哪。没有 Key 的路线也会报价，让你看到多一个 Key 能省多少。
 
 ## 命令
+
+Agent 会替你跑这些命令。手动运行时，`getcheapapi` 即 `python ~/getcheapapi/skills/getcheapapi/scripts/getcheapapi.py`。
 
 ```bash
 getcheapapi caps -v                                   # 能力列表、输入、示例

@@ -28,7 +28,7 @@ $ getcheapapi quote keyword.volume --input @50-keywords.json
 would run: dataforseo keywords_data/google_ads/search_volume/live $0.09000
 ```
 
-Same request, two sizes: for 5 keywords GoAnyAPI is 6x cheaper; for 50, DataForSEO's batch endpoint wins. You do not have to know that. getcheapapi does the comparison on every call, and a quote spends nothing.
+Same request, two sizes: for 5 keywords GoAnyAPI is 6x cheaper; for 50, DataForSEO's batch endpoint wins (they swap at about 30). You do not have to know that. getcheapapi does the comparison on every call, and a quote spends nothing.
 
 ## Quick start
 
@@ -67,18 +67,10 @@ Fill in the keys you already have in `~/.getcheapapi/.env`. One provider is enou
 ### 3. Ask
 
 > "Get the monthly search volume for these 30 keywords."
+>
 > "Search X for posts about cheap SERP APIs this week."
 
 The agent quotes every route, picks the cheapest, and tells you what it spent.
-
-### Command line (optional)
-
-For scripts and CI, install the CLI:
-
-```bash
-pip install git+https://github.com/getcheapapi/getcheapapi   # PyPI release coming
-getcheapapi caps -v
-```
 
 ## What you can ask for
 
@@ -114,6 +106,8 @@ The same data can cost 2x to 200x more depending on the route, and the default r
 Every call is logged to a local ledger, so `getcheapapi spend` shows where the money went. Routes you have no key for are priced too, so you can see what another key would save.
 
 ## Commands
+
+Your agent runs these for you. By hand, `getcheapapi` is `python ~/getcheapapi/skills/getcheapapi/scripts/getcheapapi.py`.
 
 ```bash
 getcheapapi caps -v                                   # capabilities, inputs, examples
