@@ -8,3 +8,5 @@ dist/
 internal/
 node_modules/
 .wrangler/
+.claude/
+.impeccable/
