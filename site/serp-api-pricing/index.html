@@ -34,17 +34,79 @@
             "datePublished": "2026-11-02",
             "dateModified": "2026-11-02",
             "inLanguage": "en",
-            "publisher": { "@type": "Organization", "name": "getcheapapi", "url": "https://getcheapapi.com/" }
+            "publisher": {
+              "@type": "Organization",
+              "name": "getcheapapi",
+              "url": "https://getcheapapi.com/"
+            }
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "What is the cheapest SERP API?", "acceptedAnswer": { "@type": "Answer", "text": "On published prices checked November 2, 2026, Searlo's web-search tier at $0.30 per 1,000, then AnyAPI's cheapest Google source at $0.50 and DataForSEO's standard queue at $0.60. Serper drops to $0.30 per 1,000 on its largest pack. Which is cheapest for you depends on volume, speed and the result fields you need." } },
-              { "@type": "Question", "name": "How much does SerpApi cost?", "acceptedAnswer": { "@type": "Answer", "text": "Monthly plans from $25 for 1,000 searches ($25 per 1,000) to $3,750 for 1 million ($3.75 per 1,000), with a free plan of 250 searches a month. Failed, errored and cached searches are not counted; unused searches do not roll over." } },
-              { "@type": "Question", "name": "Is there a free SERP API?", "acceptedAnswer": { "@type": "Answer", "text": "Free allowances, not free APIs: SerpApi 250 searches a month, Brave $5 of credit a month, Serper 2,500 queries once, Searlo 3,000 queries once, DataForSEO $1 of trial credit. Google's own Custom Search JSON API is closed to new customers." } },
-              { "@type": "Question", "name": "Is Google's Custom Search JSON API still available?", "acceptedAnswer": { "@type": "Answer", "text": "Not for new customers. Google says existing customers have until January 1, 2027 to move to another solution. Until then it costs $5 per 1,000 queries after 100 free a day, up to 10,000 a day." } },
-              { "@type": "Question", "name": "How much do 100 results per query cost?", "acceptedAnswer": { "@type": "Answer", "text": "Since Google stopped honoring 100 results per page in September 2025, most providers bill 100 results as 10 pages. On AnyAPI that is about $0.005 by paging, against $0.024 for its single-call top-100 endpoint." } },
-              { "@type": "Question", "name": "Where do these prices come from?", "acceptedAnswer": { "@type": "Answer", "text": "Each provider's own pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote serp.google to price your own query across routes; it spends nothing. Providers are ranked by price only." } }
+              {
+                "@type": "Question",
+                "name": "What is the cheapest SERP API?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On published prices checked November 2, 2026, Searlo's web-search tier at $0.30 per 1,000, then AnyAPI's cheapest Google source at $0.50 and DataForSEO's standard queue at $0.60. Serper drops to $0.30 per 1,000 on its largest pack. Which is cheapest for you depends on volume, speed and the result fields you need."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does SerpApi cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Monthly plans from $25 for 1,000 searches ($25 per 1,000) to $3,750 for 1 million ($3.75 per 1,000), with a free plan of 250 searches a month. Failed, errored and cached searches are not counted; unused searches do not roll over."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is there a free SERP API?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Free allowances, not free APIs: SerpApi 250 searches a month, Brave $5 of credit a month, Serper 2,500 queries once, Searlo 3,000 queries once, DataForSEO $1 of trial credit. Google's own Custom Search JSON API is closed to new customers."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Google's Custom Search JSON API still available?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not for new customers. Google says existing customers have until January 1, 2027 to move to another solution. Until then it costs $5 per 1,000 queries after 100 free a day, up to 10,000 a day."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much do 100 results per query cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Since Google stopped honoring 100 results per page in September 2025, most providers bill 100 results as 10 pages. On AnyAPI that is about $0.005 by paging, against $0.024 for its single-call top-100 endpoint."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where do these prices come from?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Each provider's own pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote serp.google to price your own query across routes; it spends nothing. Providers are ranked by price only."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the Bing Search API still available?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Microsoft retired the Bing Search API in August 2025. Bing results are still sold by third parties: AnyAPI bing.search at $0.85 per 1,000 searches and GoAnyAPI at $2.00."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do SERP APIs charge for failed searches?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It depends. SerpApi does not count failed, errored or cached searches, and GoAnyAPI does not charge failed or empty calls. Check each provider's rule before running large batches."
+                }
+              }
             ]
           }
         ]
@@ -169,7 +231,7 @@
             <div><dt>Asking for 100 results</dt><dd>Google stopped serving 100 results per page in September 2025, so most APIs bill 100 results as 10 searches.</dd></div>
             <div><dt>Search operators</dt><dd>DataForSEO multiplies the price by 5 for each operator such as <code>site:</code> or <code>intitle:</code>.</dd></div>
             <div><dt>Live instead of queued</dt><dd>DataForSEO live costs 3.3× its standard queue. Use the queue when results can wait a few minutes.</dd></div>
-            <div><dt>Silent failover</dt><dd>AnyAPI retries a failed cheap source on a dearer one by default, up to 4× the price for Google search. Pin the source and turn failover off.</dd></div>
+            <div><dt>Silent failover</dt><dd>AnyAPI retries a failed cheap source on a dearer one by default, up to 4× the price for Google search and 28× for <a href="/twitter-api-pricing/#compare">X (Twitter) API search</a>. Pin the source and turn failover off.</dd></div>
             <div><dt>Plans you do not use up</dt><dd>A SerpApi plan bills the same whether you use 10% or 100% of it; prepaid credits only cost what you spend, until they expire.</dd></div>
           </dl>
         </div>
@@ -187,7 +249,7 @@
             <div><dt>Bing results</dt><dd>Microsoft retired the Bing Search API in August 2025. AnyAPI <code>bing.search</code> is $0.85 per 1,000, GoAnyAPI $2.00.</dd></div>
             <div><dt>Google Custom Search JSON API users</dt><dd>It is closed to new customers, and existing ones have until January 1, 2027 to move.</dd></div>
           </dl>
-          <p class="p-foot">Result quality, freshness and the SERP features each API returns differ; we compare prices only. Prices exclude tax.</p>
+          <p class="p-foot">Result quality, freshness and the SERP features each API returns differ; we compare prices only. Prices exclude tax. Pulling social data as well? See <a href="/twitter-api-pricing/">X (Twitter) API pricing</a> and <a href="/reddit-api-pricing/">Reddit API pricing and shutdown dates</a>.</p>
         </div>
       </section>
 
@@ -230,6 +292,8 @@ would run: anyapi google.search $0.00050</pre>
           <details><summary class="mono"><span>Q.004 / </span>Is Google's Custom Search JSON API still available?</summary><p>Not for new customers. Google says existing customers have until January 1, 2027 to move to another solution. Until then it costs $5 per 1,000 queries after 100 free a day, up to 10,000 a day.</p></details>
           <details><summary class="mono"><span>Q.005 / </span>How much do 100 results per query cost?</summary><p>Since Google stopped honoring 100 results per page in September 2025, most providers bill 100 results as 10 pages. On AnyAPI that is about $0.005 by paging, against $0.024 for its single-call top-100 endpoint.</p></details>
           <details><summary class="mono"><span>Q.006 / </span>Where do these prices come from?</summary><p>Each provider's own pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote serp.google to price your own query across routes; it spends nothing. Providers are ranked by price only.</p></details>
+          <details><summary class="mono"><span>Q.007 / </span>Is the Bing Search API still available?</summary><p>No. Microsoft retired the Bing Search API in August 2025. Bing results are still sold by third parties: AnyAPI bing.search at $0.85 per 1,000 searches and GoAnyAPI at $2.00.</p></details>
+          <details><summary class="mono"><span>Q.008 / </span>Do SERP APIs charge for failed searches?</summary><p>It depends. SerpApi does not count failed, errored or cached searches, and GoAnyAPI does not charge failed or empty calls. Check each provider's rule before running large batches.</p></details>
         </div>
       </section>
 

@@ -149,6 +149,7 @@ canvas { display: block; }
 .cov td:first-child { width: 92px; color: var(--muted); }
 .cov td:last-child { text-align: right; color: var(--muted); padding-left: 16px; }
 .cov tr:hover th { text-decoration: underline dotted; text-underline-offset: 4px; }
+.cov th a { text-decoration: underline dotted; text-underline-offset: 4px; }
 
 /* install */
 .install { padding: 40px var(--gutter) 160px; display: flex; flex-direction: column; gap: 48px; }

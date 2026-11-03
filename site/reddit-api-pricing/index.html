@@ -34,17 +34,79 @@
             "datePublished": "2026-11-02",
             "dateModified": "2026-11-02",
             "inLanguage": "en",
-            "publisher": { "@type": "Organization", "name": "getcheapapi", "url": "https://getcheapapi.com/" }
+            "publisher": {
+              "@type": "Organization",
+              "name": "getcheapapi",
+              "url": "https://getcheapapi.com/"
+            }
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "How much does the Reddit API cost?", "acceptedAnswer": { "@type": "Answer", "text": "Reddit set $0.24 per 1,000 calls for apps above the free limits in 2023 and has not published a newer rate. Commercial use needs a written agreement with Reddit." } },
-              { "@type": "Question", "name": "Is the Reddit API free?", "acceptedAnswer": { "@type": "Answer", "text": "It was free for eligible non-commercial use at up to 100 queries per minute per OAuth client. Reddit stopped accepting new access requests on October 31, 2026, so new projects cannot start on that tier." } },
-              { "@type": "Question", "name": "Is the Reddit API shutting down?", "acceptedAnswer": { "@type": "Answer", "text": "Public access is. Reddit says access starts closing on January 12, 2027 for apps that have not registered with it, and public access ends in March 2027, except for partners with written agreements." } },
-              { "@type": "Question", "name": "Can I still get a Reddit API key?", "acceptedAnswer": { "@type": "Answer", "text": "Not through the public process: new requests have not been accepted since October 31, 2026. The remaining route is a written agreement with Reddit." } },
-              { "@type": "Question", "name": "What is the cheapest way to search Reddit by API?", "acceptedAnswer": { "@type": "Answer", "text": "On our November 2026 prices, AnyAPI's reddit.search pinned to its cheapest source: $0.00035 for a page of 25 posts, about $0.014 per 1,000. That source cannot page, so going deeper into one query costs $0.0008 per page." } },
-              { "@type": "Question", "name": "Where do these prices come from?", "acceptedAnswer": { "@type": "Answer", "text": "Reddit's 2023 API announcement, reporting on its September 30, 2026 schedule, AnyAPI's live per-source price API and Apify's store page, checked on November 2, 2026. Run getcheapapi quote reddit.search to price your own query; it spends nothing. Routes are ranked by price only." } }
+              {
+                "@type": "Question",
+                "name": "How much does the Reddit API cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Reddit set $0.24 per 1,000 calls for apps above the free limits in 2023 and has not published a newer rate. Commercial use needs a written agreement with Reddit."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the Reddit API free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "It was free for eligible non-commercial use at up to 100 queries per minute per OAuth client. Reddit stopped accepting new access requests on October 31, 2026, so new projects cannot start on that tier."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is the Reddit API shutting down?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Public access is. Reddit says access starts closing on January 12, 2027 for apps that have not registered with it, and public access ends in March 2027, except for partners with written agreements."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I still get a Reddit API key?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not through the public process: new requests have not been accepted since October 31, 2026. The remaining route is a written agreement with Reddit."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the cheapest way to search Reddit by API?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On our November 2026 prices, AnyAPI's reddit.search pinned to its cheapest source: $0.00035 for a page of 25 posts, about $0.014 per 1,000. That source cannot page, so going deeper into one query costs $0.0008 per page."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where do these prices come from?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Reddit's 2023 API announcement, reporting on its September 30, 2026 schedule, AnyAPI's live per-source price API and Apify's store page, checked on November 2, 2026. Run getcheapapi quote reddit.search to price your own query; it spends nothing. Routes are ranked by price only."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What happens to apps that already use the Reddit API?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Reddit says apps must register or respond to its outreach before January 12, 2027, when access starts closing. Public access ends in March 2027; only partners with written agreements keep it."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do Reddit RSS feeds still work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Until November 13, 2026, when Reddit stops supporting them. After that, feeds of subreddits and searches need another source."
+                }
+              }
             ]
           }
         ]
@@ -167,7 +229,7 @@
               <tr class="lo"><th scope="row">AnyAPI, cheapest source</th><td>6,000 first pages</td><td>$2.10</td></tr>
             </tbody>
           </table>
-          <p class="p-foot">The cheapest row takes four first pages per keyword (new, top, past week, past month), so some posts repeat; the paging row walks four pages of one sort.</p>
+          <p class="p-foot">The cheapest row takes four first pages per keyword (new, top, past week, past month), so some posts repeat; the paging row walks four pages of one sort. For X monitoring at the same scale, see <a href="/twitter-api-pricing/#monthly">what X API monitoring costs per month</a>.</p>
         </div>
       </section>
 
@@ -178,7 +240,7 @@
         <div class="p-body">
           <dl class="p-picks">
             <div><dt>Asking for a next page</dt><dd>On AnyAPI, requiring <code>nextCursor</code> routes every page to the $0.0008 source, 2.3× a first page.</dd></div>
-            <div><dt>Silent failover</dt><dd>AnyAPI retries a failed cheap source on a dearer one by default, up to 3.4× for Reddit search. Pin the source and turn failover off.</dd></div>
+            <div><dt>Silent failover</dt><dd>AnyAPI retries a failed cheap source on a dearer one by default, up to 3.4× for Reddit search and 28× for <a href="/twitter-api-pricing/#compare">X (Twitter) API search</a>. Pin the source and turn failover off.</dd></div>
             <div><dt>Paying per result</dt><dd>Scrapers billed per stored result cost the same for every post, so broad searches with many weak matches add up fast.</dd></div>
             <div><dt>Terms of use</dt><dd>Third-party Reddit APIs are not run or endorsed by Reddit, which restricts commercial use of its data without an agreement. Check both sets of terms.</dd></div>
           </dl>
@@ -222,6 +284,8 @@ would run: anyapi reddit.search $0.00035</pre>
           <details><summary class="mono"><span>Q.004 / </span>Can I still get a Reddit API key?</summary><p>Not through the public process: new requests have not been accepted since October 31, 2026. The remaining route is a written agreement with Reddit.</p></details>
           <details><summary class="mono"><span>Q.005 / </span>What is the cheapest way to search Reddit by API?</summary><p>On our November 2026 prices, AnyAPI's reddit.search pinned to its cheapest source: $0.00035 for a page of 25 posts, about $0.014 per 1,000. That source cannot page, so going deeper into one query costs $0.0008 per page.</p></details>
           <details><summary class="mono"><span>Q.006 / </span>Where do these prices come from?</summary><p>Reddit's 2023 API announcement, reporting on its September 30, 2026 schedule, AnyAPI's live per-source price API and Apify's store page, checked on November 2, 2026. Run getcheapapi quote reddit.search to price your own query; it spends nothing. Routes are ranked by price only.</p></details>
+          <details><summary class="mono"><span>Q.007 / </span>What happens to apps that already use the Reddit API?</summary><p>Reddit says apps must register or respond to its outreach before January 12, 2027, when access starts closing. Public access ends in March 2027; only partners with written agreements keep it.</p></details>
+          <details><summary class="mono"><span>Q.008 / </span>Do Reddit RSS feeds still work?</summary><p>Until November 13, 2026, when Reddit stops supporting them. After that, feeds of subreddits and searches need another source.</p></details>
         </div>
       </section>
 

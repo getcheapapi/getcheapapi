@@ -34,17 +34,79 @@
             "datePublished": "2026-11-02",
             "dateModified": "2026-11-02",
             "inLanguage": "en",
-            "publisher": { "@type": "Organization", "name": "getcheapapi", "url": "https://getcheapapi.com/" }
+            "publisher": {
+              "@type": "Organization",
+              "name": "getcheapapi",
+              "url": "https://getcheapapi.com/"
+            }
           },
           {
             "@type": "FAQPage",
             "mainEntity": [
-              { "@type": "Question", "name": "Is the X API free?", "acceptedAnswer": { "@type": "Answer", "text": "Not for new developers. Since February 6, 2026, pay-per-use is the default and new sign-ups get no free tier. X gives $20 in credits after your first purchase." } },
-              { "@type": "Question", "name": "How much does the X API cost per month?", "acceptedAnswer": { "@type": "Answer", "text": "There is no monthly fee on pay-per-use; you pay per resource. Reading 300,000 posts a month costs $1,500 at $0.005 each. Pay-per-use is capped at 3 million post reads a month; more needs an Enterprise plan." } },
-              { "@type": "Question", "name": "How much does twitterapi.io cost?", "acceptedAnswer": { "@type": "Answer", "text": "$0.15 per 1,000 returned posts (15 credits each, $1 = 100,000 credits), with a minimum of 15 credits per call even when nothing comes back. Profiles in batches of 100 or more cost 1 credit each." } },
-              { "@type": "Question", "name": "Are third-party Twitter APIs allowed?", "acceptedAnswer": { "@type": "Answer", "text": "They are not run or endorsed by X, and X's terms restrict collecting data outside its API. Read their terms and X's against your use case; anything that posts, likes or sends DMs needs the official API." } },
-              { "@type": "Question", "name": "What is the cheapest way to search X by keyword?", "acceptedAnswer": { "@type": "Answer", "text": "On our November 2026 prices, AnyAPI's twitter.search pinned to its cheapest source: $0.00054 per page of about 20 posts, or about $0.027 per 1,000. Its dearest source charges 28 times more, so turn failover off." } },
-              { "@type": "Question", "name": "Where do these prices come from?", "acceptedAnswer": { "@type": "Answer", "text": "X's developer pricing page, twitterapi.io's pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote x.search to price your own query; it spends nothing. Routes are ranked by price only." } }
+              {
+                "@type": "Question",
+                "name": "Is the X API free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Not for new developers. Since February 6, 2026, pay-per-use is the default and new sign-ups get no free tier. X gives $20 in credits after your first purchase."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does the X API cost per month?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "There is no monthly fee on pay-per-use; you pay per resource. Reading 300,000 posts a month costs $1,500 at $0.005 each. Pay-per-use is capped at 3 million post reads a month; more needs an Enterprise plan."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does twitterapi.io cost?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "$0.15 per 1,000 returned posts (15 credits each, $1 = 100,000 credits), with a minimum of 15 credits per call even when nothing comes back. Profiles in batches of 100 or more cost 1 credit each."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are third-party Twitter APIs allowed?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "They are not run or endorsed by X, and X's terms restrict collecting data outside its API. Read their terms and X's against your use case; anything that posts, likes or sends DMs needs the official API."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the cheapest way to search X by keyword?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "On our November 2026 prices, AnyAPI's twitter.search pinned to its cheapest source: $0.00054 per page of about 20 posts, or about $0.027 per 1,000. Its dearest source charges 28 times more, so turn failover off."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where do these prices come from?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "X's developer pricing page, twitterapi.io's pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote x.search to price your own query; it spends nothing. Routes are ranked by price only."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How much does it cost to post on X through the API?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "$0.015 per post, or $0.200 when the post contains a URL. Likes, follows, reposts and DMs cost $0.015 each. Third-party read APIs cannot post."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I get an X API key?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Create an app in X's Developer Console and buy credits; reads and writes are then billed per resource from that balance. New paying accounts get $20 in credits after the first purchase."
+                }
+              }
             ]
           }
         ]
@@ -149,7 +211,7 @@
               </tbody>
             </table>
           </div>
-          <p class="p-foot">AnyAPI serves <code>twitter.search</code> from four sources priced $0.00054, $0.0006, $0.0051 and $0.0154 per call. Its default retries a failed cheap source on a dearer one, so the same request can cost 28× more unless you pin the source and turn failover off. Sources: <a href="https://docs.x.com/x-api/getting-started/pricing">X</a>, <a href="https://twitterapi.io/pricing">twitterapi.io</a>, AnyAPI's live price API.</p>
+          <p class="p-foot">AnyAPI serves <code>twitter.search</code> from four sources priced $0.00054, $0.0006, $0.0051 and $0.0154 per call. Its default retries a failed cheap source on a dearer one, so the same request can cost 28× more unless you pin the source and turn failover off. The same trap applies to <a href="/serp-api-pricing/#traps">Google SERP APIs</a>. Sources: <a href="https://docs.x.com/x-api/getting-started/pricing">X</a>, <a href="https://twitterapi.io/pricing">twitterapi.io</a>, AnyAPI's live price API.</p>
         </div>
       </section>
 
@@ -164,7 +226,7 @@
             <div><dt>Profiles, followers, single posts by ID</dt><dd>twitterapi.io. Profiles in batches of 100+ cost 1 credit each, against $0.010 per profile on X.</dd></div>
             <div><dt>Searches that often come back empty</dt><dd>Check the minimum charge. twitterapi.io bills 15 credits for an empty call; X bills per post returned.</dd></div>
           </dl>
-          <p class="p-foot">twitterapi.io and AnyAPI are not run or endorsed by X, and X's terms restrict collecting data outside its API. Check both sets of terms against your use case.</p>
+          <p class="p-foot">twitterapi.io and AnyAPI are not run or endorsed by X, and X's terms restrict collecting data outside its API. Check both sets of terms against your use case. Monitoring Reddit too? Its official API stops taking new apps; see <a href="/reddit-api-pricing/">Reddit API pricing and shutdown dates</a>.</p>
         </div>
       </section>
 
@@ -225,6 +287,8 @@ would run: anyapi twitter.search $0.00054</pre>
           <details><summary class="mono"><span>Q.004 / </span>Are third-party Twitter APIs allowed?</summary><p>They are not run or endorsed by X, and X's terms restrict collecting data outside its API. Read their terms and X's against your use case; anything that posts, likes or sends DMs needs the official API.</p></details>
           <details><summary class="mono"><span>Q.005 / </span>What is the cheapest way to search X by keyword?</summary><p>On our November 2026 prices, AnyAPI's twitter.search pinned to its cheapest source: $0.00054 per page of about 20 posts, or about $0.027 per 1,000. Its dearest source charges 28 times more, so turn failover off.</p></details>
           <details><summary class="mono"><span>Q.006 / </span>Where do these prices come from?</summary><p>X's developer pricing page, twitterapi.io's pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote x.search to price your own query; it spends nothing. Routes are ranked by price only.</p></details>
+          <details><summary class="mono"><span>Q.007 / </span>How much does it cost to post on X through the API?</summary><p>$0.015 per post, or $0.200 when the post contains a URL. Likes, follows, reposts and DMs cost $0.015 each. Third-party read APIs cannot post.</p></details>
+          <details><summary class="mono"><span>Q.008 / </span>How do I get an X API key?</summary><p>Create an app in X's Developer Console and buy credits; reads and writes are then billed per resource from that balance. New paying accounts get $20 in credits after the first purchase.</p></details>
         </div>
       </section>
 
