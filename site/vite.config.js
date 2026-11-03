@@ -68,11 +68,17 @@ function writePages() {
   return langs;
 }
 
+// English-only pages kept as plain HTML in their own folder, served at /<slug>/.
+const PAGES = ['twitter-api-pricing'];
+
 function sitemap(langs) {
   const alternates = langs
     .map(([c, s]) => `    <xhtml:link rel="alternate" hreflang="${s._hreflang}" href="${ORIGIN}${pathOf(c)}" />`)
     .join('\n');
-  const urls = langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${alternates}\n  </url>`).join('\n');
+  const urls = [
+    ...langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${alternates}\n  </url>`),
+    ...PAGES.map((p) => `  <url>\n    <loc>${ORIGIN}/${p}/</loc>\n  </url>`),
+  ].join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`;
 }
 
@@ -86,7 +92,7 @@ export default defineConfig(() => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      rollupOptions: { input: [...langs.map(([c]) => fileOf(c)), join(SITE, '404.html')] },
+      rollupOptions: { input: [...langs.map(([c]) => fileOf(c)), ...PAGES.map((p) => join(SITE, p, 'index.html')), join(SITE, '404.html')] },
     },
     plugins: [
       {
