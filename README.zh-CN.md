@@ -1,12 +1,18 @@
-# getcheapapi
+<div align="center">
+
+<a href="https://getcheapapi.com/zh/"><img src="site/public/og.png" alt="getcheapapi：每次 API 调用都付最低价" width="100%"></a>
 
 **让你的 Agent 调 API 前先比价。**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![Agent skill](https://img.shields.io/badge/agent%20skill-Claude%20Code%20%7C%20Codex-black.svg)](skills/getcheapapi/SKILL.md)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/getcheapapi/SKILL.md)
+[![Codex](https://img.shields.io/badge/Codex-skill-111111)](skills/getcheapapi/SKILL.md)
+[![GitHub stars](https://img.shields.io/github/stars/getcheapapi/getcheapapi?style=flat&logo=github)](https://github.com/getcheapapi/getcheapapi/stargazers)
 
-[English](README.md) | 简体中文 · [官网](https://getcheapapi.com/zh/) · [Skill](skills/getcheapapi/SKILL.md)
+[English](README.md) · **简体中文** · [官网](https://getcheapapi.com/zh/)
+
+</div>
 
 getcheapapi 是一个免费开源的 Skill 和命令行工具，覆盖 SERP、X、Reddit、关键词、外链和媒体生成类 API。每次付费调用前，它先给所有供应商报价，在你有 Key 的供应商里走最便宜的那家，超出预算前就停下。
 

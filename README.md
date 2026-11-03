@@ -1,12 +1,18 @@
-# getcheapapi
+<div align="center">
+
+<a href="https://getcheapapi.com/"><img src="site/public/og.png" alt="getcheapapi: the lowest price for every API call" width="100%"></a>
 
 **Your agent compares prices before it calls an API.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![Agent skill](https://img.shields.io/badge/agent%20skill-Claude%20Code%20%7C%20Codex-black.svg)](skills/getcheapapi/SKILL.md)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-D97757?logo=claude&logoColor=white)](skills/getcheapapi/SKILL.md)
+[![Codex](https://img.shields.io/badge/Codex-skill-111111)](skills/getcheapapi/SKILL.md)
+[![GitHub stars](https://img.shields.io/github/stars/getcheapapi/getcheapapi?style=flat&logo=github)](https://github.com/getcheapapi/getcheapapi/stargazers)
 
-English | [简体中文](README.zh-CN.md) · [Website](https://getcheapapi.com) · [Skill](skills/getcheapapi/SKILL.md)
+**English** · [简体中文](README.zh-CN.md) · [Website](https://getcheapapi.com/)
+
+</div>
 
 getcheapapi is a free, open-source skill and CLI for SERP, X, Reddit, keyword, backlink and media APIs. Before each paid call it prices every provider, runs the cheapest one you have a key for, and stops before it goes over your budget.
 
