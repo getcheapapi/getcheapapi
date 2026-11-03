@@ -1,6 +1,6 @@
 # getcheapapi.com
 
-The project's one-page website: a Vite multi-page build in `dist/`, served by Workers static assets. No Worker code, no secrets.
+The project's one-page website: a Vite multi-page build in `dist/`, served by Workers static assets. A small Worker (`src/worker.js`) handles only `/stats/*`, the Rybbit proxy; its upstream is the `RYBBIT_UPSTREAM` secret. GA4 and Rybbit tags are added to every page at build time (not in dev).
 
 - `src/page.html`: the page template, with `{{key}}` holes for every translatable string.
 - `i18n/<code>.json`: one file per language (en, es, ja, ko, pt, zh). English is served at `/`, the rest at `/<code>/`.

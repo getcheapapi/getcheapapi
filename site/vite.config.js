@@ -10,6 +10,11 @@ const TEMPLATE = join(SITE, 'src', 'page.html');
 const I18N = join(SITE, 'i18n');
 const ORIGIN = 'https://getcheapapi.com';
 const HOLE = /\{\{(\w+)\}\}/g;
+// Added to every built page (not in dev). Rybbit loads from /stats/, which the Worker proxies upstream.
+const ANALYTICS = `    <script async src="https://www.googletagmanager.com/gtag/js?id=G-49X99WY2B7"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-49X99WY2B7');</script>
+    <script src="/stats/script.js?siteId=8732edd4c50b" defer></script>
+  </head>`;
 
 const pathOf = (code) => (code === 'en' ? '/' : `/${code}/`);
 const fileOf = (code) => (code === 'en' ? join(SITE, 'index.html') : join(SITE, code, 'index.html'));
@@ -143,6 +148,7 @@ export default defineConfig(() => {
           const slug = code === 'en' ? parts[0] : parts[1];
           const links = PAGES.includes(slug) ? alternates(langs, slug, 'link', '    ') : [];
           if (links.length) html = languageColumn(html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`), langs, slug, code);
+          if (!ctx.server) html = html.replace('  </head>', ANALYTICS);
           return localize(html, code);
         },
         configureServer(server) {
