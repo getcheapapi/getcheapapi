@@ -17,6 +17,9 @@ const ANALYTICS = `    <script async src="https://www.googletagmanager.com/gtag/
     <script src="/stats/script.js?siteId=8732edd4c50b" defer></script>
   </head>`;
 
+// The language's own words for the "switch to this language?" prompt site.js shows, carried on its menu link.
+const offer = (s) => ` data-offer="${s.lang_offer}" data-switch="${s.lang_switch}" data-close="${s.lang_close}"`;
+
 const pathOf = (code) => (code === 'en' ? '/' : `/${code}/`);
 const fileOf = (code) => (code === 'en' ? join(SITE, 'index.html') : join(SITE, code, 'index.html'));
 
@@ -48,7 +51,7 @@ function render(template, langs, code, strings) {
   hreflang.push(`    <link rel="alternate" hreflang="x-default" href="${ORIGIN}/" />`);
   const anchors = (indent) =>
     langs
-      .map(([c, s]) => `${indent}<a href="${pathOf(c)}" lang="${s._hreflang}" hreflang="${s._hreflang}"${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
+      .map(([c, s]) => `${indent}<a href="${pathOf(c)}" lang="${s._hreflang}" hreflang="${s._hreflang}"${offer(s)}${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
       .join('\n');
   const values = {
     ...strings,
@@ -95,7 +98,7 @@ function languageMenu(html, langs, slug, code) {
   const copies = langs.filter(([c]) => existsSync(pageFile(c, slug)));
   if (copies.length < 2) return html;
   const links = copies
-    .map(([c, s]) => `<a href="${pagePath(c, slug)}" hreflang="${s._hreflang}" lang="${s._hreflang}"${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
+    .map(([c, s]) => `<a href="${pagePath(c, slug)}" hreflang="${s._hreflang}" lang="${s._hreflang}"${offer(s)}${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
     .join('');
   const { lang_label, _name } = langs.find(([c]) => c === code)[1];
   const menu = `<details class="lang foot-lang"><summary aria-label="${lang_label}">${GLOBE}${_name}</summary><div class="lang-menu">${links}</div></details>`;

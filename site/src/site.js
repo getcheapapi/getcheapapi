@@ -203,6 +203,37 @@
     });
   }
 
+  // Offer this page in the browser's preferred language, once: never redirect, and stay quiet after the visitor
+  // switches, closes the prompt or picks from a language menu. The first preferred language this page has wins.
+  const OFFER = 'lang-offer';
+  const remember = () => { try { localStorage.setItem(OFFER, 'off'); } catch {} };
+  const copies = new Map();
+  document.querySelectorAll('a[hreflang][data-offer]').forEach((a) => {
+    copies.set(a.getAttribute('hreflang').split('-')[0], a);
+    a.addEventListener('click', remember);
+  });
+  let quiet = true;
+  try { quiet = localStorage.getItem(OFFER) === 'off'; } catch {}
+  const current = document.documentElement.lang.split('-')[0];
+  const wanted = (navigator.languages || [navigator.language || '']).map((l) => l.split('-')[0].toLowerCase()).find((l) => copies.has(l));
+  if (!quiet && wanted && wanted !== current) {
+    const link = copies.get(wanted);
+    const box = document.createElement('aside');
+    box.className = 'lang-offer mono';
+    box.lang = link.lang;
+    box.innerHTML = '<p></p><a></a><button type="button">×</button>';
+    box.querySelector('p').textContent = link.dataset.offer;
+    const go = box.querySelector('a');
+    go.href = link.getAttribute('href') + location.hash;
+    go.hreflang = link.lang;
+    go.textContent = `${link.dataset.switch} →`;
+    go.addEventListener('click', remember);
+    const close = box.querySelector('button');
+    close.setAttribute('aria-label', link.dataset.close);
+    close.addEventListener('click', () => { remember(); box.remove(); });
+    document.body.append(box);
+  }
+
   // Nav: the phone menu.
   const pill = document.querySelector('.pill');
   const menu = document.querySelector('.menu');

@@ -71,6 +71,12 @@ canvas { display: block; }
 .lang-menu a:last-child { border-bottom: 0; }
 .lang-menu a[aria-current] { color: #fff; }
 .lang-menu a[aria-current]::before { content: "● "; color: var(--dot); font-size: 9px; vertical-align: 2px; }
+.lang-offer { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30; max-width: min(420px, calc(100% - 32px)); display: flex; align-items: center; gap: 14px; background: var(--ink); color: #fff; border: 1px dotted var(--w40); border-radius: 6px; padding: 10px 8px 10px 16px; font-size: 13px; text-transform: none; box-shadow: 0 0 0 4px var(--ink), 0 12px 32px rgba(0, 0, 0, 0.35); }
+.lang-offer p { flex: 1; color: var(--w60); }
+.lang-offer a { white-space: nowrap; text-decoration: none; position: relative; }
+.lang-offer a::before { content: ""; position: absolute; left: -9px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--dot); }
+.lang-offer button { flex: none; width: 32px; height: 32px; background: transparent; color: var(--w60); border: 1px dotted transparent; border-radius: 4px; font: inherit; font-size: 16px; cursor: pointer; }
+.lang-offer button:hover { color: #fff; border-color: var(--w40); }
 
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: max(760px, 100svh); }
