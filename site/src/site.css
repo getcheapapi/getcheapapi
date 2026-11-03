@@ -112,6 +112,11 @@ canvas { display: block; }
 .lead i { flex: 1; min-width: 12px; border-bottom: 1px dotted currentColor; opacity: 0.45; transform: translateY(-4px); }
 .lead .amt { white-space: nowrap; }
 .lead.inv { background: var(--ink); color: var(--paper); padding: 2px 6px; }
+/* The route the agent takes gets the page's one orange dot; the one it skips is struck through. */
+.lead.pick { position: relative; }
+.lead.pick::before { content: ""; position: absolute; left: -16px; top: 0.55em; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
+.lead.skip { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.lead.save { color: var(--muted); }
 .ledger-foot { border-top: 1px dashed var(--line); padding-top: 14px; color: var(--muted); font-size: 12px; }
 /* Ledger lines print one after another when the receipt scrolls in (only with JS, so the page is complete without it). */
 .js [data-reveal] .ledger-group, .js [data-reveal] .ledger-foot { opacity: 0; transform: translateY(6px); transition: opacity 0.4s ease, transform 0.4s ease; }

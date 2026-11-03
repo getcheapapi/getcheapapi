@@ -91,24 +91,25 @@
             <p class="ledger-head">{{led_head}}</p>
             <div class="ledger-group">
               <p class="muted">{{led_q1}}</p>
-              <p class="lead">goanyapi keyword-search-volume<i></i>$0.01500</p>
-              <p class="lead muted">dataforseo search_volume/live<i></i>$0.09000</p>
+              <p class="lead pick">goanyapi keyword-search-volume<i></i>$0.01500</p>
+              <p class="lead skip">dataforseo search_volume/live<i></i>$0.09000</p>
+              <p class="lead save">{{led_saved}}<i></i>$0.07500</p>
             </div>
             <div class="ledger-group">
               <p class="muted">{{led_q2}}</p>
-              <p class="lead">dataforseo search_volume/live<i></i>$0.09000</p>
-              <p class="lead muted">goanyapi keyword-search-volume<i></i>$0.15000</p>
+              <p class="lead pick">dataforseo search_volume/live<i></i>$0.09000</p>
+              <p class="lead skip">goanyapi keyword-search-volume<i></i>$0.15000</p>
+              <p class="lead save">{{led_saved}}<i></i>$0.06000</p>
             </div>
             <div class="ledger-group">
               <p class="muted">{{led_leaks}}</p>
-              <p class="lead">{{led_failover}}<i></i><span class="amt">{{led_upto}} x28</span></p>
-              <p class="lead">{{led_operator}}<i></i>x5</p>
-              <p class="lead">{{led_batch}}<i></i>x15</p>
+              <p class="lead">{{led_failover}}<i></i><span class="amt">{{led_upto}} 28×</span></p>
+              <p class="lead">{{led_operator}}<i></i>5×</p>
+              <p class="lead">{{led_batch}}<i></i>15×</p>
               <p class="lead">{{led_402}}<i></i><span class="amt">{{led_reqs}}</span></p>
             </div>
             <div class="ledger-group">
-              <p class="muted">{{led_every}}</p>
-              <p class="lead inv">{{led_routes}}<i></i>{{led_cheapest}}</p>
+              <p class="lead inv">{{led_total}}<i></i>$0.13500</p>
             </div>
             <p class="ledger-foot">{{led_foot}}</p>
           </div>
@@ -121,8 +122,8 @@
           <p class="sub">{{r_sub}}</p>
         </div>
         <div class="big">
-          <p class="big-num" aria-label="{{big_aria}}"><span aria-hidden="true">~<span data-count="28">28</span>×</span></p>
-          <p class="mono big-cap">{{big_cap}} <span class="chip">AnyAPI</span></p>
+          <p class="big-num" aria-label="{{big_aria}}"><span aria-hidden="true"><span data-count="28">28</span>×</span></p>
+          <p class="mono big-cap">{{big_cap}}</p>
         </div>
       </section>
 
