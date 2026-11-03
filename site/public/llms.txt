@@ -15,3 +15,9 @@
 
 - Source and README: https://github.com/getcheapapi/getcheapapi
 - Skill instructions: https://github.com/getcheapapi/getcheapapi/blob/main/skills/getcheapapi/SKILL.md
+
+## Pricing comparisons (prices checked 2026-11-02)
+
+- SERP API pricing, seven providers from 1k to 1M searches a month: https://getcheapapi.com/serp-api-pricing/
+- X (Twitter) API pricing, official pay-per-use vs third-party read APIs: https://getcheapapi.com/twitter-api-pricing/
+- Reddit API pricing, the official API's shutdown dates and third-party costs: https://getcheapapi.com/reddit-api-pricing/

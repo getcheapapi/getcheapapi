@@ -44,7 +44,7 @@
               { "@type": "Question", "name": "How much does twitterapi.io cost?", "acceptedAnswer": { "@type": "Answer", "text": "$0.15 per 1,000 returned posts (15 credits each, $1 = 100,000 credits), with a minimum of 15 credits per call even when nothing comes back. Profiles in batches of 100 or more cost 1 credit each." } },
               { "@type": "Question", "name": "Are third-party Twitter APIs allowed?", "acceptedAnswer": { "@type": "Answer", "text": "They are not run or endorsed by X, and X's terms restrict collecting data outside its API. Read their terms and X's against your use case; anything that posts, likes or sends DMs needs the official API." } },
               { "@type": "Question", "name": "What is the cheapest way to search X by keyword?", "acceptedAnswer": { "@type": "Answer", "text": "On our November 2026 prices, AnyAPI's twitter.search pinned to its cheapest source: $0.00054 per page of about 20 posts, or about $0.027 per 1,000. Its dearest source charges 28 times more, so turn failover off." } },
-              { "@type": "Question", "name": "Where do these prices come from?", "acceptedAnswer": { "@type": "Answer", "text": "X's developer pricing page, twitterapi.io's pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote x.search to price your own query; it spends nothing." } }
+              { "@type": "Question", "name": "Where do these prices come from?", "acceptedAnswer": { "@type": "Answer", "text": "X's developer pricing page, twitterapi.io's pricing page, and AnyAPI's live per-source price API, checked on November 2, 2026. Run getcheapapi quote x.search to price your own query; it spends nothing. Routes are ranked by price only." } }
             ]
           }
         ]
@@ -149,7 +149,7 @@
               </tbody>
             </table>
           </div>
-          <p class="p-foot">AnyAPI serves <code>twitter.search</code> from four sources priced $0.00054, $0.0006, $0.0051 and $0.0154 per call. Its default retries a failed cheap source on a dearer one, so the same request can cost 28× more unless you pin the source and turn failover off.</p>
+          <p class="p-foot">AnyAPI serves <code>twitter.search</code> from four sources priced $0.00054, $0.0006, $0.0051 and $0.0154 per call. Its default retries a failed cheap source on a dearer one, so the same request can cost 28× more unless you pin the source and turn failover off. Sources: <a href="https://docs.x.com/x-api/getting-started/pricing">X</a>, <a href="https://twitterapi.io/pricing">twitterapi.io</a>, AnyAPI's live price API.</p>
         </div>
       </section>
 
