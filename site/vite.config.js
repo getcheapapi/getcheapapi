@@ -84,6 +84,17 @@ function alternates(langs, slug, tag, indent) {
   ];
 }
 
+// Footer language column for a page that exists in more than one language, appended to its .foot-cols.
+function languageColumn(html, langs, slug, code) {
+  const copies = langs.filter(([c]) => existsSync(pageFile(c, slug)));
+  if (copies.length < 2) return html;
+  const links = copies
+    .map(([c, s]) => `<a href="${pagePath(c, slug)}" hreflang="${s._hreflang}" lang="${s._hreflang}"${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
+    .join('');
+  const label = langs.find(([c]) => c === code)[1].lang_label;
+  return html.replace(/(<div class="foot-cols mono">\n(?:(\s*)<div>.*<\/div>\n)*)/, (cols, _, indent) => `${cols}${indent}<div><p>${label}</p>${links}</div>\n`);
+}
+
 // Internal links are always written as the English path (/serp-api-pricing/). On a page in another
 // language each one points at that language's copy, or is marked hreflang="en" while there is none.
 // Anchors that already declare hreflang (the language menu) target a language on purpose and stay as is.
@@ -131,7 +142,7 @@ export default defineConfig(() => {
           const code = langs.some(([c]) => c === parts[0]) ? parts[0] : 'en';
           const slug = code === 'en' ? parts[0] : parts[1];
           const links = PAGES.includes(slug) ? alternates(langs, slug, 'link', '    ') : [];
-          if (links.length) html = html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`);
+          if (links.length) html = languageColumn(html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`), langs, slug, code);
           return localize(html, code);
         },
         configureServer(server) {

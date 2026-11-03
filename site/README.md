@@ -6,7 +6,7 @@ The project's one-page website: a Vite multi-page build in `dist/`, served by Wo
 - `i18n/<code>.json`: one file per language (en, es, ja, ko, pt, zh). English is served at `/`, the rest at `/<code>/`.
 - `vite.config.js`: renders the template once per language (hreflang links, language menu), hands the pages to Vite, and emits `sitemap.xml`. It refuses to build if a language is missing a key. The rendered `index.html` and `<code>/index.html` are build output, not committed.
 - `src/site.css`, `src/site.js`: shared by every language; Vite hashes and minifies them. The ASCII figures are drawn on `<canvas>` from the product's own words.
-- `<slug>/index.html` (pricing pages): plain HTML, English at `/<slug>/`; a translation goes in `<code>/<slug>/index.html` and is picked up by the build, the sitemap and hreflang alternates. Write internal links as the English path (`/serp-api-pricing/`): the build points them at the page's own language when that copy exists, and marks them `hreflang="en"` when it does not.
+- `<slug>/index.html` (pricing pages): plain HTML, English at `/<slug>/`; a translation goes in `<code>/<slug>/index.html` and is picked up by the build, the sitemap, hreflang alternates and a footer language column (do not write those by hand). Write internal links as the English path (`/serp-api-pricing/`): the build points them at the page's own language when that copy exists, and marks them `hreflang="en"` when it does not.
 - `public/`: copied as is (favicon, `og.png`, `robots.txt`, `llms.txt`). `404.html` is English only.
 
 ```bash
