@@ -134,16 +134,10 @@
             <p class="mono dim">{{nav_what}}</p>
             <h2>{{w_h2}}</h2>
           </div>
-          <article><h3 class="mono">001 / {{f1_t}}</h3><p>{{f1_d}}</p></article>
-          <article><h3 class="mono">002 / {{f2_t}}</h3><p>{{f2_d}}</p></article>
-          <article><h3 class="mono">003 / {{f3_t}}</h3><p>{{f3_d}}</p></article>
-          <article><h3 class="mono">004 / {{f4_t}}</h3><p>{{f4_d}}</p></article>
-          <article><h3 class="mono">005 / {{f5_t}}</h3><p>{{f5_d}}</p></article>
-          <article><h3 class="mono">006 / {{f6_t}}</h3><p>{{f6_d}}</p></article>
-          <article><h3 class="mono">007 / {{f7_t}}</h3><p>{{f7_d}}</p></article>
-          <article><h3 class="mono">008 / {{f8_t}}</h3><p>{{f8_d}}</p></article>
-          <article><h3 class="mono">009 / {{f9_t}}</h3><p>{{f9_d}}</p></article>
-          <article><h3 class="mono">010 / {{f10_t}}</h3><p>{{f10_d}}</p></article>
+          <article><h3 class="mono">{{f1_t}}</h3><p>{{f1_d}}</p></article>
+          <article><h3 class="mono">{{f2_t}}</h3><p>{{f2_d}}</p></article>
+          <article><h3 class="mono">{{f3_t}}</h3><p>{{f3_d}}</p></article>
+          <article><h3 class="mono">{{f4_t}}</h3><p>{{f4_d}}</p></article>
         </div>
         <figure class="what-fig" aria-label="{{fig2_aria}}">
           <div class="sticky">
@@ -159,6 +153,7 @@
         <div class="cov-copy">
           <h2>{{c_h2}}</h2>
           <p class="sub">{{c_sub}}</p>
+          <p class="sub disc">{{c_disc}}</p>
         </div>
         <table class="cov mono">
           <caption class="visually-hidden">{{c_caption}}</caption>
@@ -192,6 +187,8 @@
             <p class="mono dim">{{i_label}}</p>
             <p class="zero">$0</p>
             <p class="dim">{{i_sub}}</p>
+          </div>
+          <div class="card-side">
             <div class="cmd">
               <code>git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
               <button class="mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
@@ -202,15 +199,6 @@
               <button class="mono" type="button" data-copy="pip install git+https://github.com/getcheapapi/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
             </div>
           </div>
-          <ol class="card-list mono">
-            <li>{{li1}}</li>
-            <li>{{li2}}</li>
-            <li>{{li3}}</li>
-            <li>{{li4}}</li>
-            <li>{{li5}}</li>
-            <li>{{li6}}</li>
-            <li>{{li7}}</li>
-          </ol>
         </div>
       </section>
 
@@ -225,6 +213,7 @@
           <details><summary class="mono"><span>Q.004 / </span>{{q4}}</summary><p>{{a4}}</p></details>
           <details><summary class="mono"><span>Q.005 / </span>{{q5}}</summary><p>{{a5}}</p></details>
           <details><summary class="mono"><span>Q.006 / </span>{{q6}}</summary><p>{{a6}}</p></details>
+          <details><summary class="mono"><span>Q.007 / </span>{{q7}}</summary><p>{{a7}}</p></details>
         </div>
       </section>
 

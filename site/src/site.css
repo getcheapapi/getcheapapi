@@ -140,6 +140,7 @@ canvas { display: block; }
 /* coverage */
 .coverage { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 140px var(--gutter) 72px; align-items: start; }
 .cov-copy { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 48px; }
+.disc { font-size: 13px; }
 .cov { width: 100%; border-collapse: collapse; font-size: 13.5px; border-bottom: 1px dashed var(--line); }
 .cov td, .cov th { padding: 15px 0; border-top: 1px dashed var(--line); text-align: left; font-weight: 400; vertical-align: top; }
 .cov td:first-child { width: 92px; color: var(--muted); }
@@ -163,10 +164,7 @@ canvas { display: block; }
 .cmd { margin-top: 12px; display: flex; align-items: center; gap: 10px; border: 1px dotted var(--w40); border-radius: 4px; padding: 0 6px 0 14px; }
 .cmd code { font-size: 13px; overflow-x: auto; white-space: nowrap; padding: 13px 0; flex: 1; min-width: 0; scrollbar-width: none; }
 .cmd button { flex: none; font-size: 12px; min-height: 36px; padding: 0 12px; background: #fff; color: var(--ink); border: 0; border-radius: 3px; cursor: pointer; }
-.card-list { list-style: none; border-left: 1px dashed var(--w20); padding: 40px; font-size: 13.5px; counter-reset: n; display: flex; flex-direction: column; }
-.card-list li { counter-increment: n; display: flex; gap: 18px; padding: 13px 0; border-bottom: 1px dashed var(--w10); }
-.card-list li:last-child { border-bottom: 0; }
-.card-list li::before { content: counter(n, decimal-leading-zero); color: var(--w40); }
+.card-side { border-left: 1px dashed var(--w20); padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; gap: 22px; min-width: 0; }
 
 /* faq */
 .faq { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 96px var(--gutter) 140px; align-items: start; }
@@ -220,7 +218,7 @@ canvas { display: block; }
   .coverage { padding-top: 88px; }
   .cov-copy { position: static; }
   .cov td:last-child { font-size: 12px; }
-  .card-list { border-left: 0; border-top: 1px dashed var(--w20); padding: 24px 40px 40px; }
+  .card-side { border-left: 0; border-top: 1px dashed var(--w20); padding: 24px 40px 40px; }
   .faq { padding-top: 72px; padding-bottom: 88px; }
   .melt { height: 120px; }
   .links { display: none; position: absolute; top: calc(100% + 8px); left: 0; right: 0; flex-direction: column; gap: 0; background: var(--ink); border: 1px dotted var(--w40); border-radius: 6px; padding: 8px 14px; font-size: 14px; }
@@ -236,7 +234,7 @@ canvas { display: block; }
   .links .only-sm { display: block; }
   .hero-fig .ledger { padding: 20px 18px 18px; font-size: 12.5px; }
   .install { padding-bottom: 96px; }
-  .card-main, .card-list { padding-left: 22px; padding-right: 22px; }
+  .card-main, .card-side { padding-left: 22px; padding-right: 22px; }
   .zero { font-size: 104px; }
   .corner { display: none; }
   .cov td:first-child { width: 72px; }
