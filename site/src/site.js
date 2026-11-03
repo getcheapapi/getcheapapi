@@ -174,6 +174,19 @@
     });
   }
 
+  // Remember which language home the visitor reads, so links home from the English-only pages keep it.
+  const here = document.querySelector('a[hreflang][aria-current="page"]');
+  let home = null;
+  try {
+    if (here) localStorage.setItem('lang-home', here.getAttribute('href'));
+    else home = localStorage.getItem('lang-home');
+  } catch {}
+  if (home && /^\/[a-z]{2}\/$/.test(home)) {
+    document.querySelectorAll('a[href="/"], a[href^="/#"]').forEach((a) => {
+      a.setAttribute('href', home + a.getAttribute('href').slice(1));
+    });
+  }
+
   // Nav: mark the section in view, and the phone menu.
   const pill = document.querySelector('.pill');
   const menu = document.querySelector('.menu');
