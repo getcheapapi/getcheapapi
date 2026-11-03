@@ -136,8 +136,11 @@ def cmd_run(args) -> int:
                           {"capability": args.capability})
     s = router.summary(options, best, cap.get("media", False))
     s |= {"maxUsd": args.max_usd, "spentUsd": round(spent, 6)}
-    if "vsUsd" in s:  # saved against what was actually spent, not the estimate
-        s["savedUsd"] = round(max(0.0, s["vsUsd"] - spent), 5)
+    for k in ("savedUsd", "savedPct"):
+        s.pop(k, None)
+    if "vsUsd" in s and code == 0:  # saved against what was actually spent, and only for a finished run
+        saved = max(0.0, s["vsUsd"] - spent)
+        s |= {"savedUsd": round(saved, 5), "savedPct": round(100 * saved / s["vsUsd"])}
     print(json.dumps({"summary": s}, ensure_ascii=False))
     return code
 
