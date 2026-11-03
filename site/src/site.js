@@ -186,7 +186,7 @@
     pill.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
   }));
-  // Slide the nav up out of view, leaving its tab. It folds itself once on the first scroll down
+  // Slide the nav up out of view; a corner button brings it back. It folds itself once on the first scroll down
   // and never unfolds on its own; after the visitor toggles it, only their choice counts.
   const fold = document.querySelector('.fold');
   const navwrap = document.querySelector('.navwrap');
@@ -199,12 +199,13 @@
   let chosen = null;
   try { chosen = localStorage.getItem('nav-mini'); } catch {}
   if (chosen) setMini(chosen === '1');
-  fold.addEventListener('click', () => {
-    const mini = !navwrap.classList.contains('mini');
+  const choose = (mini) => {
     chosen = mini ? '1' : '0';
     setMini(mini);
     try { localStorage.setItem('nav-mini', chosen); } catch {}
-  });
+  };
+  fold.addEventListener('click', () => choose(true));
+  document.querySelector('.navopen').addEventListener('click', () => choose(false));
   let lastY = window.scrollY;
   const autoFold = () => {
     const y = window.scrollY;
