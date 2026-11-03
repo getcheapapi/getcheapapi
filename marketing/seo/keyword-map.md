@@ -33,11 +33,11 @@
 
 | 词簇 | 代表词 | 意图 | 人群 | 页型 | 搜索需求（来源） | GPT 证据 | 承接页 | 现状 | 结论 | 下一步 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| SERP API 价格 | serp api pricing / serp api price / serp api cost | 找价格 | SEO 工具站、做排名监控和 AI 搜索的开发者 | 比价页 | serp api pricing 720（590→320）；serp api price 720；serp api cost 90；KD 19–32（DFS-Ads/Labs）。注：与 `serpapi pricing` 数字合并，可能部分是 SerpApi 品牌导航 | — | （待建）/serp-api-pricing | 未建 | 新建页 | P1：SerpApi、Serper、DataForSEO、AnyAPI、GoAnyAPI、Searlo、Brave 单价表 + 1k/10k/100k 总价 |
-| 最便宜 SERP API | cheapest serp api / cheap serp api / best serp api | 比较 | 同上 | 比价页 | 390 / 390（210→140）/ best 170；CPC $18.6–69；KD 31–34（DFS） | — | /serp-api-pricing | 未建 | 并入承接页 | 标题写“cheapest SERP API”，正文写“按你的量谁最便宜”，不自称最便宜 |
+| SERP API 价格 | serp api pricing / serp api price / serp api cost | 找价格 | SEO 工具站、做排名监控和 AI 搜索的开发者 | 比价页 | serp api pricing 720（590→320）；serp api price 720；serp api cost 90；KD 19–32（DFS-Ads/Labs）。注：与 `serpapi pricing` 数字合并，可能部分是 SerpApi 品牌导航 | — | /serp-api-pricing | 已建（2026-11-02，未发布） | 新建页 | 发布后提交 sitemap/IndexNow，4–8 周后看 GSC |
+| 最便宜 SERP API | cheapest serp api / cheap serp api / best serp api | 比较 | 同上 | 比价页 | 390 / 390（210→140）/ best 170；CPC $18.6–69；KD 31–34（DFS） | — | /serp-api-pricing | 已建 | 并入承接页 | 标题写“cheapest SERP API”，正文写“按你的量谁最便宜”，不自称最便宜 |
 | SerpApi 替代品 | serpapi alternative(s) / serp api alternatives | 比较 | SerpApi 现有用户，嫌贵或限速 | 替代品页 | 140（90→480，涨）；CPC $32；KD 8–9（DFS） | — | （待建）/serpapi-alternatives | 未建 | 新建页 | P2：KD 低、CPC 高、在涨 |
-| Google 搜索 API 价格 | google search api pricing / google web search api pricing | 找价格 | 原先用 Google Custom Search 的开发者 | 比价页内一节 | 260（320→140）（DFS） | — | /serp-api-pricing#google | 未建 | 并入承接页 | 写清官方 Custom Search JSON API 的现状与替代 |
-| Brave 搜索 API 价格 | brave search api pricing | 找价格 | 同上 | 比价页内一节 | 480（90→170），KD 9（DFS） | — | /serp-api-pricing#brave | 未建 | 并入承接页 | Brave 用自有索引，不是 Google 结果，单列一行说明 |
+| Google 搜索 API 价格 | google search api pricing / google web search api pricing | 找价格 | 原先用 Google Custom Search 的开发者 | 比价页内一节 | 260（320→140）（DFS） | — | /serp-api-pricing#pick | 已建 | 并入承接页 | 写清官方 Custom Search JSON API 的现状与替代 |
+| Brave 搜索 API 价格 | brave search api pricing | 找价格 | 同上 | 比价页内一节 | 480（90→170），KD 9（DFS） | — | /serp-api-pricing#volume | 已建 | 并入承接页 | Brave 用自有索引，不是 Google 结果，单列一行说明 |
 | SERP API MCP | serp api mcp / serp mcp | 找工具 | 用 Agent 的开发者 | 首页/比价页 FAQ | 70 / 10（DFS） | — | /serp-api-pricing#agents | 未建 | 并入承接页 | 写 Skill 与 MCP 的区别 |
 
 ## 主题簇：Reddit / TikTok / Google Trends API
@@ -73,7 +73,7 @@
 
 - **Agent 花钱失控类问题**（api spending limit、reduce api costs、ai agent api cost、api cost comparison）：Google 侧均为 0–10，可能是 GPT 侧需求。下一步交 `chatgpt-growth` probe：“how do I stop my coding agent from overspending on paid APIs”“cheapest way to get Twitter data for an AI agent”“cheapest SERP API for an agent”，每题 3–5 次。
 - **ValueSERP / ScaleSERP**：valueserp 140、scaleserp 40，有人在找。这两个服务现在的状态不知道（是否停服、并入其他产品），核实后决定在 /serpapi-alternatives 里加一节，还是放弃。
-- **Bing 搜索 API 停服**：bing search api 720（880→480），bing search api alternative 10。官方 API 已退役，要先看 SERP 意图：如果主要是找替代品，就在 /serp-api-pricing 加一节，承接 AnyAPI `bing.search`。
+- **Bing 搜索 API 停服**：bing search api 720（880→480），bing search api alternative 10。/serp-api-pricing#pick 已加一行（2025-08 退役、AnyAPI/GoAnyAPI 单价）；是否值得单独建页，看 SERP 意图后再定。
 - **多语种**：站点有六种语言，但上面的词都只查了美国英文。开发者 API 词在日、韩、中、西、葡市场大概率也直接搜英文，要按市场查过才能定，在那之前新页只做英文。
 
 ## 派活清单
@@ -81,7 +81,7 @@
 | 优先级 | 事项 | 证据 | 交给 | 完成标准 |
 |---|---|---|---|---|
 | 已完成 | 新建 /twitter-api-pricing | X API 价格簇合计约 3–4k/月，CPC $8–19；有独有比价数据 | `landing-page-designer` | 单价表带日期；按 1 万条推文算各家总价；附可复现的 `quote` 命令；FAQ 写免费档；有利益披露 |
-| P1 | 新建 /serp-api-pricing | SERP 价格簇约 2k/月，CPC $18+；前排全是供应商自写比价 | `landing-page-designer` | 至少 7 家单价，按 1k/10k/100k 算总价；陷阱一节（运算符 5×、失败自动切到更贵来源）；不自称最便宜 |
+| 已完成 | 新建 /serp-api-pricing | SERP 价格簇约 2k/月，CPC $18+；前排全是供应商自写比价 | `landing-page-designer` | 至少 7 家单价，按 1k/10k/100k 算总价；陷阱一节（运算符 5×、失败自动切到更贵来源）；不自称最便宜 |
 | P1 | 新建 /reddit-api-pricing | 600/月，KD 0 | `landing-page-designer` | 官方价核实到出处；第三方按 1k 条算 |
 | P2 | 新建 /serpapi-alternatives | 140→480 在涨，KD 8，CPC $32 | `landing-page-designer` | 与 /serp-api-pricing 互链，不重复单价表 |
 | P2 | 新建 /google-trends-api | 1,300/月，CPC $13.7 | `landing-page-designer` | 官方 alpha 现状、pytrends 现状、第三方单价 |

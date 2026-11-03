@@ -69,7 +69,7 @@ function writePages() {
 }
 
 // English-only pages kept as plain HTML in their own folder, served at /<slug>/.
-const PAGES = ['twitter-api-pricing'];
+const PAGES = ['serp-api-pricing', 'twitter-api-pricing'];
 
 function sitemap(langs) {
   const alternates = langs

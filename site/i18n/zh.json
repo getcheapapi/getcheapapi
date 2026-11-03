@@ -102,6 +102,7 @@
   "a6": "取决于你买什么数据、买多少。用你自己的输入跑一次 getcheapapi quote：它会把每家供应商的价格并排列出来，不花一分钱。",
   "ft_tag": "开源 Agent Skill，让每一次数据与媒体 API 调用都走最便宜的路线。免费，而且随你修改。",
   "ft_project": "项目",
+  "ft_serppricing": "SERP API 价格",
   "ft_xpricing": "X API 价格",
   "ft_bar": "开放。免费。随你修改。"
 }

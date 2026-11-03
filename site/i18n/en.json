@@ -102,6 +102,7 @@
   "a6": "It depends on the data and how much of it you buy. Run getcheapapi quote with your own input: it shows every provider's price side by side and spends nothing.",
   "ft_tag": "Open-source agent skill that sends every data and media API call down the cheapest route. Free, and yours to change.",
   "ft_project": "Project",
+  "ft_serppricing": "SERP API pricing",
   "ft_xpricing": "X API pricing",
   "ft_bar": "Open. Free. Yours to change."
 }

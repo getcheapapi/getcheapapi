@@ -102,6 +102,7 @@
   "a6": "Depende de los datos y de cuántos compres. Ejecuta getcheapapi quote con tu propia entrada: muestra el precio de cada proveedor lado a lado y no gasta nada.",
   "ft_tag": "Skill open source para agentes que envía cada llamada a APIs de datos y medios por la ruta más barata. Gratis, y tuyo para cambiarlo.",
   "ft_project": "Proyecto",
+  "ft_serppricing": "Precios de SERP API",
   "ft_xpricing": "Precios de la API de X",
   "ft_bar": "Abierto. Gratis. Tuyo para cambiarlo."
 }
