@@ -81,3 +81,36 @@ def test_catalog_routes_reference_known_providers():
         for r in cap["routes"]:
             assert r["provider"] in PROVIDERS, (name, r)
             assert isinstance(r["body"], dict), (name, r)
+
+
+def test_yir_quote_retries_transient_gateway_errors(monkeypatch):
+    from getcheapapi import providers
+    monkeypatch.setenv("YIR_API_KEY", "x")
+    monkeypatch.setattr(providers.time, "sleep", lambda s: None)
+    calls = []
+
+    def fake_http(method, url, headers=None, body=None, timeout=0):
+        calls.append(url)
+        if len(calls) < 3:
+            raise Stop("HTTP 525: error code: 525")
+        return {"expected_amount": "0.0085", "supply": {"available": True}}
+
+    monkeypatch.setattr(providers, "http", fake_http)
+    y = providers.Yir()
+    assert y.estimate("image", {"model": "a/b", "prompt": "p"}) == pytest.approx(0.0085)
+    assert len(calls) == 3
+
+
+def test_yir_quote_does_not_retry_client_errors(monkeypatch):
+    from getcheapapi import providers
+    monkeypatch.setenv("YIR_API_KEY", "x")
+    calls = []
+
+    def fake_http(*a, **k):
+        calls.append(1)
+        raise Stop("HTTP 400: bad model")
+
+    monkeypatch.setattr(providers, "http", fake_http)
+    with pytest.raises(Stop):
+        providers.Yir().estimate("image", {"model": "a/b", "prompt": "p"})
+    assert len(calls) == 1

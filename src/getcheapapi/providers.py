@@ -250,8 +250,15 @@ class Yir(Provider):
 
     def quote(self, kind: str, body: dict) -> dict:
         key = repr((kind, sorted(self.request(body).items(), key=str)))
-        if key not in self._quotes:
-            self._quotes[key] = http("POST", f"{self.base}{YIR_PATHS[kind]}/quotes", self.auth, self.request(body), timeout=90)
+        for attempt in range(3):  # quotes are free and idempotent: retry the gateway's transient 5xx
+            if key in self._quotes:
+                break
+            try:
+                self._quotes[key] = http("POST", f"{self.base}{YIR_PATHS[kind]}/quotes", self.auth, self.request(body), timeout=90)
+            except Stop as exc:
+                if not str(exc).startswith("HTTP 5") or attempt == 2:
+                    raise
+                time.sleep(2 * (attempt + 1))
         return self._quotes[key]
 
     @staticmethod
