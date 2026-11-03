@@ -205,7 +205,7 @@
       const was = label ? label.textContent : '';
       const done = () => {
         if (!label) return;
-        label.textContent = 'copied';
+        label.textContent = btn.dataset.copied || 'copied';
         setTimeout(() => { label.textContent = was; }, 1500);
       };
       navigator.clipboard?.writeText(PIP).then(done, () => {});

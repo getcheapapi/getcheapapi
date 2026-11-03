@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>getcheapapi：SERP、X、关键词与外链 API 的最低价路由</title>
+    <meta name="description" content="开源的付费数据与媒体 API 比价路由。每次调用前给所有供应商报价，走最便宜的那条，超出预算就拒绝。专为 AI Agent 打造。" />
+    <link rel="canonical" href="https://getcheapapi.com/zh/" />
+    <link rel="alternate" hreflang="en" href="https://getcheapapi.com/" />
+    <link rel="alternate" hreflang="es" href="https://getcheapapi.com/es/" />
+    <link rel="alternate" hreflang="ja" href="https://getcheapapi.com/ja/" />
+    <link rel="alternate" hreflang="ko" href="https://getcheapapi.com/ko/" />
+    <link rel="alternate" hreflang="pt-BR" href="https://getcheapapi.com/pt/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://getcheapapi.com/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://getcheapapi.com/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#232323" />
+    <meta property="og:title" content="getcheapapi" />
+    <meta property="og:description" content="别再为数据和媒体 API 多付钱。先报价，再花钱。" />
+    <meta property="og:url" content="https://getcheapapi.com/zh/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:image" content="https://getcheapapi.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="getcheapapi：一次调用，五条路线，运行前先报价。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "getcheapapi",
+        "description": "开源的付费数据与媒体 API 比价路由。每次调用前给所有供应商报价，走最便宜的那条，超出预算就拒绝。专为 AI Agent 打造。",
+        "url": "https://getcheapapi.com/zh/",
+        "inLanguage": "zh-Hans",
+        "codeRepository": "https://github.com/getcheapapi/getcheapapi",
+        "license": "https://opensource.org/licenses/MIT",
+        "programmingLanguage": "Python"
+      }
+    </script>
+    <link rel="stylesheet" href="/site.css" />
+    <script>document.documentElement.classList.add('js');</script>
+    <script src="/site.js" defer></script>
+  </head>
+  <body>
+    <header class="navwrap">
+      <nav class="pill" aria-label="Main">
+        <div class="pill-row">
+          <a class="mark" href="#top" aria-label="getcheapapi">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 3h5v5h5v5h5v6h3" /><path d="M2 19h18" stroke-dasharray="2 2" /></svg>
+          </a>
+          <div class="links mono" id="navlinks">
+            <a href="#what">功能</a>
+            <a href="#coverage">覆盖范围</a>
+            <a href="#install" class="has-dot">安装</a>
+            <a href="#faq">常见问题</a>
+            <a class="only-sm" href="https://github.com/getcheapapi/getcheapapi">GitHub ↗</a>
+          </div>
+          <span class="grow"></span>
+          <details class="lang mono">
+            <summary aria-label="语言">中文</summary>
+            <div class="lang-menu">
+              <a href="/" lang="en" hreflang="en">English</a>
+              <a href="/es/" lang="es" hreflang="es">Español</a>
+              <a href="/ja/" lang="ja" hreflang="ja">日本語</a>
+              <a href="/ko/" lang="ko" hreflang="ko">한국어</a>
+              <a href="/pt/" lang="pt-BR" hreflang="pt-BR">Português</a>
+              <a href="/zh/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a>
+            </div>
+          </details>
+          <a class="mono gh" href="https://github.com/getcheapapi/getcheapapi">GitHub ↗</a>
+          <button class="menu" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navlinks">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 5h14M2 9h14M2 13h14" /></svg>
+          </button>
+        </div>
+        <div class="marq mono" aria-hidden="true">
+          <div class="marq-track"><span>开源 · MIT</span><span>一个 Key 就够</span><span>花钱之前先报价</span><span>遇到 402 就停</span><span>15 项能力 · 5 家供应商</span><span>开源 · MIT</span><span>一个 Key 就够</span><span>花钱之前先报价</span><span>遇到 402 就停</span><span>15 项能力 · 5 家供应商</span></div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="top" class="hero">
+        <div class="hero-copy">
+          <p class="mono eyebrow">付费数据与媒体 API 的比价路由。</p>
+          <h1>你的 Agent 从不核对的 API 账单。</h1>
+          <p class="hero-lede">SERP、X、Reddit、关键词搜索量、外链、图片。getcheapapi 给每次调用能用的所有供应商报价，走最便宜的那条，超出预算就拒绝执行。开源，在你自己的机器上运行。</p>
+          <div class="ctas">
+            <button class="btn dark mono" type="button" data-copy data-copied="已复制">pip</button>
+            <button class="btn dark mono dotted" type="button" data-copy data-copied="已复制"><span data-copy-label>install</span></button>
+            <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">查看源码</a>
+          </div>
+          <code class="cmd-line">$ pip install git+https://github.com/getcheapapi/getcheapapi</code>
+          <p class="mono scroll-hint"><span aria-hidden="true">↓</span>往下看账单</p>
+        </div>
+        <figure class="hero-fig dots" aria-label="图示：一次调用在五条路线上的报价，从故障切换后的高价逐级降到最低价。">
+          <canvas data-field="stairs" data-animate></canvas>
+          <span class="mono tag tag-hi"><i class="dot" aria-hidden="true"></i>x28 · 故障切换源</span>
+          <span class="mono tag tag-lo">x1.0 · 最便宜路线 ↓</span>
+          <figcaption class="mono">fig. 01 · 一次调用，五条路线，运行前先报价</figcaption>
+        </figure>
+      </section>
+
+      <section class="receipt">
+        <div class="receipt-copy">
+          <h2>同样的数据，最多贵 200 倍。取决于走哪条路线。</h2>
+          <p class="sub">聚合商会悄悄切换到更贵的源。一些选项会抬高价格。各家计费规则都不一样。而 Agent 没有刹车。</p>
+          <div class="big">
+            <p class="big-num" aria-label="大约 28 倍"><span aria-hidden="true">~<span data-count="28">28</span>×</span></p>
+            <p class="mono big-cap">同一个 X 搜索接口的价差 <span class="chip">AnyAPI</span></p>
+          </div>
+        </div>
+        <div class="ledger mono" data-reveal>
+          <i class="node" aria-hidden="true"></i>
+          <p class="ledger-head">估价</p>
+          <div class="ledger-group">
+            <p class="muted">报价 01 · keyword.volume · 5 个关键词</p>
+            <p class="lead">goanyapi keyword-search-volume<i></i>$0.01500</p>
+            <p class="lead muted">dataforseo search_volume/live<i></i>$0.09000</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">报价 02 · 同一调用 · 50 个关键词</p>
+            <p class="lead">dataforseo search_volume/live<i></i>$0.09000</p>
+            <p class="lead muted">goanyapi keyword-search-volume<i></i>$0.15000</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">钱漏在哪里</p>
+            <p class="lead">静默故障切换<i></i>最高 x28</p>
+            <p class="lead">SERP 加一个搜索运算符<i></i>x5</p>
+            <p class="lead">拆成 15 次而不是一次批量<i></i>x15</p>
+            <p class="lead">402 之后继续发出的请求<i></i>211</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">每一次运行</p>
+            <p class="lead inv">getcheapapi 走<i></i>最便宜的路线</p>
+          </div>
+          <p class="ledger-foot">getcheapapi quote 会在运行前打印这张单子，不花一分钱。</p>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="below" aria-hidden="true"></canvas>
+
+      <section id="what" class="dark dots what">
+        <div class="what-list">
+          <div class="what-head">
+            <p class="mono dim">功能</p>
+            <h2>先报价，后花钱。</h2>
+          </div>
+          <article><h3 class="mono">001 / 按能力调用，不按供应商</h3><p>serp.google、x.search、keyword.volume、image.generate。每项能力对应多家供应商的路线，字段映射和批量合并都已处理好。</p></article>
+          <article><h3 class="mono">002 / 每条路线都有报价</h3><p>价格来自本地缓存：供应商有实时价格接口就用实时价，没有就用公开价目表。你没有 Key 的路线也会报价，让你知道多一个 Key 能省多少。</p></article>
+          <article><h3 class="mono">003 / 花钱前重新报价</h3><p>调用前一刻刷新价格。AnyAPI 会锁定最便宜的源，并关闭故障切换。</p></article>
+          <article><h3 class="mono">004 / 不越过的预算</h3><p>每次运行先估价，超过 <code>--max-usd</code> 就拒绝。默认上限是 0.1 美元。</p></article>
+          <article><h3 class="mono">005 / 遇到 402 就停</h3><p>遇到 402 返回退出码 2，第一次失败就停止。Agent 会把它理解为停下，而不是重试。</p></article>
+          <article><h3 class="mono">006 / 价格基线</h3><p>最低价突然上涨时，运行会停下，等你确认接受新价格。</p></article>
+          <article><h3 class="mono">007 / 去重与批量</h3><p>输入会先去重；供应商支持时，一组查询合并成一次批量调用。</p></article>
+          <article><h3 class="mono">008 / 每次调用都记账</h3><p>响应会保存，费用记录在 <code>~/.getcheapapi</code>。<code>getcheapapi spend</code> 按供应商和接口汇总。</p></article>
+          <article><h3 class="mono">009 / 媒体生成也一样</h3><p>通过 Yir 生成图片、视频和语音，每个任务先报价，并在服务端设上限。</p></article>
+          <article><h3 class="mono">010 / 给 Agent 用的 Skill</h3><p>把目录链接到 Claude Code、Codex 或其他 Agent。从克隆的仓库直接运行，不用安装包。</p></article>
+        </div>
+        <figure class="what-fig" aria-label="图示：同一任务的五条路线，柱子由高到低；getcheapapi 走最短的那根。">
+          <div class="sticky">
+            <canvas data-field="bars"></canvas>
+            <figcaption class="mono">fig. 02 · 同一任务，五条路线 · getcheapapi 走最短的那根</figcaption>
+          </div>
+        </figure>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="above" aria-hidden="true"></canvas>
+
+      <section id="coverage" class="coverage">
+        <div class="cov-copy">
+          <h2>15 项能力，5 家供应商，一条命令。</h2>
+          <p class="sub">所有路线都在一个目录文件里。价格和接口会变，新增或修正路线就提一个 Pull Request。</p>
+        </div>
+        <table class="cov mono">
+          <caption class="visually-hidden">能力及对应的供应商</caption>
+          <thead class="visually-hidden"><tr><th scope="col">#</th><th scope="col">能力</th><th scope="col">供应商</th></tr></thead>
+          <tbody>
+            <tr><td>CAP.001</td><th scope="row">serp.google</th><td>AnyAPI · GoAnyAPI · DataForSEO</td></tr>
+            <tr><td>CAP.002</td><th scope="row">serp.bing</th><td>AnyAPI · GoAnyAPI</td></tr>
+            <tr><td>CAP.003</td><th scope="row">x.search</th><td>AnyAPI · twitterapi.io</td></tr>
+            <tr><td>CAP.004</td><th scope="row">reddit.search</th><td>AnyAPI</td></tr>
+            <tr><td>CAP.005</td><th scope="row">tiktok.search</th><td>AnyAPI</td></tr>
+            <tr><td>CAP.006</td><th scope="row">google.trends</th><td>AnyAPI · GoAnyAPI</td></tr>
+            <tr><td>CAP.007</td><th scope="row">keyword.volume</th><td>DataForSEO · GoAnyAPI</td></tr>
+            <tr><td>CAP.008</td><th scope="row">keyword.ideas</th><td>DataForSEO · GoAnyAPI</td></tr>
+            <tr><td>CAP.009</td><th scope="row">backlinks.summary</th><td>GoAnyAPI · DataForSEO</td></tr>
+            <tr><td>CAP.010</td><th scope="row">domain.rank</th><td>DataForSEO</td></tr>
+            <tr><td>CAP.011</td><th scope="row">domain.dr</th><td>GoAnyAPI</td></tr>
+            <tr><td>CAP.012</td><th scope="row">website.traffic</th><td>GoAnyAPI</td></tr>
+            <tr><td>CAP.013</td><th scope="row">image.generate</th><td>Yir</td></tr>
+            <tr><td>CAP.014</td><th scope="row">video.generate</th><td>Yir</td></tr>
+            <tr><td>CAP.015</td><th scope="row">speech.generate</th><td>Yir</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="install" class="install">
+        <h2>一次安装，无需注册，不加价。</h2>
+        <div class="card dark dots">
+          <span class="corner tl" aria-hidden="true">+</span><span class="corner tr" aria-hidden="true">+</span><span class="corner bl" aria-hidden="true">+</span><span class="corner br" aria-hidden="true">+</span>
+          <i class="node" aria-hidden="true"></i>
+          <div class="card-main">
+            <p class="mono dim">免费 · MIT 许可</p>
+            <p class="zero">$0</p>
+            <p class="dim">直接用你自己的 Key 向供应商付费。有一个 Key 就能开始。</p>
+            <div class="cmd">
+              <code>pip install git+https://github.com/getcheapapi/getcheapapi</code>
+              <button class="mono" type="button" data-copy data-copied="已复制"><span data-copy-label>复制</span></button>
+            </div>
+          </div>
+          <ol class="card-list mono">
+            <li>命令行：caps、quote、run、call、spend、balance</li>
+            <li>5 家供应商的 15 项能力</li>
+            <li>本地价格缓存与价格基线</li>
+            <li>每次付费调用都有预算保护</li>
+            <li>本地账本 ~/.getcheapapi</li>
+            <li>Claude Code 与 Codex 的 Agent Skill</li>
+            <li>直接调用原始接口，同样受保护</li>
+          </ol>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="below" aria-hidden="true"></canvas>
+
+      <section id="faq" class="dark dots faq">
+        <h2>安装前</h2>
+        <div class="faq-list">
+          <details><summary class="mono"><span>Q.001 / </span>免费吗？</summary><p>免费。MIT 许可，不用注册，不收费。你用自己的 Key 直接向供应商付费。</p></details>
+          <details><summary class="mono"><span>Q.002 / </span>每家供应商都需要 Key 吗？</summary><p>不需要，一个就够。没有 Key 的路线也会报价，你能看到多加一个 Key 能省多少。</p></details>
+          <details><summary class="mono"><span>Q.003 / </span>我的数据会经过你们的服务器吗？</summary><p>不会。价格缓存、账本和保存的结果都在你本机的 ~/.getcheapapi 里。唯一的网络流量就是 API 调用本身。</p></details>
+          <details><summary class="mono"><span>Q.004 / </span>价格有多新？</summary><p>供应商有价格接口的用实时价，没有的用公开价目表。每次运行在花钱前都会重新报价。</p></details>
+          <details><summary class="mono"><span>Q.005 / </span>能路由大模型调用吗？</summary><p>不能。文本模型交给 LiteLLM 和 OpenRouter。getcheapapi 只管付费的数据与媒体 API。</p></details>
+          <details><summary class="mono"><span>Q.006 / </span>怎么新增供应商或修正价格？</summary><p>编辑目录文件，对线上供应商跑一遍免费的字段校验，然后提交 Pull Request。</p></details>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="above" aria-hidden="true"></canvas>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <p class="mono foot-name"><span class="mark-box" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 3h5v5h5v5h5v6h3" /><path d="M2 19h18" stroke-dasharray="2 2" /></svg></span>getcheapapi</p>
+          <p class="muted">开源的付费数据与媒体 API 比价路由。先报价，再花钱。</p>
+        </div>
+        <div class="foot-cols mono">
+          <div><p>项目</p><a href="https://github.com/getcheapapi/getcheapapi">GitHub</a><a href="#coverage">覆盖范围</a><a href="#faq">常见问题</a><a href="/llms.txt">llms.txt</a></div>
+          <div><p>CLI</p><span>caps</span><span>quote</span><span>run</span><span>spend</span></div>
+          <div><p>语言</p>
+            <a href="/" lang="en" hreflang="en">English</a>
+            <a href="/es/" lang="es" hreflang="es">Español</a>
+            <a href="/ja/" lang="ja" hreflang="ja">日本語</a>
+            <a href="/ko/" lang="ko" hreflang="ko">한국어</a>
+            <a href="/pt/" lang="pt-BR" hreflang="pt-BR">Português</a>
+            <a href="/zh/" lang="zh-Hans" hreflang="zh-Hans" aria-current="page">简体中文</a>
+          </div>
+        </div>
+      </div>
+      <p class="wordmark" aria-hidden="true">getcheapapi</p>
+      <div class="foot-bar mono"><span>MIT · 2026</span><span>先报价，再花钱。</span></div>
+    </footer>
+  </body>
+</html>

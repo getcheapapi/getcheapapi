@@ -15,6 +15,16 @@
   --gutter: max(64px, env(safe-area-inset-left, 0px));
   color-scheme: light;
 }
+/* Geist has no CJK glyphs: fall back to each script's system face. */
+:lang(zh) { --cjk: "PingFang SC", "Noto Sans SC", "Microsoft YaHei"; }
+:lang(ja) { --cjk: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Meiryo"; }
+:lang(ko) { --cjk: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic"; }
+:lang(zh), :lang(ja), :lang(ko) {
+  --sans: "Geist", var(--cjk), sans-serif;
+  --mono: "Geist Mono", ui-monospace, var(--cjk), monospace;
+  line-break: strict;
+}
+:lang(ko) { word-break: keep-all; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 120px; }
@@ -51,6 +61,16 @@ canvas { display: block; }
 .links .only-sm { display: none; }
 .gh { font-size: 13px; text-decoration: none; }
 .menu { display: none; width: 40px; height: 40px; background: transparent; color: #fff; border: 1px dotted var(--w40); border-radius: 4px; align-items: center; justify-content: center; cursor: pointer; }
+.lang { position: relative; font-size: 13px; }
+.lang summary { list-style: none; cursor: pointer; color: var(--w60); padding: 4px 6px; border: 1px dotted transparent; border-radius: 3px; }
+.lang summary::-webkit-details-marker { display: none; }
+.lang summary::after { content: " ▾"; font-size: 10px; }
+.lang[open] summary, .lang summary:hover { color: #fff; border-color: var(--w40); }
+.lang-menu { position: absolute; top: calc(100% + 14px); right: -6px; min-width: 160px; display: flex; flex-direction: column; background: var(--ink); border: 1px dotted var(--w40); border-radius: 6px; padding: 6px 14px; z-index: 2; }
+.lang-menu a { text-decoration: none; padding: 9px 0; border-bottom: 1px dashed var(--w10); color: var(--w60); text-transform: none; }
+.lang-menu a:last-child { border-bottom: 0; }
+.lang-menu a[aria-current] { color: #fff; }
+.lang-menu a[aria-current]::before { content: "● "; color: var(--dot); font-size: 9px; vertical-align: 2px; }
 .marq { background: var(--grey); color: var(--ink); font-size: 12px; overflow: hidden; border-radius: 2px; padding: 2px 0; }
 .marq-track { display: flex; width: max-content; animation: marq 26s linear infinite; }
 .marq-track span { white-space: nowrap; padding: 0 22px; }
@@ -174,6 +194,15 @@ canvas { display: block; }
 .foot-cols div { display: flex; flex-direction: column; gap: 10px; }
 .foot-cols p { font-family: var(--sans); text-transform: none; letter-spacing: 0; font-size: 15px; color: var(--muted); }
 .foot-cols a { text-decoration: none; }
+.foot-cols a[hreflang] { text-transform: none; }
+.foot-cols a[aria-current] { text-decoration: underline dotted; text-underline-offset: 4px; }
+/* CJK headlines: one character is about two Latin ones wide. */
+:lang(zh) .hero h1, :lang(ja) .hero h1, :lang(ko) .hero h1 { max-width: 11em; }
+:lang(ja) h1, :lang(ja) h2 { word-break: auto-phrase; }
+/* The zh headline has spaces around its Latin words; break only there. */
+:lang(zh) .hero h1 { word-break: keep-all; }
+:lang(zh) .receipt-copy h2, :lang(ja) .receipt-copy h2, :lang(ko) .receipt-copy h2,
+:lang(zh) .install h2, :lang(ja) .install h2, :lang(ko) .install h2 { max-width: 11em; }
 .wordmark { border-top: 1px dashed var(--line); padding: 24px 0 0 calc(var(--gutter) - 0.06em); font-weight: 500; font-size: clamp(60px, 16vw, 248px); line-height: 0.78; letter-spacing: -0.055em; white-space: nowrap; margin-bottom: -0.1em; }
 .foot-bar { display: flex; justify-content: space-between; gap: 16px; padding: 16px var(--gutter) 24px; font-size: 11.5px; color: var(--muted); border-top: 1px dashed var(--line); position: relative; background: var(--paper); }
 
@@ -212,7 +241,7 @@ canvas { display: block; }
   .corner { display: none; }
   .cov td:first-child { width: 72px; }
   .cov td:last-child { max-width: 40vw; }
-  .foot-cols { gap: 48px; }
+  .foot-cols { gap: 32px 48px; flex-wrap: wrap; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

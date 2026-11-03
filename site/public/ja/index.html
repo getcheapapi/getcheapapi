@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>getcheapapi：SERP・X・キーワード・被リンク API を最安ルートで</title>
+    <meta name="description" content="有料のデータ・メディア API 向けオープンソース価格ルーター。呼び出しごとに全プロバイダーの価格を比較し、最安ルートで実行、予算を超えたら拒否します。AI エージェント向け。" />
+    <link rel="canonical" href="https://getcheapapi.com/ja/" />
+    <link rel="alternate" hreflang="en" href="https://getcheapapi.com/" />
+    <link rel="alternate" hreflang="es" href="https://getcheapapi.com/es/" />
+    <link rel="alternate" hreflang="ja" href="https://getcheapapi.com/ja/" />
+    <link rel="alternate" hreflang="ko" href="https://getcheapapi.com/ko/" />
+    <link rel="alternate" hreflang="pt-BR" href="https://getcheapapi.com/pt/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://getcheapapi.com/zh/" />
+    <link rel="alternate" hreflang="x-default" href="https://getcheapapi.com/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#232323" />
+    <meta property="og:title" content="getcheapapi" />
+    <meta property="og:description" content="データ・メディア API の払いすぎをやめよう。まず見積もり、それから支払い。" />
+    <meta property="og:url" content="https://getcheapapi.com/ja/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:image" content="https://getcheapapi.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="getcheapapi：1 回の呼び出し、5 つのルート、実行前に見積もり。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "getcheapapi",
+        "description": "有料のデータ・メディア API 向けオープンソース価格ルーター。呼び出しごとに全プロバイダーの価格を比較し、最安ルートで実行、予算を超えたら拒否します。AI エージェント向け。",
+        "url": "https://getcheapapi.com/ja/",
+        "inLanguage": "ja",
+        "codeRepository": "https://github.com/getcheapapi/getcheapapi",
+        "license": "https://opensource.org/licenses/MIT",
+        "programmingLanguage": "Python"
+      }
+    </script>
+    <link rel="stylesheet" href="/site.css" />
+    <script>document.documentElement.classList.add('js');</script>
+    <script src="/site.js" defer></script>
+  </head>
+  <body>
+    <header class="navwrap">
+      <nav class="pill" aria-label="Main">
+        <div class="pill-row">
+          <a class="mark" href="#top" aria-label="getcheapapi">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 3h5v5h5v5h5v6h3" /><path d="M2 19h18" stroke-dasharray="2 2" /></svg>
+          </a>
+          <div class="links mono" id="navlinks">
+            <a href="#what">機能</a>
+            <a href="#coverage">対応範囲</a>
+            <a href="#install" class="has-dot">インストール</a>
+            <a href="#faq">よくある質問</a>
+            <a class="only-sm" href="https://github.com/getcheapapi/getcheapapi">GitHub ↗</a>
+          </div>
+          <span class="grow"></span>
+          <details class="lang mono">
+            <summary aria-label="言語">日本語</summary>
+            <div class="lang-menu">
+              <a href="/" lang="en" hreflang="en">English</a>
+              <a href="/es/" lang="es" hreflang="es">Español</a>
+              <a href="/ja/" lang="ja" hreflang="ja" aria-current="page">日本語</a>
+              <a href="/ko/" lang="ko" hreflang="ko">한국어</a>
+              <a href="/pt/" lang="pt-BR" hreflang="pt-BR">Português</a>
+              <a href="/zh/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
+            </div>
+          </details>
+          <a class="mono gh" href="https://github.com/getcheapapi/getcheapapi">GitHub ↗</a>
+          <button class="menu" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="navlinks">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 5h14M2 9h14M2 13h14" /></svg>
+          </button>
+        </div>
+        <div class="marq mono" aria-hidden="true">
+          <div class="marq-track"><span>オープンソース · MIT</span><span>キーは 1 つで十分</span><span>支払う前に見積もり</span><span>402 で停止</span><span>15 の機能 · 5 社のプロバイダー</span><span>オープンソース · MIT</span><span>キーは 1 つで十分</span><span>支払う前に見積もり</span><span>402 で停止</span><span>15 の機能 · 5 社のプロバイダー</span></div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="top" class="hero">
+        <div class="hero-copy">
+          <p class="mono eyebrow">有料データ・メディア API の価格ルーター。</p>
+          <h1>エージェントが確認しない API の請求書。</h1>
+          <p class="hero-lede">SERP、X、Reddit、キーワード検索量、被リンク、画像。getcheapapi は呼び出しに使える全プロバイダーの価格を出し、最安ルートで実行し、予算を超えたら拒否します。オープンソースで、あなたのマシン上で動きます。</p>
+          <div class="ctas">
+            <button class="btn dark mono" type="button" data-copy data-copied="コピー済み">pip</button>
+            <button class="btn dark mono dotted" type="button" data-copy data-copied="コピー済み"><span data-copy-label>install</span></button>
+            <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">ソースを見る</a>
+          </div>
+          <code class="cmd-line">$ pip install git+https://github.com/getcheapapi/getcheapapi</code>
+          <p class="mono scroll-hint"><span aria-hidden="true">↓</span>スクロールして明細を見る</p>
+        </div>
+        <figure class="hero-fig dots" aria-label="図：1 回の呼び出しを 5 つのルートで見積もり、フェイルオーバー時の価格から最安値へ段階的に下がる。">
+          <canvas data-field="stairs" data-animate></canvas>
+          <span class="mono tag tag-hi"><i class="dot" aria-hidden="true"></i>x28 · フェイルオーバー先</span>
+          <span class="mono tag tag-lo">x1.0 · 最安ルート ↓</span>
+          <figcaption class="mono">fig. 01 · 1 回の呼び出し、5 つのルート、実行前に見積もり</figcaption>
+        </figure>
+      </section>
+
+      <section class="receipt">
+        <div class="receipt-copy">
+          <h2>同じデータでも最大 200 倍。ルート次第で。</h2>
+          <p class="sub">アグリゲーターは知らないうちに高いソースへ切り替えます。オプションで価格が上がり、課金ルールもバラバラ。そしてエージェントにはブレーキがありません。</p>
+          <div class="big">
+            <p class="big-num" aria-label="約 28 倍"><span aria-hidden="true">~<span data-count="28">28</span>×</span></p>
+            <p class="mono big-cap">同じ X 検索エンドポイントの価格差 <span class="chip">AnyAPI</span></p>
+          </div>
+        </div>
+        <div class="ledger mono" data-reveal>
+          <i class="node" aria-hidden="true"></i>
+          <p class="ledger-head">見積もり</p>
+          <div class="ledger-group">
+            <p class="muted">見積もり 01 · keyword.volume · 5 キーワード</p>
+            <p class="lead">goanyapi keyword-search-volume<i></i>$0.01500</p>
+            <p class="lead muted">dataforseo search_volume/live<i></i>$0.09000</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">見積もり 02 · 同じ呼び出し · 50 キーワード</p>
+            <p class="lead">dataforseo search_volume/live<i></i>$0.09000</p>
+            <p class="lead muted">goanyapi keyword-search-volume<i></i>$0.15000</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">コストが漏れる場所</p>
+            <p class="lead">無言のフェイルオーバー<i></i>最大 x28</p>
+            <p class="lead">SERP の検索演算子 1 つ<i></i>x5</p>
+            <p class="lead">一括でなく 15 回の呼び出し<i></i>x15</p>
+            <p class="lead">402 の後に送られたリクエスト<i></i>211</p>
+          </div>
+          <div class="ledger-group">
+            <p class="muted">毎回の実行</p>
+            <p class="lead inv">getcheapapi のルート<i></i>最安</p>
+          </div>
+          <p class="ledger-foot">getcheapapi quote は実行前にこの明細を出力します。費用はかかりません。</p>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="below" aria-hidden="true"></canvas>
+
+      <section id="what" class="dark dots what">
+        <div class="what-list">
+          <div class="what-head">
+            <p class="mono dim">機能</p>
+            <h2>まず見積もり、支払いはその後。</h2>
+          </div>
+          <article><h3 class="mono">001 / プロバイダーではなく機能で呼ぶ</h3><p>serp.google、x.search、keyword.volume、image.generate。各機能は複数プロバイダーのルートに対応し、フィールドの対応付けとバッチ化も済んでいます。</p></article>
+          <article><h3 class="mono">002 / 全ルートに価格を</h3><p>ローカルキャッシュから：価格 API があるプロバイダーはライブ価格、ないものは公開価格表。キーを持っていないルートも見積もるので、キーを追加したらいくら節約できるか分かります。</p></article>
+          <article><h3 class="mono">003 / 支払い直前に再見積もり</h3><p>呼び出しの直前に価格を更新。AnyAPI は最安ソースに固定し、フェイルオーバーをオフにします。</p></article>
+          <article><h3 class="mono">004 / 超えない予算</h3><p>毎回まず見積もり、<code>--max-usd</code> を超えれば拒否。デフォルトの上限は 0.1 ドルです。</p></article>
+          <article><h3 class="mono">005 / 402 で停止</h3><p>402 では終了コード 2、最初の失敗で停止。エージェントはこれを再試行ではなく停止と読みます。</p></article>
+          <article><h3 class="mono">006 / 価格ベースライン</h3><p>最安価格が急に上がったら、新しい価格を承認するまで実行を止めます。</p></article>
+          <article><h3 class="mono">007 / 重複排除とバッチ化</h3><p>入力は重複を除き、プロバイダーが対応していればクエリのリストを 1 回のバッチで実行します。</p></article>
+          <article><h3 class="mono">008 / すべての呼び出しを記帳</h3><p>レスポンスを保存し、課金を <code>~/.getcheapapi</code> に記録。<code>getcheapapi spend</code> がプロバイダーとエンドポイント別に集計します。</p></article>
+          <article><h3 class="mono">009 / メディアも</h3><p>Yir 経由の画像・動画・音声生成も、ジョブごとに見積もり、サーバー側で上限を設定します。</p></article>
+          <article><h3 class="mono">010 / エージェント用スキル</h3><p>フォルダを Claude Code、Codex などのエージェントにリンク。クローンからならパッケージをインストールせずに動きます。</p></article>
+        </div>
+        <figure class="what-fig" aria-label="図：同じジョブの 5 つのルートを高さの異なる棒で表示。getcheapapi は一番低い棒を実行します。">
+          <div class="sticky">
+            <canvas data-field="bars"></canvas>
+            <figcaption class="mono">fig. 02 · 同じジョブ、5 つのルート · getcheapapi は一番低い棒を実行</figcaption>
+          </div>
+        </figure>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="above" aria-hidden="true"></canvas>
+
+      <section id="coverage" class="coverage">
+        <div class="cov-copy">
+          <h2>15 の機能、5 社、1 つのコマンド。</h2>
+          <p class="sub">ルートは 1 つのカタログファイルにまとまっています。価格もエンドポイントも変わるので、追加や修正は Pull Request で。</p>
+        </div>
+        <table class="cov mono">
+          <caption class="visually-hidden">機能と対応プロバイダー</caption>
+          <thead class="visually-hidden"><tr><th scope="col">#</th><th scope="col">機能</th><th scope="col">プロバイダー</th></tr></thead>
+          <tbody>
+            <tr><td>CAP.001</td><th scope="row">serp.google</th><td>AnyAPI · GoAnyAPI · DataForSEO</td></tr>
+            <tr><td>CAP.002</td><th scope="row">serp.bing</th><td>AnyAPI · GoAnyAPI</td></tr>
+            <tr><td>CAP.003</td><th scope="row">x.search</th><td>AnyAPI · twitterapi.io</td></tr>
+            <tr><td>CAP.004</td><th scope="row">reddit.search</th><td>AnyAPI</td></tr>
+            <tr><td>CAP.005</td><th scope="row">tiktok.search</th><td>AnyAPI</td></tr>
+            <tr><td>CAP.006</td><th scope="row">google.trends</th><td>AnyAPI · GoAnyAPI</td></tr>
+            <tr><td>CAP.007</td><th scope="row">keyword.volume</th><td>DataForSEO · GoAnyAPI</td></tr>
+            <tr><td>CAP.008</td><th scope="row">keyword.ideas</th><td>DataForSEO · GoAnyAPI</td></tr>
+            <tr><td>CAP.009</td><th scope="row">backlinks.summary</th><td>GoAnyAPI · DataForSEO</td></tr>
+            <tr><td>CAP.010</td><th scope="row">domain.rank</th><td>DataForSEO</td></tr>
+            <tr><td>CAP.011</td><th scope="row">domain.dr</th><td>GoAnyAPI</td></tr>
+            <tr><td>CAP.012</td><th scope="row">website.traffic</th><td>GoAnyAPI</td></tr>
+            <tr><td>CAP.013</td><th scope="row">image.generate</th><td>Yir</td></tr>
+            <tr><td>CAP.014</td><th scope="row">video.generate</th><td>Yir</td></tr>
+            <tr><td>CAP.015</td><th scope="row">speech.generate</th><td>Yir</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="install" class="install">
+        <h2>インストール 1 回。アカウント不要。上乗せなし。</h2>
+        <div class="card dark dots">
+          <span class="corner tl" aria-hidden="true">+</span><span class="corner tr" aria-hidden="true">+</span><span class="corner bl" aria-hidden="true">+</span><span class="corner br" aria-hidden="true">+</span>
+          <i class="node" aria-hidden="true"></i>
+          <div class="card-main">
+            <p class="mono dim">無料 · MIT ライセンス</p>
+            <p class="zero">$0</p>
+            <p class="dim">プロバイダーには自分のキーで直接支払います。キーが 1 つあれば始められます。</p>
+            <div class="cmd">
+              <code>pip install git+https://github.com/getcheapapi/getcheapapi</code>
+              <button class="mono" type="button" data-copy data-copied="コピー済み"><span data-copy-label>コピー</span></button>
+            </div>
+          </div>
+          <ol class="card-list mono">
+            <li>CLI：caps、quote、run、call、spend、balance</li>
+            <li>5 社にまたがる 15 の機能</li>
+            <li>ローカル価格キャッシュと価格ベースライン</li>
+            <li>すべての有料呼び出しに予算ガード</li>
+            <li>ローカル台帳 ~/.getcheapapi</li>
+            <li>Claude Code と Codex 用エージェントスキル</li>
+            <li>生のエンドポイント呼び出しにも同じガード</li>
+          </ol>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="below" aria-hidden="true"></canvas>
+
+      <section id="faq" class="dark dots faq">
+        <h2>インストールの前に</h2>
+        <div class="faq-list">
+          <details><summary class="mono"><span>Q.001 / </span>無料ですか？</summary><p>はい。MIT ライセンスで、アカウントも料金も不要です。プロバイダーには自分のキーで直接支払います。</p></details>
+          <details><summary class="mono"><span>Q.002 / </span>プロバイダーごとにキーが必要？</summary><p>いいえ、1 つで十分です。キーのないルートも見積もるので、キーを追加した場合の節約額が分かります。</p></details>
+          <details><summary class="mono"><span>Q.003 / </span>データはそちらのサーバーを通りますか？</summary><p>いいえ。価格キャッシュ、台帳、保存した結果はすべてあなたのマシンの ~/.getcheapapi にあります。通信は API 呼び出しそのものだけです。</p></details>
+          <details><summary class="mono"><span>Q.004 / </span>価格はどのくらい新しい？</summary><p>価格 API があるプロバイダーはライブ価格、ないものは公開価格表。毎回、支払い直前に再見積もりします。</p></details>
+          <details><summary class="mono"><span>Q.005 / </span>LLM の呼び出しもルーティングできますか？</summary><p>いいえ。テキストモデルは LiteLLM や OpenRouter の領域です。getcheapapi は有料のデータ・メディア API 専用です。</p></details>
+          <details><summary class="mono"><span>Q.006 / </span>プロバイダーの追加や価格の修正は？</summary><p>カタログファイルを編集し、実際のプロバイダーに対して無料のスキーマチェックを実行して、Pull Request を送ってください。</p></details>
+        </div>
+      </section>
+
+      <canvas class="melt" data-field="melt" data-dark="above" aria-hidden="true"></canvas>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <p class="mono foot-name"><span class="mark-box" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 3h5v5h5v5h5v6h3" /><path d="M2 19h18" stroke-dasharray="2 2" /></svg></span>getcheapapi</p>
+          <p class="muted">有料データ・メディア API のオープンソース価格ルーター。まず見積もり、それから支払い。</p>
+        </div>
+        <div class="foot-cols mono">
+          <div><p>プロジェクト</p><a href="https://github.com/getcheapapi/getcheapapi">GitHub</a><a href="#coverage">対応範囲</a><a href="#faq">よくある質問</a><a href="/llms.txt">llms.txt</a></div>
+          <div><p>CLI</p><span>caps</span><span>quote</span><span>run</span><span>spend</span></div>
+          <div><p>言語</p>
+            <a href="/" lang="en" hreflang="en">English</a>
+            <a href="/es/" lang="es" hreflang="es">Español</a>
+            <a href="/ja/" lang="ja" hreflang="ja" aria-current="page">日本語</a>
+            <a href="/ko/" lang="ko" hreflang="ko">한국어</a>
+            <a href="/pt/" lang="pt-BR" hreflang="pt-BR">Português</a>
+            <a href="/zh/" lang="zh-Hans" hreflang="zh-Hans">简体中文</a>
+          </div>
+        </div>
+      </div>
+      <p class="wordmark" aria-hidden="true">getcheapapi</p>
+      <div class="foot-bar mono"><span>MIT · 2026</span><span>まず見積もり、それから支払い。</span></div>
+    </footer>
+  </body>
+</html>
