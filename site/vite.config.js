@@ -72,6 +72,17 @@ function writePages() {
 const PAGES = ['serp-api-pricing', 'twitter-api-pricing', 'reddit-api-pricing'];
 const pageFile = (code, slug) => join(SITE, code === 'en' ? '' : code, slug, 'index.html');
 const pageFiles = (langs) => langs.flatMap(([c]) => PAGES.map((p) => pageFile(c, p))).filter(existsSync);
+const pagePath = (code, slug) => `${code === 'en' ? '' : `/${code}`}/${slug}/`;
+
+// hreflang alternates for a page that exists in more than one language, as <link> or <xhtml:link> lines.
+function alternates(langs, slug, tag, indent) {
+  const copies = langs.filter(([c]) => existsSync(pageFile(c, slug)));
+  if (copies.length < 2) return [];
+  return [
+    ...copies.map(([c, s]) => `${indent}<${tag} rel="alternate" hreflang="${s._hreflang}" href="${ORIGIN}${pagePath(c, slug)}" />`),
+    `${indent}<${tag} rel="alternate" hreflang="x-default" href="${ORIGIN}${pagePath('en', slug)}" />`,
+  ];
+}
 
 // Internal links are always written as the English path (/serp-api-pricing/). On a page in another
 // language each one points at that language's copy, or is marked hreflang="en" while there is none.
@@ -87,12 +98,15 @@ function localize(html, code) {
 }
 
 function sitemap(langs) {
-  const alternates = langs
+  const homeAlternates = langs
     .map(([c, s]) => `    <xhtml:link rel="alternate" hreflang="${s._hreflang}" href="${ORIGIN}${pathOf(c)}" />`)
     .join('\n');
   const urls = [
     ...langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${alternates}\n  </url>`),
-    ...pageFiles(langs).map((f) => `  <url>\n    <loc>${ORIGIN}/${relative(SITE, dirname(f)).split(sep).join('/')}/</loc>\n  </url>`),
+    ...PAGES.flatMap((p) => {
+      const links = alternates(langs, p, 'xhtml:link', '    ').map((l) => `\n${l}`).join('');
+      return langs.filter(([c]) => existsSync(pageFile(c, p))).map(([c]) => `  <url>\n    <loc>${ORIGIN}${pagePath(c, p)}</loc>${links}\n  </url>`);
+    }),
   ].join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`;
 }
@@ -113,8 +127,12 @@ export default defineConfig(() => {
       {
         name: 'i18n-pages',
         transformIndexHtml(html, ctx) {
-          const first = relative(SITE, ctx.filename).split(sep)[0];
-          return localize(html, langs.some(([c]) => c === first) ? first : 'en');
+          const parts = relative(SITE, ctx.filename).split(sep);
+          const code = langs.some(([c]) => c === parts[0]) ? parts[0] : 'en';
+          const slug = code === 'en' ? parts[0] : parts[1];
+          const links = PAGES.includes(slug) ? alternates(langs, slug, 'link', '    ') : [];
+          if (links.length) html = html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`);
+          return localize(html, code);
         },
         configureServer(server) {
           server.watcher.add([TEMPLATE, I18N]);
