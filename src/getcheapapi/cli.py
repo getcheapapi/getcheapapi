@@ -78,7 +78,7 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
                        encoding="utf-8")
     print(json.dumps({"saved": str(out) if responses else None, **({"files": files} if files else {}),
                       "done": len(responses), "of": len(bodies), "spentUsd": round(spent, 6)}))
-    return code
+    return code, spent
 
 
 def as_inputs(parsed) -> list[dict]:
@@ -114,6 +114,7 @@ def cmd_quote(args) -> int:
         best = runnable[0]
         cheaper = [o for o in options if o.status == "no key" and o.usd is not None and o.usd < (best.usd or 0) - 1e-12]
         print(f"would run: {best.label} ${best.usd:.5f}")
+        print("summary: " + json.dumps(router.summary(options, best, cap.get("media", False)), ensure_ascii=False))
         for o in cheaper:
             print(f"  a key for {o.provider} ({PROVIDERS[o.provider].site}) would save ${best.usd - o.usd:.5f} on this run")
     elif keyless := [o for o in options if o.status == "no key"]:
@@ -131,14 +132,20 @@ def cmd_run(args) -> int:
     options = router.plan(cap, inputs, clients, args.via)
     print(router.table(options), file=sys.stderr)
     best = router.choose(options)
-    return execute(clients[best.provider], best.endpoint, best.bodies, args, best.label,
-                   {"capability": args.capability})
+    code, spent = execute(clients[best.provider], best.endpoint, best.bodies, args, best.label,
+                          {"capability": args.capability})
+    s = router.summary(options, best, cap.get("media", False))
+    s |= {"maxUsd": args.max_usd, "spentUsd": round(spent, 6)}
+    if "vsUsd" in s:  # saved against what was actually spent, not the estimate
+        s["savedUsd"] = round(max(0.0, s["vsUsd"] - spent), 5)
+    print(json.dumps({"summary": s}, ensure_ascii=False))
+    return code
 
 
 def cmd_call(args) -> int:
     client = client_for(args.provider, args)
     parsed = read_input(args.input)
-    return execute(client, args.endpoint, as_inputs(parsed), args, f"{args.provider} {args.endpoint}")
+    return execute(client, args.endpoint, as_inputs(parsed), args, f"{args.provider} {args.endpoint}")[0]
 
 
 def cmd_prices(args) -> int:

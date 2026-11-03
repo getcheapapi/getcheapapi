@@ -184,3 +184,14 @@ def test_anyapi_async_acceptance_is_not_a_wrong_source(monkeypatch):
     body = {"q": "x"}
     a._pinned[id(body)] = ({"cheap"}, 0.0005)
     assert a.call("company.research", body)[3] is True
+
+
+def test_summary_saves_against_dearest_priced_route(monkeypatch):
+    monkeypatch.setenv("GOANYAPI_API_KEY", "x")
+    cap = router.capability("keyword.volume")
+    options = router.plan(cap, [{"keywords": ["a", "b", "c"]}], {})
+    best = router.choose(options)
+    s = router.summary(options, best)
+    assert s["pick"] == best.label and s["calls"] == 3 and s["routes"] == 2
+    assert s["savedUsd"] == round(s["vsUsd"] - s["usd"], 5) and 0 < s["savedPct"] < 100
+    assert "savedUsd" not in router.summary([best], best)

@@ -59,6 +59,16 @@ getcheapapi accept-price reddit.search   # only after the user accepts a higher 
 - **Stops on trouble**: exit code 2 means out of balance; any first failure stops the batch.
 - **Keeps records**: full responses in `~/.getcheapapi/results/<provider>/`, one ledger line per call in `~/.getcheapapi/ledger.jsonl`; `--project` defaults to the current folder name. `GETCHEAPAPI_HOME` moves this folder.
 
+## Tell the user what the comparison found
+
+`quote` prints a `summary:` line and every `run` ends with a `{"summary": ...}` line: routes priced, the pick, calls, cost, the cap, and `savedUsd`/`savedPct` against the dearest priced route (media: against the official price). After each comparison or paid run, give the user those numbers in two or three lines, in their language, before the data itself, for example:
+
+> Compared 3 routes: goanyapi $0.009 · dataforseo $0.09 · ...
+> Using goanyapi keyword-search-volume, 3 calls, $0.009 (cap $0.10).
+> Spent $0.009, $0.081 (90%) less than dataforseo.
+
+Copy the numbers from the CLI; do not compute or round them yourself. Skip the saving line when there is only one route. Several runs in one task get one combined summary at the end, with total spent and total saved.
+
 ## Rules
 
 - **Quote and confirm before the first paid call** of an endpoint or capability in a session: give the user the route, the number of calls and the total, and wait for their OK. A model or spec change, or a much larger batch, needs a new OK. The script's caps are a backstop, not a substitute.

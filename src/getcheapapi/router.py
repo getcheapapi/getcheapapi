@@ -157,6 +157,24 @@ def choose(options: list[Option]) -> Option:
     return runnable[0]
 
 
+def summary(options: list[Option], best: Option, media: bool = False) -> dict:
+    """The numbers the user is told after a comparison: how many routes were priced, the pick, and what it
+    saves against the dearest priced route (media: against the official price, since models differ in quality)."""
+    priced = [o for o in options if o.usd is not None and o.status in ("ok", "no key")]
+    out = {"routes": len(priced), "pick": best.label, "calls": len(best.bodies), "usd": round(best.usd or 0, 5)}
+    if media:
+        dear_label, dear_usd = "official", best.official
+    else:
+        others = [o for o in priced if o is not best]
+        dear = max(others, key=lambda o: o.usd) if others else None
+        dear_label, dear_usd = (dear.label, dear.usd) if dear else (None, None)
+    if dear_usd and dear_usd > (best.usd or 0):
+        saved = dear_usd - (best.usd or 0)
+        out |= {"vs": dear_label, "vsUsd": round(dear_usd, 5), "savedUsd": round(saved, 5),
+                "savedPct": round(100 * saved / dear_usd)}
+    return out
+
+
 def table(options: list[Option]) -> str:
     priced = [o.usd for o in options if o.usd is not None and o.status == "ok"]
     best = min(priced) if priced else None
