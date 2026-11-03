@@ -1,7 +1,7 @@
 // Renders src/page.html once per language in i18n/ (English at /, the rest at /<code>/), then lets Vite
 // build them like any multi-page site. The rendered HTML files are build output and are not committed.
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
@@ -68,8 +68,23 @@ function writePages() {
   return langs;
 }
 
-// English-only pages kept as plain HTML in their own folder, served at /<slug>/.
+// Pages kept as plain HTML in their own folder: /<slug>/ in English, /<code>/<slug>/ once translated.
 const PAGES = ['serp-api-pricing', 'twitter-api-pricing', 'reddit-api-pricing'];
+const pageFile = (code, slug) => join(SITE, code === 'en' ? '' : code, slug, 'index.html');
+const pageFiles = (langs) => langs.flatMap(([c]) => PAGES.map((p) => pageFile(c, p))).filter(existsSync);
+
+// Internal links are always written as the English path (/serp-api-pricing/). On a page in another
+// language each one points at that language's copy, or is marked hreflang="en" while there is none.
+// Anchors that already declare hreflang (the language menu) target a language on purpose and stay as is.
+function localize(html, code) {
+  if (code === 'en') return html;
+  return html.replace(/<a\b[^>]*>/g, (tag) => {
+    if (/\shreflang=/.test(tag)) return tag;
+    return tag.replace(/\shref="(\/[^"#?]*\/|\/)([#?][^"]*)?"/, (attr, path, rest = '') =>
+      existsSync(pageFile(code, path.slice(1, -1))) ? ` href="/${code}${path}${rest}"` : `${attr} hreflang="en"`,
+    );
+  });
+}
 
 function sitemap(langs) {
   const alternates = langs
@@ -77,7 +92,7 @@ function sitemap(langs) {
     .join('\n');
   const urls = [
     ...langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${alternates}\n  </url>`),
-    ...PAGES.map((p) => `  <url>\n    <loc>${ORIGIN}/${p}/</loc>\n  </url>`),
+    ...pageFiles(langs).map((f) => `  <url>\n    <loc>${ORIGIN}/${relative(SITE, dirname(f)).split(sep).join('/')}/</loc>\n  </url>`),
   ].join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`;
 }
@@ -92,11 +107,15 @@ export default defineConfig(() => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      rollupOptions: { input: [...langs.map(([c]) => fileOf(c)), ...PAGES.map((p) => join(SITE, p, 'index.html')), join(SITE, '404.html')] },
+      rollupOptions: { input: [...langs.map(([c]) => fileOf(c)), ...pageFiles(langs), join(SITE, '404.html')] },
     },
     plugins: [
       {
         name: 'i18n-pages',
+        transformIndexHtml(html, ctx) {
+          const first = relative(SITE, ctx.filename).split(sep)[0];
+          return localize(html, langs.some(([c]) => c === first) ? first : 'en');
+        },
         configureServer(server) {
           server.watcher.add([TEMPLATE, I18N]);
           server.watcher.on('change', (file) => {
