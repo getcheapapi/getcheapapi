@@ -50,7 +50,8 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
         try:
             result, cost, rows, ok = client.call(endpoint, body)
         except Stop as exc:
-            record({**row, "costUsd": 0, "error": str(exc)[:300]})
+            spent += exc.cost
+            record({**row, "costUsd": round(exc.cost, 6), "error": str(exc)[:300]})
             print(str(exc), file=sys.stderr)
             code = exc.code
             break
@@ -59,6 +60,8 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
         source = (result.get("source") or {}).get("id") if isinstance(result, dict) else None
         record({**row, "costUsd": round(cost, 6), "rows": rows, **({"source": source} if source else {}),
                 **({} if ok else {"error": "call failed"})})
+        if isinstance(result, dict) and result.get("nextAction"):  # async AnyAPI: poll, never resubmit
+            print(json.dumps({"requestId": result.get("requestId"), "nextAction": result["nextAction"]}))
         if client.name == "yir" and ok:
             files += client.download(result, out.parent, out.stem)
         if not ok:

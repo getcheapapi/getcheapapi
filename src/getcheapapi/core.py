@@ -22,9 +22,10 @@ def home() -> Path:
 class Stop(Exception):
     """Stop the run before (or right after) spending more; code 2 means out of balance."""
 
-    def __init__(self, msg: str, code: int = 1):
+    def __init__(self, msg: str, code: int = 1, cost: float = 0.0):
         super().__init__(msg)
         self.code = code
+        self.cost = cost  # charged before stopping, e.g. served by an unexpected source
 
 
 def _load_file(path: Path) -> None:

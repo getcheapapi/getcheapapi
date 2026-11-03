@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import base64
 import os
+import re
 import time
 import urllib.parse
 import uuid
@@ -81,16 +82,19 @@ class AnyAPI(Provider):
         try:
             result = http("POST", f"{self.base}/run/{endpoint}", {"X-API-Key": self.key}, body)
         except Stop as exc:
-            if exc.code == EXIT_NO_BALANCE:
+            if exc.code == EXIT_NO_BALANCE or "invalid_input" in str(exc):  # bad fields: see `describe anyapi`
                 raise
             raise Stop(f"{exc}\nThe pinned cheap sources {sorted(allowed)} cannot serve it now (no charge); "
                        f"others cost more:\n{L.price_table(endpoint, body, L.fetch_lanes(endpoint, self.key))}\n"
                        "Ask the user before rerunning with --max-ratio N.") from None
+        cost = float(result.get("costUsd") or 0)
+        if result.get("requestId") and result.get("nextAction") and not result.get("output"):
+            return result, cost, 0, True  # async SKU accepted; the source is known only when polled
         problem = L.served_ok(result, allowed, price)
         if problem:
-            raise Stop(f"AnyAPI {endpoint} {problem}; stopping.")
+            raise Stop(f"AnyAPI {endpoint} {problem}; stopping.", cost=cost)
         output = result.get("output") or {}
-        return result, float(result.get("costUsd") or 0), list_len(output.get("data")), True
+        return result, cost, list_len(output.get("data")), True
 
     def balance(self):
         return http("GET", f"{self.base}/balance", {"X-API-Key": self.key})
@@ -192,8 +196,16 @@ class DataForSEO(Provider):
         return {"balanceUsd": money.get("balance"), "totalUsd": money.get("total")}
 
 
-TWITTERAPI_USD_PER_ITEM = 0.00015  # also the per-call minimum, charged on empty results
-WRITE_WORDS = ("create", "delete", "send", "post_", "follow", "like", "retweet", "login", "upload")
+TWITTERAPI_USD_PER_ITEM = 0.00015  # per post; also the per-call minimum, charged on empty results
+TWITTERAPI_USD_PER_USER = 0.00003  # followers/followings: 1-3 credits each, priced at the top
+# Writes and logins name a verb in the last segment (create_tweet_v2, follow_user_v2, user_login_v2);
+# monitoring lives under oapi/. Reads such as user/followers or tweet/retweeters stay allowed.
+TWITTERAPI_WRITE = re.compile(r"(^|/)(create|delete|send|like|unlike|retweet|unretweet|follow|unfollow|"
+                              r"user_login|login|upload|update|add|remove)_[^/]*$|^oapi/")
+
+
+def twitterapi_unit(endpoint: str) -> float:
+    return TWITTERAPI_USD_PER_USER if re.search(r"follow(er|ing)", endpoint, re.I) else TWITTERAPI_USD_PER_ITEM
 
 
 class TwitterAPI(Provider):
@@ -206,15 +218,22 @@ class TwitterAPI(Provider):
         return env("TWITTERAPI_IO_KEY")
 
     def estimate(self, endpoint, body, fresh=True):
-        return 20 * TWITTERAPI_USD_PER_ITEM if "search" in endpoint else TWITTERAPI_USD_PER_ITEM
+        if TWITTERAPI_WRITE.search(endpoint.lstrip("/")):
+            raise Stop("twitterapi.io writes, logins and monitoring are not routed by getcheapapi.")
+        unit = twitterapi_unit(endpoint)
+        if unit == TWITTERAPI_USD_PER_USER:
+            return max(TWITTERAPI_USD_PER_ITEM, 200 * unit)  # pages of up to 200 users
+        ids = body.get("tweet_ids") or body.get("userIds")
+        return (len(str(ids).split(",")) if ids else 20) * unit  # list endpoints return pages of about 20 posts
 
     def call(self, endpoint, body):
-        if any(w in endpoint for w in WRITE_WORDS):
-            raise Stop("twitterapi.io writes and logins are not routed by getcheapapi.")
+        if TWITTERAPI_WRITE.search(endpoint.lstrip("/")):
+            raise Stop("twitterapi.io writes, logins and monitoring are not routed by getcheapapi.")
         result = http("GET", f"{self.base}/{endpoint.lstrip('/')}?{urllib.parse.urlencode(body)}", {"X-API-Key": self.key})
         rows = list_len(result) or list_len(result.get("data"))
-        # twitterapi.io returns no cost: 15 credits per returned item, 15 minimum even when empty.
-        return result, max(1, rows) * TWITTERAPI_USD_PER_ITEM, rows, result.get("status", "success") != "error"
+        # twitterapi.io returns no cost: credits per returned item, 15 minimum even when empty.
+        cost = max(TWITTERAPI_USD_PER_ITEM, rows * twitterapi_unit(endpoint))
+        return result, cost, rows, result.get("status", "success") != "error"
 
     def balance(self):
         return http("GET", f"{self.base}/oapi/my/info", {"X-API-Key": self.key})

@@ -132,3 +132,55 @@ def test_env_file_pointer_loads_keys_without_copying(tmp_path, monkeypatch):
     finally:
         os.environ.pop("ANYAPI_API_KEY", None)
         os.environ.pop("GETCHEAPAPI_ENV_FILE", None)
+
+
+def test_twitterapi_blocks_writes_and_monitoring_but_not_follower_reads():
+    from getcheapapi.providers import TwitterAPI
+    t = TwitterAPI()
+    for path in ("twitter/create_tweet_v2", "twitter/follow_user_v2", "twitter/user_login_v2",
+                 "twitter/send_dm_to_user", "oapi/tweet_filter/add_rule", "/twitter/like_tweet_v2"):
+        with pytest.raises(Stop):
+            t.estimate(path, {})
+    for path in ("twitter/user/followers", "twitter/user/followings", "twitter/tweet/retweeters",
+                 "twitter/tweet/advanced_search", "twitter/user/last_tweets"):
+        assert t.estimate(path, {}) > 0
+    assert t.estimate("twitter/user/followers", {}) == pytest.approx(0.006)  # 200 users x 3 credits
+    assert t.estimate("twitter/tweets", {"tweet_ids": "1,2,3"}) == pytest.approx(3 * 0.00015)
+
+
+def test_anyapi_unexpected_source_stops_but_keeps_the_charge(monkeypatch):
+    from getcheapapi import providers
+    monkeypatch.setenv("ANYAPI_API_KEY", "x")
+    monkeypatch.setattr(providers, "http", lambda *a, **k: {"source": {"id": "dear"}, "costUsd": 0.01, "output": {}})
+    a = providers.AnyAPI()
+    body = {"query": "x"}
+    a._pinned[id(body)] = ({"cheap"}, 0.0005)
+    with pytest.raises(Stop) as exc:
+        a.call("google.search", body)
+    assert exc.value.cost == pytest.approx(0.01)
+
+
+def test_anyapi_invalid_input_is_not_reported_as_pricier_sources(monkeypatch):
+    from getcheapapi import providers
+
+    def fake_http(*a, **k):
+        raise Stop("HTTP 400: {\"error\":\"invalid_input: missing property 'query'\"}")
+
+    monkeypatch.setenv("ANYAPI_API_KEY", "x")
+    monkeypatch.setattr(providers, "http", fake_http)
+    a = providers.AnyAPI()
+    body = {"keyword": "x"}
+    a._pinned[id(body)] = ({"cheap"}, 0.0005)
+    with pytest.raises(Stop) as exc:
+        a.call("tiktok.search_keyword", body)
+    assert "--max-ratio" not in str(exc.value)
+
+
+def test_anyapi_async_acceptance_is_not_a_wrong_source(monkeypatch):
+    from getcheapapi import providers
+    monkeypatch.setenv("ANYAPI_API_KEY", "x")
+    monkeypatch.setattr(providers, "http", lambda *a, **k: {"requestId": "r1", "nextAction": {"poll": "/v1/requests/r1"}})
+    a = providers.AnyAPI()
+    body = {"q": "x"}
+    a._pinned[id(body)] = ({"cheap"}, 0.0005)
+    assert a.call("company.research", body)[3] is True
