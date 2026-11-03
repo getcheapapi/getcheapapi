@@ -19,6 +19,7 @@
   "cmd_note": "Codex ou outro agente? Crie um link da mesma pasta no diretório de skills dele.",
   "copy": "copiar",
   "copied": "copiado",
+  "copy_failed": "falha ao copiar",
   "cli_or": "Scripts podem usar a CLI:",
   "scroll_hint": "Veja quanto seu agente economizaria",
   "r_h2": "Os mesmos dados podem custar de 2× a 200× mais, dependendo da rota.",

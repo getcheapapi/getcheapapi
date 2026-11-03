@@ -75,11 +75,12 @@
           <h1>{{h1}}</h1>
           <p class="hero-lede">{{lede}}</p>
           <div class="ctas">
-            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{btn_skill}}</span></button>
+            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
             <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
           </div>
           <div class="cmd-note">
-            <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+            <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp;
+ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
             <p>{{cmd_note}}</p>
           </div>
           <p class="mono scroll-hint"><span aria-hidden="true">↓</span>{{scroll_hint}}</p>
@@ -191,13 +192,14 @@
           </div>
           <div class="card-side">
             <div class="cmd">
-              <code>git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
-              <button class="mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
+              <code>git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp;
+ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+              <button class="mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{copy}}</span></button>
             </div>
             <p class="dim cli-or">{{cli_or}}</p>
             <div class="cmd">
               <code>pip install git+https://github.com/getcheapapi/getcheapapi</code>
-              <button class="mono" type="button" data-copy="pip install git+https://github.com/getcheapapi/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
+              <button class="mono" type="button" data-copy="pip install git+https://github.com/getcheapapi/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{copy}}</span></button>
             </div>
           </div>
         </div>
@@ -206,7 +208,13 @@
       <canvas class="melt" data-field="melt" data-dark="below" aria-hidden="true"></canvas>
 
       <section id="faq" class="dark dots faq">
-        <h2>{{q_h2}}</h2>
+        <div class="faq-head">
+          <h2>{{q_h2}}</h2>
+          <div class="ctas">
+            <button class="btn light mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
+            <a class="btn ghost mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
+          </div>
+        </div>
         <div class="faq-list">
           <details><summary class="mono"><span>Q.001 / </span>{{q1}}</summary><p>{{a1}}</p></details>
           <details><summary class="mono"><span>Q.002 / </span>{{q2}}</summary><p>{{a2}}</p></details>

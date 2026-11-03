@@ -19,6 +19,7 @@
   "cmd_note": "Codex 等其他 Agent：把同一个目录链接到它的 Skill 目录即可。",
   "copy": "复制",
   "copied": "已复制",
+  "copy_failed": "复制失败，请手动选择",
   "cli_or": "脚本也可以直接用命令行：",
   "scroll_hint": "看看你的 Agent 能省多少",
   "r_h2": "同样的数据，走不同路线，价格能差 2 到 200 倍。",

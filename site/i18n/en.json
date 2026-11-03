@@ -19,6 +19,7 @@
   "cmd_note": "Codex or another agent: link the same folder into its skills directory.",
   "copy": "copy",
   "copied": "copied",
+  "copy_failed": "copy failed, select it",
   "cli_or": "Scripts can use the CLI instead:",
   "scroll_hint": "See what your agent would save",
   "r_h2": "The same data can cost 2× to 200× more, depending on the route.",

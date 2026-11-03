@@ -210,22 +210,37 @@
     const open = pill.classList.toggle('open');
     menu.setAttribute('aria-expanded', String(open));
   });
-  document.querySelectorAll('#navlinks a').forEach((a) => a.addEventListener('click', () => {
+  const closeMenu = () => {
     pill.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
-  }));
+  };
+  document.querySelectorAll('#navlinks a').forEach((a) => a.addEventListener('click', closeMenu));
+  // Esc or a tap outside closes the phone menu and any open language menu.
+  const closeAll = (keep) => {
+    if (!pill.contains(keep)) closeMenu();
+    document.querySelectorAll('details.lang[open]').forEach((d) => { if (!d.contains(keep)) d.open = false; });
+  };
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+  document.addEventListener('click', (e) => closeAll(e.target));
 
   // Copy the install command.
   document.querySelectorAll('[data-copy]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const label = btn.querySelector('[data-copy-label]') || btn.parentElement.querySelector('[data-copy-label]');
       const was = label ? label.textContent : '';
-      const done = () => {
+      const say = (text) => {
         if (!label) return;
-        label.textContent = btn.dataset.copied || 'copied';
+        label.textContent = text;
         setTimeout(() => { label.textContent = was; }, 1500);
       };
-      navigator.clipboard?.writeText(btn.dataset.copy).then(done, () => {});
+      // No clipboard (plain http, permission denied): select the command shown next to the button so it can be copied by hand.
+      const failed = () => {
+        say(btn.dataset.failed || 'copy failed');
+        const code = btn.parentElement.querySelector('code') || document.querySelector('.cmd-line');
+        if (code) getSelection().selectAllChildren(code);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(btn.dataset.copy).then(() => say(btn.dataset.copied || 'copied'), failed);
+      else failed();
     });
   });
 })();

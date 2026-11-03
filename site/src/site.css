@@ -85,8 +85,12 @@ canvas { display: block; }
 .btn.dotted::after { content: ""; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
 .btn.grey { background: var(--grey); color: var(--ink); }
 .btn.grey:hover { background: #d2d2d2; color: var(--ink); }
+.btn.light { background: var(--paper); color: var(--ink); }
+.btn.light:hover { background: #fff; color: var(--ink); }
+.btn.ghost { color: #fff; border: 1px dotted var(--w40); }
+.btn.ghost:hover { color: #fff; border-color: #fff; }
 .cmd-note { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); max-width: 52ch; }
-.cmd-line { display: block; font-size: 12.5px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.cmd-line { display: block; font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .scroll-hint { position: absolute; left: var(--gutter); bottom: 32px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
 .scroll-hint span { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 50%; align-items: center; justify-content: center; font-size: 10px; }
 /* The receipt is printed on paper over the stairs field, which stays behind it as texture. */
@@ -140,7 +144,7 @@ canvas { display: block; }
 .what-fig { position: relative; }
 .what-fig .sticky { position: sticky; top: 48px; height: min(760px, calc(100svh - 180px)); }
 .what-fig canvas { width: 100%; height: calc(100% - 40px); }
-.what-fig figcaption { margin-top: 18px; font-size: 11px; color: var(--w40); }
+.what-fig figcaption { margin-top: 18px; font-size: 11px; color: var(--w60); }
 
 /* coverage */
 .coverage { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 140px var(--gutter) 72px; align-items: start; }
@@ -150,8 +154,7 @@ canvas { display: block; }
 .cov td, .cov th { padding: 15px 0; border-top: 1px dashed var(--line); text-align: left; font-weight: 400; vertical-align: top; }
 .cov td:first-child { width: 92px; color: var(--muted); }
 .cov td:last-child { text-align: right; color: var(--muted); padding-left: 16px; }
-.cov tr:hover th { text-decoration: underline dotted; text-underline-offset: 4px; }
-.cov th a { text-decoration: underline dotted; text-underline-offset: 4px; }
+.cov th a { display: inline-block; padding: 13px 0; margin: -13px 0; text-decoration: underline dotted; text-underline-offset: 4px; }
 
 /* install */
 .install { padding: 40px var(--gutter) 160px; display: flex; flex-direction: column; gap: 48px; }
@@ -167,21 +170,22 @@ canvas { display: block; }
 .card-main .dim { max-width: 36ch; }
 .cli-or { font-size: 14px; margin-bottom: -10px; }
 .cmd { margin-top: 12px; display: flex; align-items: center; gap: 10px; border: 1px dotted var(--w40); border-radius: 4px; padding: 0 6px 0 14px; }
-.cmd code { font-size: 13px; overflow-x: auto; white-space: nowrap; padding: 13px 0; flex: 1; min-width: 0; scrollbar-width: none; }
-.cmd button { flex: none; font-size: 12px; min-height: 36px; padding: 0 12px; background: #fff; color: var(--ink); border: 0; border-radius: 3px; cursor: pointer; }
+.cmd code { font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; padding: 13px 0; flex: 1; min-width: 0; }
+.cmd button { flex: none; font-size: 12px; min-height: 44px; padding: 0 14px; background: #fff; color: var(--ink); border: 0; border-radius: 3px; cursor: pointer; }
 .card-side { border-left: 1px dashed var(--w20); padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; gap: 22px; min-width: 0; }
 
 /* faq */
 .faq { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 96px var(--gutter) 140px; align-items: start; }
 .faq h2 { font-size: 40px; }
 .faq-list { font-size: 14px; border-bottom: 1px dashed var(--w20); }
-.faq details { border-top: 1px dashed var(--w20); padding: 22px 0; }
-.faq summary { list-style: none; cursor: pointer; display: flex; gap: 8px; }
+.faq-head { display: flex; flex-direction: column; gap: 32px; }
+.faq details { border-top: 1px dashed var(--w20); }
+.faq summary { list-style: none; cursor: pointer; display: flex; gap: 8px; padding: 22px 0; }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary span { color: var(--w40); flex: none; }
-.faq summary::after { content: "+"; margin-left: auto; color: var(--w40); }
+.faq summary span { color: var(--w60); flex: none; }
+.faq summary::after { content: "+"; margin-left: auto; color: var(--w60); }
 .faq details[open] summary::after { content: "−"; }
-.faq details p { margin-top: 12px; font-size: 16px; color: var(--w60); max-width: 60ch; }
+.faq details p { margin: -10px 0 0; padding-bottom: 22px; font-size: 16px; color: var(--w60); max-width: 60ch; }
 
 /* footer */
 .foot { overflow: hidden; }
@@ -194,6 +198,7 @@ canvas { display: block; }
 .foot-cols div { display: flex; flex-direction: column; gap: 10px; }
 .foot-cols p { font-family: var(--sans); text-transform: none; letter-spacing: 0; font-size: 15px; color: var(--muted); }
 .foot-cols a { text-decoration: none; }
+.foot-cols span { color: var(--muted); }
 /* CJK headlines: one character is about two Latin ones wide. */
 :lang(zh) .hero h1, :lang(ja) .hero h1, :lang(ko) .hero h1 { max-width: 11em; }
 :lang(ja) h1, :lang(ja) h2 { word-break: auto-phrase; }
@@ -214,7 +219,7 @@ canvas { display: block; }
   :root { --gutter: max(20px, env(safe-area-inset-left, 0px)); }
   .hero, .receipt, .what, .coverage, .faq, .card { grid-template-columns: minmax(0, 1fr); }
   .hero-copy { padding-top: 128px; padding-bottom: 56px; }
-  .scroll-hint { display: none; }
+  .scroll-hint, .cmd-note { display: none; }
   .hero-fig { min-height: 0; padding: 56px var(--gutter); }
   .receipt { padding-top: 96px; padding-bottom: 88px; gap: 56px; }
   .what { padding: 72px var(--gutter) 88px; }
