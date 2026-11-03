@@ -15,7 +15,7 @@ from pathlib import Path
 
 from getcheapapi import lanes as L
 from getcheapapi import router
-from getcheapapi.core import Stop, env, home, ledger_path, load_env, now, record, write_json
+from getcheapapi.core import Stop, env, home, key_source, ledger_path, load_env, now, record, write_json
 from getcheapapi.providers import DATA_DIR, PROVIDERS, AnyAPI, GoAnyAPI, Provider
 
 
@@ -35,7 +35,8 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
     """Prepare on fresh prices, estimate, enforce --max-usd, call one by one, record and save."""
     bodies = [client.prepare(endpoint, b) for b in bodies]
     estimate = sum(client.estimate(endpoint, b) for b in bodies)
-    print(json.dumps({"route": label, "calls": len(bodies), "estimateUsd": round(estimate, 5), "maxUsd": args.max_usd}))
+    print(json.dumps({"route": label, "calls": len(bodies), "estimateUsd": round(estimate, 5), "maxUsd": args.max_usd,
+                      "keys": key_source(*client.keys)}))
     if estimate > args.max_usd:
         raise Stop(f"estimate ${estimate:.4f} exceeds --max-usd {args.max_usd}; tell the user the count and total, "
                    "then rerun with a higher --max-usd once they agree.")
@@ -204,6 +205,7 @@ def cmd_spend(args) -> int:
 
 
 def cmd_balance(args) -> int:
+    print(f"{args.provider} keys: {key_source(*PROVIDERS[args.provider].keys)}", file=sys.stderr)
     print(json.dumps(PROVIDERS[args.provider]().balance()))
     return 0
 

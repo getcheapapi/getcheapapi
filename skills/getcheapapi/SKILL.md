@@ -9,7 +9,7 @@ One CLI routes each paid call to the cheapest provider that can serve it. Compar
 
 Run it as `python <this skill folder>/scripts/getcheapapi.py <command>`; below it is written `getcheapapi`.
 
-Keys: `ANYAPI_API_KEY`, `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD`, `GOANYAPI_API_KEY`, `TWITTERAPI_IO_KEY`, `YIR_API_KEY`, read from the environment, a `.env` in the working folder or its parents, or `~/.getcheapapi/.env`; `GETCHEAPAPI_ENV_FILE` in any of these points to another `.env` that holds the keys. One provider is enough. When a key is missing, tell the user where to put it and give them the sign-up link the CLI prints (`getcheapapi caps` lists one per missing provider). Never print keys, never ask the user to paste them into the chat, never sign up or top up for them.
+Keys: `ANYAPI_API_KEY`, `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD`, `GOANYAPI_API_KEY`, `TWITTERAPI_IO_KEY`, `YIR_API_KEY`, read from the environment, a `.env` in the working folder or its parents, or `~/.getcheapapi/.env`; `GETCHEAPAPI_ENV_FILE` in any of these points to another `.env` that holds the keys. One provider is enough. `run`, `call` and `balance` print which file (or `environment`) each key came from, never the key; a `.env` in the working folder wins over `~/.getcheapapi/.env`, so when the source is not the one the user expects, say so before spending. When a key is missing, tell the user where to put it and give them the sign-up link the CLI prints (`getcheapapi caps` lists one per missing provider). Never print keys, never ask the user to paste them into the chat, never sign up or top up for them.
 
 ## Pick the route
 

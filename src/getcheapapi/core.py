@@ -28,15 +28,19 @@ class Stop(Exception):
         self.cost = cost  # charged before stopping, e.g. served by an unexpected source
 
 
+KEY_SOURCES: dict[str, str] = {}  # variable -> .env file it was loaded from
+
+
 def _load_file(path: Path) -> None:
     for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
-        value = value.strip().strip('"').strip("'")
-        if key.strip() and value:
-            os.environ.setdefault(key.strip(), value)
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key and value and key not in os.environ:
+            os.environ[key] = value
+            KEY_SOURCES[key] = str(path)
 
 
 def load_env() -> list[Path]:
@@ -67,6 +71,12 @@ def env(name: str) -> str:
     if not value:
         raise Stop(f"{name} is not configured; add it to .env (see .env.example) or ~/.getcheapapi/.env.")
     return value
+
+
+def key_source(*names: str) -> str:
+    """Where these variables came from (file paths or "environment"), never their values."""
+    sources = dict.fromkeys(KEY_SOURCES.get(n, "environment") for n in names if os.environ.get(n, "").strip())
+    return ", ".join(sources) or "not configured"
 
 
 def has_env(*names: str) -> bool:

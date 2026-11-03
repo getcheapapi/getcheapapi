@@ -134,6 +134,25 @@ def test_env_file_pointer_loads_keys_without_copying(tmp_path, monkeypatch):
         os.environ.pop("GETCHEAPAPI_ENV_FILE", None)
 
 
+def test_key_source_names_the_file_not_the_value(tmp_path, monkeypatch):
+    from getcheapapi.core import key_source, load_env
+    work = tmp_path / "work"
+    work.mkdir()
+    (work / ".env").write_text("ANYAPI_API_KEY=abc\n", encoding="utf-8")
+    monkeypatch.chdir(work)
+    monkeypatch.setenv("GETCHEAPAPI_HOME", str(tmp_path / "home"))
+    monkeypatch.delenv("ANYAPI_API_KEY", raising=False)
+    monkeypatch.setenv("YIR_API_KEY", "xyz")
+    load_env()
+    import os
+    try:
+        assert key_source("ANYAPI_API_KEY") == str(work / ".env")
+        assert key_source("YIR_API_KEY") == "environment"
+        assert "abc" not in key_source("ANYAPI_API_KEY", "YIR_API_KEY")
+    finally:
+        os.environ.pop("ANYAPI_API_KEY", None)
+
+
 def test_twitterapi_blocks_writes_and_monitoring_but_not_follower_reads():
     from getcheapapi.providers import TwitterAPI
     t = TwitterAPI()
