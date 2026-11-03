@@ -75,13 +75,11 @@
           <h1>{{h1}}</h1>
           <p class="hero-lede">{{lede}}</p>
           <div class="ctas">
-            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; mkdir -p ~/.claude/skills &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
+            <button class="btn dark mono dotted" type="button" data-copy="{{install_prompt}}" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
             <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
           </div>
           <div class="cmd-note">
-            <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp;
-mkdir -p ~/.claude/skills &amp;&amp;
-ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+            <code class="cmd-line">{{install_prompt}}</code>
             <p>{{cmd_note}}</p>
           </div>
           <p class="mono scroll-hint"><span aria-hidden="true">↓</span>{{scroll_hint}}</p>
@@ -193,10 +191,8 @@ ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
           </div>
           <div class="card-side">
             <div class="cmd">
-              <code>git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp;
-mkdir -p ~/.claude/skills &amp;&amp;
-ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
-              <button class="mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; mkdir -p ~/.claude/skills &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{copy}}</span></button>
+              <code>{{install_prompt}}</code>
+              <button class="mono" type="button" data-copy="{{install_prompt}}" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{copy}}</span></button>
             </div>
             <p class="dim cli-or">{{cli_or}}</p>
             <div class="cmd">
@@ -213,7 +209,7 @@ ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
         <div class="faq-head">
           <h2>{{q_h2}}</h2>
           <div class="ctas">
-            <button class="btn light mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; mkdir -p ~/.claude/skills &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
+            <button class="btn light mono dotted" type="button" data-copy="{{install_prompt}}" data-copied="{{copied}}" data-failed="{{copy_failed}}"><span data-copy-label aria-live="polite">{{btn_skill}}</span></button>
             <a class="btn ghost mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
           </div>
         </div>
