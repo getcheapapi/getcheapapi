@@ -1,5 +1,7 @@
 # getcheapapi
 
+English | [简体中文](README.zh-CN.md)
+
 **Stop overpaying for data and media APIs.** getcheapapi is an open-source price router for AI agents and developers: it prices every provider you can use for a call, runs it through the cheapest one, and refuses to overspend.
 
 Website: [getcheapapi.com](https://getcheapapi.com)
