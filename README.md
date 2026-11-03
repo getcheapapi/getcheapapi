@@ -41,11 +41,13 @@ Out of scope: LLM text routing (LiteLLM and OpenRouter cover it), and any write 
 
 | Provider | Used for | Pricing source |
 |---|---|---|
-| [AnyAPI](https://getanyapi.com) | SERP, X, Reddit, TikTok, Google Trends | live per-source prices |
+| [AnyAPI](https://getanyapi.com/?via=q89thkytbw) | SERP, X, Reddit, TikTok, Google Trends | live per-source prices |
 | [DataForSEO](https://dataforseo.com) | keyword volume and ideas, backlinks, SERP | published price list |
-| [GoAnyAPI](https://goanyapi.com) | SERP, DR, traffic, keyword volume, backlinks | public catalog |
-| [twitterapi.io](https://twitterapi.io) | X search (read only) | published price list |
+| [GoAnyAPI](https://goanyapi.com/r/ga-ccef6a6e4f) | SERP, DR, traffic, keyword volume, backlinks | public catalog |
+| [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X search (read only) | published price list |
 | [Yir](https://yir.ai) | image, video, speech generation | live quotes |
+
+Some provider links above carry our referral code, and the CLI prints them when a key is missing. They never affect routing: routes are ranked by price only.
 
 ## Install
 

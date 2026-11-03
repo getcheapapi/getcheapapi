@@ -45,7 +45,7 @@ class Provider:
 
 
 class AnyAPI(Provider):
-    name, keys, site = "anyapi", ("ANYAPI_API_KEY",), "https://getanyapi.com"
+    name, keys, site = "anyapi", ("ANYAPI_API_KEY",), "https://getanyapi.com/?via=q89thkytbw"
     base = L.BASE
 
     def __init__(self, max_ratio: float = L.DEFAULT_MAX_RATIO):
@@ -106,7 +106,7 @@ GOANY_USD_PER_CREDIT = 0.001
 
 
 class GoAnyAPI(Provider):
-    name, keys, site = "goanyapi", ("GOANYAPI_API_KEY",), "https://goanyapi.com"
+    name, keys, site = "goanyapi", ("GOANYAPI_API_KEY",), "https://goanyapi.com/r/ga-ccef6a6e4f"
     base = "https://api.goanyapi.com/api/v1"
 
     @property
@@ -198,7 +198,7 @@ WRITE_WORDS = ("create", "delete", "send", "post_", "follow", "like", "retweet",
 
 class TwitterAPI(Provider):
     """Read-only. Writes, logins and monitoring are out of scope for a price router."""
-    name, keys, site = "twitterapi", ("TWITTERAPI_IO_KEY",), "https://twitterapi.io"
+    name, keys, site = "twitterapi", ("TWITTERAPI_IO_KEY",), "https://twitterapi.io/?ref=wn7a9fzv"
     base = "https://api.twitterapi.io"
 
     @property
