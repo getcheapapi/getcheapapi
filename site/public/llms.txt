@@ -11,19 +11,20 @@ If a human pasted a prompt asking you to install getcheapapi, do this, then repo
    - Claude Code: `mkdir -p ~/.claude/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi`
    - Codex: `mkdir -p ~/.agents/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.agents/skills/getcheapapi`
    - Other agents: link it into whatever skills directory you load from.
-   - On Windows, where symlinks may need admin rights, copy the folder instead.
-   Linked from a clone, the skill runs without installing the Python package (Python 3.10+ required).
-3. Check it works: `python ~/getcheapapi/skills/getcheapapi/scripts/getcheapapi.py caps` (or `getcheapapi caps` if the package is installed).
+   - On Windows, use a directory junction (no admin rights needed), e.g. `cmd /c mklink /J "%USERPROFILE%\.claude\skills\getcheapapi" "%USERPROFILE%\getcheapapi\skills\getcheapapi"`. Do not copy the folder: the skill runs code from the clone around it.
+   The skill runs straight from the clone; nothing to pip install (Python 3.10+ required).
+3. Check it works: `python ~/getcheapapi/skills/getcheapapi/scripts/getcheapapi.py caps`.
 4. Tell the human to put provider keys in `~/.getcheapapi/.env` (format: `.env.example` in the repo). Never ask them to paste keys into chat. The skill may need a restart of the agent session to load.
 
 ## Using it
 
-1. Optional CLI for scripts: `pip install git+https://github.com/getcheapapi/getcheapapi`.
-2. Keys: put them in `~/.getcheapapi/.env` (format: `.env.example`), read from any working folder; a `.env` in the working folder or its parents also works. One is enough. Never ask the human to paste keys into chat.
-3. Discover: `getcheapapi caps -v` lists capabilities, inputs and examples.
-4. Price before spending: `getcheapapi quote <capability> --input '<json>'` spends nothing.
-5. Run under a cap: `getcheapapi run <capability> --input '<json>' --max-usd 0.01`. Exit code 2 means out of balance (HTTP 402); a refused budget exits 1. Either way, stop and tell the human, do not retry.
-6. Report spend: `getcheapapi spend --days 7`.
+Below, `getcheapapi` means `python <skill folder>/scripts/getcheapapi.py`.
+
+1. Keys: put them in `~/.getcheapapi/.env` (format: `.env.example`), read from any working folder; a `.env` in the working folder or its parents also works. One is enough. Never ask the human to paste keys into chat.
+2. Discover: `getcheapapi caps -v` lists capabilities, inputs and examples.
+3. Price before spending: `getcheapapi quote <capability> --input '<json>'` spends nothing.
+4. Run under a cap: `getcheapapi run <capability> --input '<json>' --max-usd 0.01`. Exit code 2 means out of balance (HTTP 402); a refused budget exits 1. Either way, stop and tell the human, do not retry.
+5. Report spend: `getcheapapi spend --days 7`.
 
 ## Links
 

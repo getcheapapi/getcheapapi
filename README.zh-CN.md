@@ -52,7 +52,7 @@ mkdir -p ~/.claude/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/sk
 mkdir -p ~/.agents/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.agents/skills/getcheapapi
 ```
 
-Windows 上直接复制目录，不用链接。Skill 从克隆的仓库直接运行，不需要安装 Python 包（需要 Python 3.10+）。装好后重启 Agent 会话即可加载。
+Windows 上用目录联接（`mklink /J`，不需要管理员权限），不要复制目录：Skill 要从克隆的仓库里运行（需要 Python 3.10+）。装好后重启 Agent 会话即可加载。
 
 </details>
 

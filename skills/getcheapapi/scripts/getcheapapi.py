@@ -15,8 +15,8 @@ sys.path[:] = [p for p in sys.path if Path(p or ".").resolve() != HERE]
 if importlib.util.find_spec("getcheapapi") is None:
     src = Path(__file__).resolve().parents[3] / "src"  # scripts -> skill -> skills -> repo root
     if not (src / "getcheapapi").is_dir():
-        sys.exit("getcheapapi is not installed. Install it with "
-                 "`pip install git+https://github.com/getcheapapi/getcheapapi`, or link this skill from a clone of https://github.com/getcheapapi/getcheapapi.")
+        sys.exit("getcheapapi cannot find its code. Link this skill from a clone of https://github.com/getcheapapi/getcheapapi "
+                 "instead of copying it; see https://getcheapapi.com/llms.txt.")
     sys.path.insert(0, str(src))
 
 from getcheapapi.cli import main  # noqa: E402

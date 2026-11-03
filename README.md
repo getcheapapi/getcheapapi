@@ -52,7 +52,7 @@ mkdir -p ~/.claude/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/sk
 mkdir -p ~/.agents/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.agents/skills/getcheapapi
 ```
 
-On Windows, copy the folder instead of linking it. The skill runs from the clone without installing the package (Python 3.10+). Restart the agent session to load it.
+On Windows, link it with a directory junction (`mklink /J`, no admin rights needed) rather than copying it: the skill runs from the clone (Python 3.10+). Restart the agent session to load it.
 
 </details>
 
