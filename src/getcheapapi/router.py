@@ -151,7 +151,9 @@ def choose(options: list[Option]) -> Option:
     runnable = [o for o in options if o.status == "ok"]
     if not runnable:
         reasons = "; ".join(f"{o.label}: {o.status}" for o in options) or "no routes"
-        raise Stop(f"no route can run: {reasons}")
+        keyless = [o for o in options if o.status == "no key"]
+        hint = f"\ncheapest route needs a key for {keyless[0].provider}: {PROVIDERS[keyless[0].provider].site}" if keyless else ""
+        raise Stop(f"no route can run: {reasons}{hint}")
     return runnable[0]
 
 

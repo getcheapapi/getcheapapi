@@ -91,6 +91,9 @@ def as_inputs(parsed) -> list[dict]:
 def cmd_caps(args) -> int:
     keys = {name: cls.configured() for name, cls in PROVIDERS.items()}
     print("providers: " + "  ".join(f"{n}{'' if ok else ' (no key)'}" for n, ok in keys.items()))
+    for n, ok in keys.items():
+        if not ok:
+            print(f"  {n} sign-up: {PROVIDERS[n].site}")
     for name, cap in router.load_catalog().items():
         providers = sorted({r["provider"] for r in cap["routes"]})
         print(f"  {name:18} {cap['description']}  [{', '.join(providers)}]")
@@ -113,6 +116,8 @@ def cmd_quote(args) -> int:
         print(f"would run: {best.label} ${best.usd:.5f}")
         for o in cheaper:
             print(f"  a key for {o.provider} ({PROVIDERS[o.provider].site}) would save ${best.usd - o.usd:.5f} on this run")
+    elif keyless := [o for o in options if o.status == "no key"]:
+        print(f"no key yet; the cheapest route needs a key for {keyless[0].provider}: {PROVIDERS[keyless[0].provider].site}")
     return 0
 
 
