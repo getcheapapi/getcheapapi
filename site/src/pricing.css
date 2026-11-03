@@ -29,6 +29,8 @@
 .p-table thead th { color: var(--muted); font-size: 12px; }
 .p-table td { color: var(--muted); padding-left: 16px; }
 .p-table td:last-child, .p-table thead th:last-child { text-align: right; white-space: nowrap; color: var(--ink); }
+.p-timeline th { white-space: nowrap; }
+.p-table.p-timeline td:last-child, .p-table.p-timeline thead th:last-child { white-space: normal; text-align: left; }
 .p-wide td, .p-wide thead th:not(:first-child) { text-align: right; white-space: nowrap; }
 .p-table .lo th, .p-table .lo td:last-child { background: var(--ink); color: var(--paper); }
 .p-table .lo th { padding-left: 8px; }

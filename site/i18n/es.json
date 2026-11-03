@@ -104,5 +104,6 @@
   "ft_project": "Proyecto",
   "ft_serppricing": "Precios de SERP API",
   "ft_xpricing": "Precios de la API de X",
+  "ft_redditpricing": "Precios de la API de Reddit",
   "ft_bar": "Abierto. Gratis. Tuyo para cambiarlo."
 }

@@ -44,8 +44,9 @@
 
 | 词簇 | 代表词 | 意图 | 人群 | 页型 | 搜索需求（来源） | GPT 证据 | 承接页 | 现状 | 结论 | 下一步 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Reddit API 价格 | reddit api pricing / reddit api cost | 找价格 | 做社区监控、选题的开发者 | 比价页 | 390（590→260）+ 210；KD 0；CPC $12（DFS） | — | （待建）/reddit-api-pricing | 未建 | 新建页 | P1：KD 0，前排多为 2023 新闻和供应商博客；官方 $0.24/1k 调用（需核实）vs AnyAPI $0.35–0.6/1k 条 |
-| Reddit 搜索 API | reddit search api / reddit api alternative | 找工具 | 同上 | 比价页内一节 | 140 / 20（DFS） | — | /reddit-api-pricing | 未建 | 并入承接页 | — |
+| Reddit API 价格 | reddit api pricing / reddit api cost | 找价格 | 做社区监控、选题的开发者 | 比价页 | 390（590→260）+ 210；KD 0；CPC $12（DFS） | — | /reddit-api-pricing | 已建（2026-11-02，未发布） | 新建页 | 发布后提交 sitemap/IndexNow，4–8 周后看 GSC |
+| Reddit API 关停 | reddit api shutdown / reddit api alternative / reddit api key | 了解/找工具 | 被 Reddit 关停影响的开发者 | 比价页内一节 | 未查量（2026-09-30 公告后的新事件） | — | /reddit-api-pricing#official | 已建 | 并入承接页 | 下次取数时补查这几个词的量；量大就把 H1 改成以关停为主 |
+| Reddit 搜索 API | reddit search api / reddit api alternative | 找工具 | 同上 | 比价页内一节 | 140 / 20（DFS） | — | /reddit-api-pricing#compare | 已建 | 并入承接页 | — |
 | Google Trends API | google trends api / google trends api pricing / pytrends alternative | 找工具 | 做选题和趋势监控的开发者 | 比价页 | 1,300（1,600→880）；pricing 20；pytrends alternative 10；CPC $13.7（DFS） | — | （待建）/google-trends-api | 未建 | 新建页 | P2：官方 Trends API alpha 的现状 + 第三方单价（AnyAPI $0.002、GoAnyAPI 按词） |
 | TikTok API | tiktok api / tiktok search api / tiktok scraper api | 找工具 | 做短视频选题的开发者 | — | 1,900（意图多为官方开放平台）；search 40；scraper 30（DFS） | — | — | — | 放弃主词，长尾观察 | 主词意图不符（官方 SDK/登录）；搜索类长尾量太小，等 GPT 侧证据 |
 
@@ -82,7 +83,7 @@
 |---|---|---|---|---|
 | 已完成 | 新建 /twitter-api-pricing | X API 价格簇合计约 3–4k/月，CPC $8–19；有独有比价数据 | `landing-page-designer` | 单价表带日期；按 1 万条推文算各家总价；附可复现的 `quote` 命令；FAQ 写免费档；有利益披露 |
 | 已完成 | 新建 /serp-api-pricing | SERP 价格簇约 2k/月，CPC $18+；前排全是供应商自写比价 | `landing-page-designer` | 至少 7 家单价，按 1k/10k/100k 算总价；陷阱一节（运算符 5×、失败自动切到更贵来源）；不自称最便宜 |
-| P1 | 新建 /reddit-api-pricing | 600/月，KD 0 | `landing-page-designer` | 官方价核实到出处；第三方按 1k 条算 |
+| 已完成 | 新建 /reddit-api-pricing | 600/月，KD 0 | `landing-page-designer` | 官方价核实到出处；第三方按 1k 条算 |
 | P2 | 新建 /serpapi-alternatives | 140→480 在涨，KD 8，CPC $32 | `landing-page-designer` | 与 /serp-api-pricing 互链，不重复单价表 |
 | P2 | 新建 /google-trends-api | 1,300/月，CPC $13.7 | `landing-page-designer` | 官方 alpha 现状、pytrends 现状、第三方单价 |
 | P2 | Skill 目录与 awesome 列表收录 | skill 词 4 万+/月，而且是列表型 SERP | `backlink` | 提交 5 个以上目录/列表，并在台账记录收录情况 |
