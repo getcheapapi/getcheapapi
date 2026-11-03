@@ -50,8 +50,8 @@ Out of scope: LLM text routing (LiteLLM and OpenRouter cover it), and any write 
 ## Install
 
 ```bash
-pip install .          # from a clone; a PyPI release is coming
-cp .env.example .env   # fill in the keys you have; one is enough
+pip install git+https://github.com/getcheapapi/getcheapapi   # a PyPI release is coming
+cp .env.example .env   # from a clone; fill in the keys you have, one is enough
 getcheapapi caps -v
 ```
 

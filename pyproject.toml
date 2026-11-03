@@ -13,6 +13,7 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://getcheapapi.com"
+Repository = "https://github.com/getcheapapi/getcheapapi"
 
 [project.scripts]
 getcheapapi = "getcheapapi.cli:main"

@@ -7,7 +7,7 @@ description: One cost-guarded entry point for paid data and media APIs. Picks th
 
 One CLI routes each paid call to the cheapest provider that can serve it. Comparing is free; only `run` and `call` spend.
 
-Run it as `python <this skill folder>/scripts/getcheapapi.py <command>`; below it is written `getcheapapi`, which also works directly when the package is pip-installed.
+Run it as `python <this skill folder>/scripts/getcheapapi.py <command>`; below it is written `getcheapapi`, which also works directly when the package is installed (`pip install git+https://github.com/getcheapapi/getcheapapi`).
 
 Keys: `ANYAPI_API_KEY`, `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD`, `GOANYAPI_API_KEY`, `TWITTERAPI_IO_KEY`, `YIR_API_KEY`, read from the environment, a `.env` in the working folder or its parents, or `~/.getcheapapi/.env`; `GETCHEAPAPI_ENV_FILE` in any of these points to another `.env` that holds the keys. One provider is enough. When a key is missing, tell the user where to put it. Never print keys, never ask the user to paste them into the chat, never sign up or top up for them.
 
