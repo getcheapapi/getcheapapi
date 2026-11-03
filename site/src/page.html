@@ -56,7 +56,7 @@
           </div>
           <span class="grow"></span>
           <details class="lang mono">
-            <summary aria-label="{{lang_label}}">{{lang_short}}</summary>
+            <summary aria-label="{{lang_label}}"><svg class="globe" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M1.5 8h13M8 1.5c1.8 1.8 2.7 4 2.7 6.5s-.9 4.7-2.7 6.5M8 1.5C6.2 3.3 5.3 5.5 5.3 8s.9 4.7 2.7 6.5" /></svg></summary>
             <div class="lang-menu">
 {{lang_menu}}
             </div>
@@ -242,13 +242,18 @@
         <div class="foot-cols mono">
           <div><p>{{ft_project}}</p><a href="https://github.com/getcheapapi/getcheapapi">GitHub</a><a href="#coverage">{{nav_coverage}}</a><a href="#faq">{{nav_faq}}</a><a href="/serp-api-pricing/">{{ft_serppricing}}</a><a href="/twitter-api-pricing/">{{ft_xpricing}}</a><a href="/reddit-api-pricing/">{{ft_redditpricing}}</a><a href="/llms.txt">llms.txt</a></div>
           <div><p>CLI</p><span>caps</span><span>quote</span><span>run</span><span>spend</span></div>
-          <div><p>{{lang_label}}</p>
-{{lang_links}}
-          </div>
         </div>
       </div>
       <p class="wordmark" aria-hidden="true">getcheapapi</p>
-      <div class="foot-bar mono"><span>MIT · 2026</span><span>{{ft_bar}}</span></div>
+      <div class="foot-bar mono">
+        <span>MIT · 2026</span><span class="grow"></span><span>{{ft_bar}}</span>
+        <details class="lang foot-lang">
+          <summary aria-label="{{lang_label}}"><svg class="globe" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M1.5 8h13M8 1.5c1.8 1.8 2.7 4 2.7 6.5s-.9 4.7-2.7 6.5M8 1.5C6.2 3.3 5.3 5.5 5.3 8s.9 4.7 2.7 6.5" /></svg>{{_name}}</summary>
+          <div class="lang-menu">
+{{lang_links}}
+          </div>
+        </details>
+      </div>
     </footer>
   </body>
 </html>

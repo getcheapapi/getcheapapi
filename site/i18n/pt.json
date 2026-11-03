@@ -2,7 +2,6 @@
   "_name": "Português",
   "_hreflang": "pt-BR",
   "_og_locale": "pt_BR",
-  "lang_short": "PT",
   "lang_label": "Idioma",
   "title": "getcheapapi: skill open source para agentes pagarem o menor preço em APIs de SERP, X e SEO",
   "description": "Skill gratuito com licença MIT para Claude Code, Codex e outros agentes. Antes de cada chamada de SERP, X, palavras-chave ou backlinks, cota todos os provedores, usa o mais barato e respeita seu orçamento. Mude qualquer rota você mesmo.",

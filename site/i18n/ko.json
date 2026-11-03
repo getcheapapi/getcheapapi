@@ -2,7 +2,6 @@
   "_name": "한국어",
   "_hreflang": "ko",
   "_og_locale": "ko_KR",
-  "lang_short": "한국어",
   "lang_label": "언어",
   "title": "getcheapapi: SERP·X·SEO API를 최저가로 호출하는 오픈소스 에이전트 스킬",
   "description": "Claude Code, Codex 등 에이전트를 위한 무료 MIT 라이선스 스킬. SERP, X, 키워드, 백링크 호출마다 모든 공급자의 가격을 비교해 가장 싼 곳을 쓰고 예산을 지킵니다. 어떤 경로든 직접 바꿀 수 있습니다.",

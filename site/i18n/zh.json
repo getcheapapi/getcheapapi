@@ -2,7 +2,6 @@
   "_name": "简体中文",
   "_hreflang": "zh-Hans",
   "_og_locale": "zh_CN",
-  "lang_short": "中文",
   "lang_label": "语言",
   "title": "getcheapapi：开源 Agent Skill，SERP、X、关键词与外链 API 自动走最低价",
   "description": "免费、MIT 开源的 Skill，适用于 Claude Code、Codex 等 Agent。每次调用 SERP、X、关键词或外链接口前先给所有供应商报价，走最便宜的那家，不超出你的预算。任何路线都能自己改。",

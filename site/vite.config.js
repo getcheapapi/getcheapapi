@@ -10,6 +10,7 @@ const TEMPLATE = join(SITE, 'src', 'page.html');
 const I18N = join(SITE, 'i18n');
 const ORIGIN = 'https://getcheapapi.com';
 const HOLE = /\{\{(\w+)\}\}/g;
+const GLOBE = '<svg class="globe" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M1.5 8h13M8 1.5c1.8 1.8 2.7 4 2.7 6.5s-.9 4.7-2.7 6.5M8 1.5C6.2 3.3 5.3 5.5 5.3 8s.9 4.7 2.7 6.5" /></svg>';
 // Added to every built page (not in dev). Rybbit loads from /stats/, which the Worker proxies upstream.
 const ANALYTICS = `    <script async src="https://www.googletagmanager.com/gtag/js?id=G-49X99WY2B7"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-49X99WY2B7');</script>
@@ -89,15 +90,16 @@ function alternates(langs, slug, tag, indent) {
   ];
 }
 
-// Footer language column for a page that exists in more than one language, appended to its .foot-cols.
-function languageColumn(html, langs, slug, code) {
+// Footer language menu for a page that exists in more than one language, added to the end of its .foot-bar.
+function languageMenu(html, langs, slug, code) {
   const copies = langs.filter(([c]) => existsSync(pageFile(c, slug)));
   if (copies.length < 2) return html;
   const links = copies
     .map(([c, s]) => `<a href="${pagePath(c, slug)}" hreflang="${s._hreflang}" lang="${s._hreflang}"${c === code ? ' aria-current="page"' : ''}>${s._name}</a>`)
     .join('');
-  const label = langs.find(([c]) => c === code)[1].lang_label;
-  return html.replace(/(<div class="foot-cols mono">\n(?:(\s*)<div>.*<\/div>\n)*)/, (cols, _, indent) => `${cols}${indent}<div><p>${label}</p>${links}</div>\n`);
+  const { lang_label, _name } = langs.find(([c]) => c === code)[1];
+  const menu = `<details class="lang foot-lang"><summary aria-label="${lang_label}">${GLOBE}${_name}</summary><div class="lang-menu">${links}</div></details>`;
+  return html.replace(/(<div class="foot-bar mono"><span>[^<]*<\/span>)(.*)<\/div>/, `$1<span class="grow"></span>$2${menu}</div>`);
 }
 
 // Internal links are always written as the English path (/serp-api-pricing/). On a page in another
@@ -118,7 +120,7 @@ function sitemap(langs) {
     .map(([c, s]) => `    <xhtml:link rel="alternate" hreflang="${s._hreflang}" href="${ORIGIN}${pathOf(c)}" />`)
     .join('\n');
   const urls = [
-    ...langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${alternates}\n  </url>`),
+    ...langs.map(([c]) => `  <url>\n    <loc>${ORIGIN}${pathOf(c)}</loc>\n${homeAlternates}\n  </url>`),
     ...PAGES.flatMap((p) => {
       const links = alternates(langs, p, 'xhtml:link', '    ').map((l) => `\n${l}`).join('');
       return langs.filter(([c]) => existsSync(pageFile(c, p))).map(([c]) => `  <url>\n    <loc>${ORIGIN}${pagePath(c, p)}</loc>${links}\n  </url>`);
@@ -147,7 +149,7 @@ export default defineConfig(() => {
           const code = langs.some(([c]) => c === parts[0]) ? parts[0] : 'en';
           const slug = code === 'en' ? parts[0] : parts[1];
           const links = PAGES.includes(slug) ? alternates(langs, slug, 'link', '    ') : [];
-          if (links.length) html = languageColumn(html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`), langs, slug, code);
+          if (links.length) html = languageMenu(html.replace(/<link rel="canonical"[^>]*>/, (tag) => `${tag}\n${links.join('\n')}`), langs, slug, code);
           if (!ctx.server) html = html.replace('  </head>', ANALYTICS);
           return localize(html, code);
         },

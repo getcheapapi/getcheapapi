@@ -2,7 +2,6 @@
   "_name": "English",
   "_hreflang": "en",
   "_og_locale": "en_US",
-  "lang_short": "EN",
   "lang_label": "Language",
   "title": "getcheapapi: open-source agent skill for the cheapest SERP, X and SEO API calls",
   "description": "Free, MIT-licensed skill for Claude Code, Codex and other agents. Before each SERP, X, keyword or backlink call it prices every provider, uses the cheapest and stays under your budget. Change any route yourself.",
