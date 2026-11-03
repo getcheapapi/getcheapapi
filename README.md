@@ -1,10 +1,14 @@
 # getcheapapi
 
-English | [简体中文](README.zh-CN.md)
+**Your agent compares prices before it calls an API.**
 
-**Stop overpaying for data and media APIs.** getcheapapi is an open-source price router for AI agents and developers: it prices every provider you can use for a call, runs it through the cheapest one, and refuses to overspend.
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![Agent skill](https://img.shields.io/badge/agent%20skill-Claude%20Code%20%7C%20Codex-black.svg)](skills/getcheapapi/SKILL.md)
 
-Website: [getcheapapi.com](https://getcheapapi.com)
+English | [简体中文](README.zh-CN.md) · [Website](https://getcheapapi.com) · [Skill](skills/getcheapapi/SKILL.md)
+
+getcheapapi is a free, open-source skill and CLI for SERP, X, Reddit, keyword, backlink and media APIs. Before each paid call it prices every provider, runs the cheapest one you have a key for, and stops before it goes over your budget.
 
 ```text
 $ getcheapapi quote keyword.volume --input '{"keywords":["k1","k2","k3","k4","k5"]}'
@@ -18,26 +22,107 @@ $ getcheapapi quote keyword.volume --input @50-keywords.json
 would run: dataforseo keywords_data/google_ads/search_volume/live $0.09000
 ```
 
-## Why
+Same request, two sizes: for 5 keywords GoAnyAPI is 6x cheaper; for 50, DataForSEO's batch endpoint wins. You do not have to know that. getcheapapi does the comparison on every call, and a quote spends nothing.
 
-The same data costs 2x to 200x more depending on the route, and the default is usually the expensive one:
+## Quick start
 
-- **Aggregators fail over to dearer upstreams silently.** One AnyAPI endpoint is served by several sources whose prices differ by up to 28x (X search) or 200x; when the cheap one fails, the default retry bills the dear one.
-- **Harmless-looking options raise the price.** A field that only some sources return, a "live" mode, a search operator (5x on DataForSEO SERP).
-- **Billing rules differ everywhere.** Per call, per row, per keyword; empty results charged on some, free on others; batch endpoints that take 1,000 items for one price.
-- **Agents have no brakes.** A real night: keyword volumes split into 15 calls instead of one, backlinks fetched domain by domain, and a script that kept sending 211 requests after a 402.
+### 1. Add the skill to your agent
 
-getcheapapi turns that knowledge into code: a capability catalog, a local price cache, and guards on every paid call.
+Paste this into Claude Code, Codex or another coding agent:
 
-## What it does
+```text
+Read https://getcheapapi.com/llms.txt and install the getcheapapi skill for this agent by following its install steps.
+```
 
-- **Ask for a capability, not a provider**: `serp.google`, `x.search`, `keyword.volume`, `image.generate`… Each maps to routes across providers, with field mapping and batching.
-- **Prices every route** from a local cache (live price APIs where providers have them, published tables where they do not) and picks the cheapest one you have a key for. Routes you have no key for are priced too, so you see what another key would save.
-- **Re-prices on fresh prices before spending**, pins AnyAPI to the cheapest sources with failover off, and keeps a price baseline that stops the run when the cheapest price jumps.
-- **Guards every run**: estimate first and refuse past `--max-usd`; stop on 402 (exit code 2) or the first failure; dedupe and batch inputs; save every response; log every call to a local ledger (`getcheapapi spend`).
-- **Media too**: image, video and speech generation via Yir, quoted before every job and capped server-side.
+<details>
+<summary>Or install it by hand</summary>
 
-Out of scope: LLM text routing (LiteLLM and OpenRouter cover it), and any write action on social accounts.
+```bash
+git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi
+
+# Claude Code
+mkdir -p ~/.claude/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi
+# Codex
+mkdir -p ~/.agents/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.agents/skills/getcheapapi
+```
+
+On Windows, copy the folder instead of linking it. The skill runs from the clone without installing the package (Python 3.10+). Restart the agent session to load it.
+
+</details>
+
+### 2. Add your keys
+
+```bash
+mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheapapi/getcheapapi/main/.env.example -o ~/.getcheapapi/.env
+```
+
+Fill in the keys you already have in `~/.getcheapapi/.env`. One provider is enough to start. Keep keys in this file, not in the chat with your agent.
+
+### 3. Ask
+
+> "Get the monthly search volume for these 30 keywords."
+> "Search X for posts about cheap SERP APIs this week."
+
+The agent quotes every route, picks the cheapest, and tells you what it spent.
+
+### Command line (optional)
+
+For scripts and CI, install the CLI:
+
+```bash
+pip install git+https://github.com/getcheapapi/getcheapapi   # PyPI release coming
+getcheapapi caps -v
+```
+
+## What you can ask for
+
+| Capability | What you get | Providers compared |
+|---|---|---|
+| `serp.google` | Google top 10 results for a query | AnyAPI, DataForSEO, GoAnyAPI |
+| `serp.bing` | Bing top 10 results for a query | AnyAPI, GoAnyAPI |
+| `x.search` | X (Twitter) search, about 20 posts a page | AnyAPI, twitterapi.io |
+| `reddit.search` | Reddit post search, about 25 posts a page | AnyAPI |
+| `tiktok.search` | TikTok video search, about 20 videos a page | AnyAPI |
+| `google.trends` | Interest over time, up to 5 keywords | AnyAPI, GoAnyAPI |
+| `keyword.volume` | Monthly Google search volume for a keyword list | DataForSEO, GoAnyAPI |
+| `keyword.ideas` | Keyword ideas around a seed | DataForSEO, GoAnyAPI |
+| `backlinks.summary` | Backlink overview of a domain | DataForSEO, GoAnyAPI |
+| `domain.rank` / `domain.dr` | Domain rank or Domain Rating for a list of domains | DataForSEO / GoAnyAPI |
+| `website.traffic` | Estimated monthly traffic history | GoAnyAPI |
+| `image.generate` · `video.generate` · `speech.generate` | Image, video and speech generation | Yir |
+
+Not covered: LLM text routing (use LiteLLM or OpenRouter) and any write action on social accounts.
+
+## How it keeps your bill down
+
+The same data can cost 2x to 200x more depending on the route, and the default route is usually the expensive one. getcheapapi handles the usual traps:
+
+| Trap | What getcheapapi does |
+|---|---|
+| Aggregators quietly fail over to a dearer source (up to 28x on one X search) | Pins AnyAPI to the cheapest sources with failover off |
+| Options that look harmless raise the price (a search operator: 5x on DataForSEO SERP) | Prices the exact input, options included, before running |
+| Billing differs everywhere: per call, per row, per keyword, batches | Dedupes inputs and sends one batch when that is cheaper |
+| Prices change | Re-checks prices before spending; stops if the cheapest price jumps |
+| Agents keep going: one script sent 211 requests after running out of balance | Refuses runs over `--max-usd` (default $0.10), stops on HTTP 402 or the first failure |
+
+Every call is logged to a local ledger, so `getcheapapi spend` shows where the money went. Routes you have no key for are priced too, so you can see what another key would save.
+
+## Commands
+
+```bash
+getcheapapi caps -v                                   # capabilities, inputs, examples
+getcheapapi quote serp.google --input '{"query":"cheap serp api"}'   # compare, spends nothing
+getcheapapi run serp.google --input '{"query":"cheap serp api"}' --max-usd 0.01
+getcheapapi run x.search --input '[{"query":"a"},{"query":"b"}]'      # a list runs as one batch
+getcheapapi call dataforseo backlinks/summary/live --input '{"target":"example.com"}'  # raw endpoint, same guards
+getcheapapi prices refresh                            # update the local price cache
+getcheapapi spend --days 7                            # spend by provider and endpoint
+getcheapapi balance anyapi
+```
+
+Exit codes for scripts: `0` done, `1` refused or failed (budget, error), `2` out of balance (HTTP 402). On `1` or `2`, stop; do not retry in a loop.
+
+Everything stays in `~/.getcheapapi/` (override with `GETCHEAPAPI_HOME`): keys, price cache, ledger and saved results. Nothing leaves your machine except the API calls themselves.
 
 ## Providers
 
@@ -49,33 +134,7 @@ Out of scope: LLM text routing (LiteLLM and OpenRouter cover it), and any write 
 | [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X search (read only) | published price list |
 | [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme) (same team) | image, video, speech generation | live quotes |
 
-Some provider links above carry our referral code, and the CLI prints them when a key is missing. They never affect routing: routes are ranked by price only.
-
-## Install
-
-```bash
-pip install git+https://github.com/getcheapapi/getcheapapi   # a PyPI release is coming
-mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheapapi/getcheapapi/main/.env.example -o ~/.getcheapapi/.env
-# fill in the keys you have in ~/.getcheapapi/.env, one is enough
-getcheapapi caps -v
-```
-
-For agents (Claude Code, Codex and others), install the skill in [`skills/getcheapapi`](skills/getcheapapi/SKILL.md): link or copy that folder into your agent's skills directory (for example `~/.claude/skills/getcheapapi`). Linked from a clone, it runs without installing the package.
-
-## Usage
-
-```bash
-getcheapapi caps -v                                   # capabilities, inputs, examples
-getcheapapi quote serp.google --input '{"query":"cheap serp api"}'   # compare, spends nothing
-getcheapapi run serp.google --input '{"query":"cheap serp api"}' --max-usd 0.01
-getcheapapi run x.search --input '[{"query":"a"},{"query":"b"}]'      # a list runs as one batch
-getcheapapi call dataforseo backlinks/summary/live --input '{"target":"example.com"}'  # raw endpoint, same guards
-getcheapapi prices refresh                            # update the local price cache
-getcheapapi spend --days 7                            # what you spent, by provider and endpoint
-getcheapapi balance anyapi
-```
-
-State lives in `~/.getcheapapi/` (override with `GETCHEAPAPI_HOME`): price cache, price baseline, ledger, saved results. Nothing leaves your machine except the API calls themselves.
+**Disclosure.** Some links above carry our referral code, and the CLI prints them when a key is missing. Yir is run by the same team as getcheapapi. Neither affects routing: routes are ranked by price only.
 
 ## Contributing
 
@@ -86,10 +145,6 @@ python scripts/check_catalog.py   # checks route fields against live provider sc
 python -m pytest
 ```
 
-## Disclosure
-
-getcheapapi is neutral by design: routes are ranked by price only. Yir is run by the same team as getcheapapi; it is labeled as such and ranked by the same rule.
-
 ## License
 
-MIT
+[MIT](LICENSE)

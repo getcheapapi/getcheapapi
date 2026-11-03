@@ -1,10 +1,14 @@
 # getcheapapi
 
-[English](README.md) | 简体中文
+**让你的 Agent 调 API 前先比价。**
 
-**别再为数据和媒体 API 多付钱。** getcheapapi 是面向 AI Agent 和开发者的开源比价路由：每次调用前给你能用的所有供应商报价，走最便宜的那家，超预算就拒绝。
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![Agent skill](https://img.shields.io/badge/agent%20skill-Claude%20Code%20%7C%20Codex-black.svg)](skills/getcheapapi/SKILL.md)
 
-官网：[getcheapapi.com/zh/](https://getcheapapi.com/zh/)
+[English](README.md) | 简体中文 · [官网](https://getcheapapi.com/zh/) · [Skill](skills/getcheapapi/SKILL.md)
+
+getcheapapi 是一个免费开源的 Skill 和命令行工具，覆盖 SERP、X、Reddit、关键词、外链和媒体生成类 API。每次付费调用前，它先给所有供应商报价，在你有 Key 的供应商里走最便宜的那家，超出预算前就停下。
 
 ```text
 $ getcheapapi quote keyword.volume --input '{"keywords":["k1","k2","k3","k4","k5"]}'
@@ -18,51 +22,92 @@ $ getcheapapi quote keyword.volume --input @50-keywords.json
 would run: dataforseo keywords_data/google_ads/search_volume/live $0.09000
 ```
 
-## 为什么
+同一个请求，规模不同：查 5 个关键词时 GoAnyAPI 便宜 6 倍；查 50 个时 DataForSEO 的批量接口更划算。这些你不用记，getcheapapi 每次调用都会比一遍，而且报价本身不花钱。
 
-同样的数据，走不同路线，价格能差 2 到 200 倍，而默认路线往往是贵的那条：
+## 快速开始
 
-- **聚合商会悄悄切到更贵的上游。** AnyAPI 的同一个接口背后有多个来源，价格最高相差 28 倍（X 搜索）甚至 200 倍；便宜的来源失败时，默认重试会按贵的那家计费。
-- **看似无害的选项会抬价。** 只有部分来源返回的字段、“live” 模式、搜索运算符（DataForSEO SERP 上贵 5 倍）。
-- **各家计费规则都不一样。** 按次、按行、按关键词；空结果有的收费有的免费；有的批量接口 1,000 条只收一次钱。
-- **Agent 没有刹车。** 真实的一晚：关键词搜索量拆成 15 次调用而不是 1 次，外链逐个域名去查，还有个脚本在 402 之后又发了 211 次请求。
+### 1. 把 Skill 加进你的 Agent
 
-getcheapapi 把这些经验写成了代码：一份能力目录、一份本地价格缓存，以及每次付费调用上的护栏。
+把下面这句话粘贴给 Claude Code、Codex 或其他编程 Agent：
 
-## 它做什么
+```text
+Read https://getcheapapi.com/llms.txt and install the getcheapapi skill for this agent by following its install steps.
+```
 
-- **按能力请求，而不是按供应商**：`serp.google`、`x.search`、`keyword.volume`、`image.generate`……每个能力映射到多家供应商的路线，字段映射和批量处理都已做好。
-- **给每条路线报价**，数据来自本地缓存（供应商有实时价格接口的用接口，没有的用公开价目表），在你有 Key 的路线里选最便宜的。没有 Key 的路线也会报价，让你看到多一个 Key 能省多少。
-- **花钱前用最新价格再核一次**，把 AnyAPI 固定到最便宜的来源并关闭自动切换，同时保存价格基线，最低价突然上涨就停止运行。
-- **守住每次运行**：先估价，超过 `--max-usd` 就拒绝；遇到 402（退出码 2）或第一次失败就停；输入去重并批量发送；保存每次响应；每次调用记入本地账本（`getcheapapi spend`）。
-- **媒体也支持**：通过 Yir 生成图片、视频和语音，每个任务开始前先报价，并在服务端封顶。
+<details>
+<summary>或者手动安装</summary>
 
-不在范围内：LLM 文本路由（LiteLLM 和 OpenRouter 已经覆盖），以及社交账号上的任何写操作。
+```bash
+git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi
 
-## 供应商
+# Claude Code
+mkdir -p ~/.claude/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi
+# Codex
+mkdir -p ~/.agents/skills && ln -s ~/getcheapapi/skills/getcheapapi ~/.agents/skills/getcheapapi
+```
 
-| 供应商 | 用途 | 价格来源 |
-|---|---|---|
-| [AnyAPI](https://getanyapi.com/?via=q89thkytbw) | SERP、X、Reddit、TikTok、Google Trends | 各来源实时价格 |
-| [DataForSEO](https://dataforseo.com) | 关键词搜索量与拓词、外链、SERP | 公开价目表 |
-| [GoAnyAPI](https://goanyapi.com/r/ga-ccef6a6e4f) | SERP、DR、流量、关键词搜索量、外链 | 公开目录 |
-| [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X 搜索（只读） | 公开价目表 |
-| [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme)（同一团队） | 图片、视频、语音生成 | 实时报价 |
+Windows 上直接复制目录，不用链接。Skill 从克隆的仓库直接运行，不需要安装 Python 包（需要 Python 3.10+）。装好后重启 Agent 会话即可加载。
 
-上表部分供应商链接带有我们的推荐码，缺少 Key 时 CLI 也会打印这些链接。它们不影响路由：路线只按价格排序。
+</details>
 
-## 安装
+### 2. 填入你的 Key
+
+```bash
+mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheapapi/getcheapapi/main/.env.example -o ~/.getcheapapi/.env
+```
+
+在 `~/.getcheapapi/.env` 里填上你已有的 Key，有一家就能开始用。Key 只放在这个文件里，不要贴进和 Agent 的对话。
+
+### 3. 直接提需求
+
+> “帮我查这 30 个关键词的月搜索量。”
+> “搜一下 X 上这周讨论便宜 SERP API 的帖子。”
+
+Agent 会给每条路线报价，选最便宜的执行，最后告诉你花了多少。
+
+### 命令行（可选）
+
+写脚本或跑 CI 时，可以装命令行工具：
 
 ```bash
 pip install git+https://github.com/getcheapapi/getcheapapi   # PyPI 版本即将发布
-mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheapapi/getcheapapi/main/.env.example -o ~/.getcheapapi/.env
-# 在 ~/.getcheapapi/.env 里填上你有的 Key，一个就够
 getcheapapi caps -v
 ```
 
-给 Agent 用（Claude Code、Codex 等）：安装 [`skills/getcheapapi`](skills/getcheapapi/SKILL.md) 里的 Skill，把这个目录链接或复制到 Agent 的 Skill 目录（例如 `~/.claude/skills/getcheapapi`）。从克隆仓库链接过去的话，不安装包也能运行。
+## 能查什么
 
-## 用法
+| 能力 | 返回内容 | 参与比价的供应商 |
+|---|---|---|
+| `serp.google` | 一个查询的 Google 前 10 条结果 | AnyAPI、DataForSEO、GoAnyAPI |
+| `serp.bing` | 一个查询的 Bing 前 10 条结果 | AnyAPI、GoAnyAPI |
+| `x.search` | X（Twitter）搜索，每页约 20 条 | AnyAPI、twitterapi.io |
+| `reddit.search` | Reddit 帖子搜索，每页约 25 条 | AnyAPI |
+| `tiktok.search` | TikTok 视频搜索，每页约 20 条 | AnyAPI |
+| `google.trends` | 热度随时间变化，最多 5 个关键词 | AnyAPI、GoAnyAPI |
+| `keyword.volume` | 一批关键词的 Google 月搜索量 | DataForSEO、GoAnyAPI |
+| `keyword.ideas` | 围绕种子词的关键词拓展 | DataForSEO、GoAnyAPI |
+| `backlinks.summary` | 一个域名的外链概览 | DataForSEO、GoAnyAPI |
+| `domain.rank` / `domain.dr` | 一批域名的 Domain Rank 或 Domain Rating | DataForSEO / GoAnyAPI |
+| `website.traffic` | 网站月流量估算历史 | GoAnyAPI |
+| `image.generate` · `video.generate` · `speech.generate` | 图片、视频、语音生成 | Yir |
+
+不在范围内：LLM 文本路由（用 LiteLLM 或 OpenRouter），以及社交账号上的任何写操作。
+
+## 它怎么帮你省钱
+
+同样的数据，走不同路线价格能差 2 到 200 倍，而默认路线往往是贵的那条。getcheapapi 帮你绕开这些常见的坑：
+
+| 坑 | getcheapapi 的做法 |
+|---|---|
+| 聚合商悄悄切到更贵的来源（一次 X 搜索最高差 28 倍） | 把 AnyAPI 固定到最便宜的来源，关闭自动切换 |
+| 看似无害的选项会抬价（加个搜索运算符，DataForSEO SERP 贵 5 倍） | 按实际输入（含所有选项）报价，再执行 |
+| 各家计费规则不同：按次、按行、按关键词、批量 | 输入去重，批量更便宜时一次发完 |
+| 价格会变 | 花钱前再核一次价，最低价突然上涨就停 |
+| Agent 不会自己停：有个脚本在余额用完后又发了 211 次请求 | 超过 `--max-usd`（默认 0.1 美元）就拒绝；遇到 HTTP 402 或第一次失败就停 |
+
+每次调用都记入本地账本，`getcheapapi spend` 能看到钱花在了哪。没有 Key 的路线也会报价，让你看到多一个 Key 能省多少。
+
+## 命令
 
 ```bash
 getcheapapi caps -v                                   # 能力列表、输入、示例
@@ -75,7 +120,21 @@ getcheapapi spend --days 7                            # 按供应商和接口查
 getcheapapi balance anyapi
 ```
 
-状态保存在 `~/.getcheapapi/`（可用 `GETCHEAPAPI_HOME` 覆盖）：价格缓存、价格基线、账本、保存的结果。除了 API 调用本身，没有任何数据离开你的机器。
+脚本可用的退出码：`0` 完成，`1` 被拒绝或失败（超预算、出错），`2` 余额不足（HTTP 402）。遇到 `1` 或 `2` 就停，不要循环重试。
+
+所有数据都在 `~/.getcheapapi/`（可用 `GETCHEAPAPI_HOME` 改位置）：Key、价格缓存、账本和保存的结果。除了 API 调用本身，没有任何数据离开你的机器。
+
+## 供应商
+
+| 供应商 | 用途 | 价格来源 |
+|---|---|---|
+| [AnyAPI](https://getanyapi.com/?via=q89thkytbw) | SERP、X、Reddit、TikTok、Google Trends | 各来源实时价格 |
+| [DataForSEO](https://dataforseo.com) | 关键词搜索量与拓词、外链、SERP | 公开价目表 |
+| [GoAnyAPI](https://goanyapi.com/r/ga-ccef6a6e4f) | SERP、DR、流量、关键词搜索量、外链 | 公开目录 |
+| [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X 搜索（只读） | 公开价目表 |
+| [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme)（同一团队） | 图片、视频、语音生成 | 实时报价 |
+
+**披露。** 上表部分链接带有我们的推荐码，缺少 Key 时 CLI 也会打印这些链接。Yir 与 getcheapapi 由同一团队运营。两者都不影响路由：路线只按价格排序。
 
 ## 参与贡献
 
@@ -86,10 +145,6 @@ python scripts/check_catalog.py   # 对照供应商实时 schema 检查路线字
 python -m pytest
 ```
 
-## 披露
-
-getcheapapi 的设计是中立的：路线只按价格排序。Yir 与 getcheapapi 由同一团队运营；表中已标注，并按同样的规则排序。
-
 ## 许可证
 
-MIT
+[MIT](LICENSE)
