@@ -79,11 +79,11 @@
           <h1>{{h1}}</h1>
           <p class="hero-lede">{{lede}}</p>
           <div class="ctas">
-            <button class="btn dark mono" type="button" data-copy data-copied="{{copied}}">pip</button>
-            <button class="btn dark mono dotted" type="button" data-copy data-copied="{{copied}}"><span data-copy-label>install</span></button>
+            <button class="btn dark mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}">{{btn_skill}}</button>
+            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
             <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
           </div>
-          <code class="cmd-line">$ pip install git+https://github.com/getcheapapi/getcheapapi</code>
+          <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
           <p class="mono scroll-hint"><span aria-hidden="true">↓</span>{{scroll_hint}}</p>
         </div>
         <figure class="hero-fig dots" aria-label="{{fig1_aria}}">
@@ -198,8 +198,13 @@
             <p class="zero">$0</p>
             <p class="dim">{{i_sub}}</p>
             <div class="cmd">
+              <code>git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+              <button class="mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
+            </div>
+            <p class="dim cli-or">{{cli_or}}</p>
+            <div class="cmd">
               <code>pip install git+https://github.com/getcheapapi/getcheapapi</code>
-              <button class="mono" type="button" data-copy data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
+              <button class="mono" type="button" data-copy="pip install git+https://github.com/getcheapapi/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
             </div>
           </div>
           <ol class="card-list mono">

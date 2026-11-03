@@ -48,12 +48,14 @@ canvas { display: block; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* nav pill */
-.navwrap { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; display: flex; justify-content: center; pointer-events: none; padding: 16px 16px 0; }
-.pill { pointer-events: auto; width: min(560px, 100%); background: var(--ink); color: #fff; border: 1px dotted var(--w40); border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 0 0 3px var(--ink); }
+.navwrap { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; display: flex; justify-content: center; pointer-events: none; padding: 16px 16px 0; transition: transform .3s ease; }
+.navwrap.away { transform: translateY(calc(-100% - 8px)); }
+@media (prefers-reduced-motion: reduce) { .navwrap { transition: none; } }
+.pill { pointer-events: auto; width: min(660px, 100%); background: var(--ink); color: #fff; border: 1px dotted var(--w40); border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 0 0 3px var(--ink); }
 .pill-row { display: flex; align-items: center; gap: 20px; padding: 0 4px; min-height: 32px; }
 .mark { display: flex; width: 30px; height: 30px; flex: none; background: #fff; color: var(--ink); border-radius: 2px; align-items: center; justify-content: center; }
 .links { display: flex; gap: 20px; font-size: 13px; color: var(--w60); }
-.links a { text-decoration: none; }
+.links a { text-decoration: none; white-space: nowrap; }
 .links a.on { color: #fff; outline: 1px dotted var(--w40); outline-offset: 4px; }
 .has-dot { position: relative; }
 .has-dot::after { content: ""; position: absolute; top: -3px; right: -8px; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
@@ -80,7 +82,7 @@ canvas { display: block; }
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: max(760px, 100svh); }
 .hero-copy { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 28px; padding: 140px var(--gutter) 88px; }
 .eyebrow { font-size: 15px; }
-.hero h1 { font-size: clamp(40px, 3.7vw, 54px); line-height: 1.06; letter-spacing: -0.02em; max-width: 13ch; }
+.hero h1 { font-size: clamp(40px, 3.7vw, 54px); line-height: 1.06; letter-spacing: -0.02em; max-width: 16ch; }
 .hero-lede { max-width: 46ch; }
 .ctas { display: flex; flex-wrap: wrap; gap: 6px; }
 .btn { position: relative; display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; font-size: 14px; border: 0; border-radius: 4px; text-decoration: none; cursor: pointer; transition: transform 0.15s ease, background-color 0.15s ease; }
@@ -163,6 +165,7 @@ canvas { display: block; }
 .card-main > p.mono { font-size: 13px; }
 .zero { font-size: 160px; line-height: 0.85; font-weight: 500; letter-spacing: -0.045em; }
 .card-main .dim { max-width: 36ch; }
+.cli-or { font-size: 14px; margin-bottom: -10px; }
 .cmd { margin-top: 12px; display: flex; align-items: center; gap: 10px; border: 1px dotted var(--w40); border-radius: 4px; padding: 0 6px 0 14px; }
 .cmd code { font-size: 13px; overflow-x: auto; white-space: nowrap; padding: 13px 0; flex: 1; min-width: 0; scrollbar-width: none; }
 .cmd button { flex: none; font-size: 12px; min-height: 36px; padding: 0 12px; background: #fff; color: var(--ink); border: 0; border-radius: 3px; cursor: pointer; }
@@ -203,7 +206,7 @@ canvas { display: block; }
 :lang(zh) .hero h1 { word-break: keep-all; }
 :lang(zh) .receipt-copy h2, :lang(ja) .receipt-copy h2, :lang(ko) .receipt-copy h2,
 :lang(zh) .install h2, :lang(ja) .install h2, :lang(ko) .install h2 { max-width: 11em; }
-.wordmark { border-top: 1px dashed var(--line); padding: 24px 0 0 calc(var(--gutter) - 0.06em); font-weight: 500; font-size: clamp(60px, 16vw, 248px); line-height: 0.78; letter-spacing: -0.055em; white-space: nowrap; margin-bottom: -0.1em; }
+.wordmark { border-top: 1px dashed var(--line); padding: 24px 0 0 calc(var(--gutter) - 0.06em); font-weight: 500; font-size: clamp(60px, 16vw, 248px); line-height: 1; letter-spacing: -0.055em; white-space: nowrap; padding-bottom: 0.04em; }
 .foot-bar { display: flex; justify-content: space-between; gap: 16px; padding: 16px var(--gutter) 24px; font-size: 11.5px; color: var(--muted); border-top: 1px dashed var(--line); position: relative; background: var(--paper); }
 
 @media (max-width: 980px) {

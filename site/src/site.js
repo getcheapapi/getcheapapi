@@ -2,7 +2,6 @@
 (() => {
   const STREAM =
     'ANYAPI · DATAFORSEO · GOANYAPI · TWITTERAPI.IO · YIR · $0.01500 · $0.09000 · X1.0 · X28 · QUOTE · RUN · --MAX-USD 0.1 · EXIT 2 · SERP.GOOGLE · X.SEARCH · KEYWORD.VOLUME · BACKLINKS.SUMMARY · IMAGE.GENERATE · ';
-  const PIP = 'pip install git+https://github.com/getcheapapi/getcheapapi';
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const hash = (x, y, s) => {
@@ -187,6 +186,16 @@
     pill.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
   }));
+  // Tuck the nav away while scrolling down; bring it back on any scroll up.
+  const navwrap = document.querySelector('.navwrap');
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (Math.abs(y - lastY) < 6) return;
+    const away = y > lastY && y > 120 && !pill.classList.contains('open') && !navwrap.contains(document.activeElement);
+    navwrap.classList.toggle('away', away);
+    lastY = y;
+  }, { passive: true });
   const spy = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
@@ -208,7 +217,7 @@
         label.textContent = btn.dataset.copied || 'copied';
         setTimeout(() => { label.textContent = was; }, 1500);
       };
-      navigator.clipboard?.writeText(PIP).then(done, () => {});
+      navigator.clipboard?.writeText(btn.dataset.copy).then(done, () => {});
     });
   });
 })();
