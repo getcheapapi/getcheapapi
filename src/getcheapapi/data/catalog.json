@@ -123,7 +123,7 @@
     "input": {"prompt": "prompt", "model": "model id; compare first, then pass the one whose quality fits", "parameters": "model parameters, e.g. {\"resolution\": \"1K\"} (optional)"},
     "example": {"prompt": "a cardboard robot holding a price tag, studio light", "model": "google/nano-banana-2"},
     "routes": [
-      {"provider": "yir", "endpoint": "image", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?"},
+      {"provider": "yir", "endpoint": "image", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?", "routing": "$routing?"},
        "models": ["google/nano-banana-2", "openai/gpt-image-2", "bytedance/seedream-5.0", "alibaba/z-image-turbo", "bfl/flux-2-flex"]}
     ]
   },
@@ -133,7 +133,7 @@
     "input": {"prompt": "prompt", "model": "model id; compare first", "parameters": "e.g. {\"duration\": 5, \"resolution\": \"720p\"} (optional)"},
     "example": {"prompt": "a paper plane flying over a city at dusk", "model": "bytedance/seedance-2.0-fast"},
     "routes": [
-      {"provider": "yir", "endpoint": "video", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?"},
+      {"provider": "yir", "endpoint": "video", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?", "routing": "$routing?"},
        "models": ["bytedance/seedance-2.0-fast", "google/veo-3.1-fast-generate-001", "klingai/kling-3.0", "alibaba/wan-2.7"]}
     ]
   },
@@ -143,7 +143,7 @@
     "input": {"prompt": "exact text to read aloud", "model": "model id", "parameters": "e.g. {\"voice\": \"ID\"} (optional)"},
     "example": {"prompt": "Compare prices before you call a paid API.", "model": "elevenlabs/eleven-v3"},
     "routes": [
-      {"provider": "yir", "endpoint": "audio", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?"},
+      {"provider": "yir", "endpoint": "audio", "body": {"model": "$model", "prompt": "$prompt", "parameters": "$parameters?", "routing": "$routing?"},
        "models": ["elevenlabs/eleven-v3"]}
     ]
   }

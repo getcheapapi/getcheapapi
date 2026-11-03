@@ -55,7 +55,7 @@ cp .env.example .env   # fill in the keys you have; one is enough
 getcheapapi caps -v
 ```
 
-For agents (Claude Code, Codex and others), install the skill in [`skill/SKILL.md`](skill/SKILL.md) next to the CLI.
+For agents (Claude Code, Codex and others), install the skill in [`skills/getcheapapi`](skills/getcheapapi/SKILL.md): link or copy that folder into your agent's skills directory (for example `~/.claude/skills/getcheapapi`). Linked from a clone, it runs without installing the package.
 
 ## Usage
 

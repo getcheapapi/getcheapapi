@@ -114,3 +114,21 @@ def test_yir_quote_does_not_retry_client_errors(monkeypatch):
     with pytest.raises(Stop):
         providers.Yir().estimate("image", {"model": "a/b", "prompt": "p"})
     assert len(calls) == 1
+
+
+def test_env_file_pointer_loads_keys_without_copying(tmp_path, monkeypatch):
+    from getcheapapi.core import load_env
+    keys = tmp_path / "elsewhere.env"
+    keys.write_text("ANYAPI_API_KEY=abc\n", encoding="utf-8")
+    (tmp_path / ".env").write_text(f"GETCHEAPAPI_ENV_FILE={keys}\n", encoding="utf-8")  # home .env: pointer only
+    work = tmp_path / "work"
+    work.mkdir()
+    monkeypatch.chdir(work)
+    monkeypatch.delenv("GETCHEAPAPI_ENV_FILE", raising=False)
+    load_env()
+    import os
+    try:
+        assert os.environ["ANYAPI_API_KEY"] == "abc"
+    finally:
+        os.environ.pop("ANYAPI_API_KEY", None)
+        os.environ.pop("GETCHEAPAPI_ENV_FILE", None)

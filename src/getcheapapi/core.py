@@ -27,25 +27,37 @@ class Stop(Exception):
         self.code = code
 
 
+def _load_file(path: Path) -> None:
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        value = value.strip().strip('"').strip("'")
+        if key.strip() and value:
+            os.environ.setdefault(key.strip(), value)
+
+
 def load_env() -> list[Path]:
     """Load KEY=VALUE lines from .env in the working dir and its parents, then ~/.getcheapapi/.env.
 
-    Existing environment variables win; nothing is printed.
+    GETCHEAPAPI_ENV_FILE (set in the environment or in any of those files) names one more .env to read,
+    so keys kept elsewhere need no second copy. Existing environment variables win; nothing is printed.
     """
     candidates = [d / ".env" for d in (Path.cwd(), *Path.cwd().parents)] + [home() / ".env"]
-    loaded = []
+    loaded: list[Path] = []
     for path in candidates:
+        if path.is_file():
+            _load_file(path)
+            loaded.append(path)
+    extra = os.environ.get("GETCHEAPAPI_ENV_FILE", "").strip()
+    if extra:
+        path = Path(extra).expanduser()
         if not path.is_file():
-            continue
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            value = value.strip().strip('"').strip("'")
-            if key.strip() and value:
-                os.environ.setdefault(key.strip(), value)
-        loaded.append(path)
+            raise Stop(f"GETCHEAPAPI_ENV_FILE points to a missing file: {path}")
+        if path.resolve() not in {p.resolve() for p in loaded}:
+            _load_file(path)
+            loaded.append(path)
     return loaded
 
 
