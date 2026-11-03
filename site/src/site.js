@@ -186,16 +186,36 @@
     pill.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
   }));
-  // Tuck the nav away while scrolling down; bring it back on any scroll up.
+  // Slide the nav up out of view, leaving its tab. It folds itself once on the first scroll down
+  // and never unfolds on its own; after the visitor toggles it, only their choice counts.
+  const fold = document.querySelector('.fold');
   const navwrap = document.querySelector('.navwrap');
+  const setMini = (mini) => {
+    navwrap.classList.toggle('mini', mini);
+    fold.setAttribute('aria-expanded', String(!mini));
+    pill.querySelectorAll('.pill-row, .marq').forEach((el) => { el.inert = mini; });
+    if (mini) { pill.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); }
+  };
+  let chosen = null;
+  try { chosen = localStorage.getItem('nav-mini'); } catch {}
+  if (chosen) setMini(chosen === '1');
+  fold.addEventListener('click', () => {
+    const mini = !navwrap.classList.contains('mini');
+    chosen = mini ? '1' : '0';
+    setMini(mini);
+    try { localStorage.setItem('nav-mini', chosen); } catch {}
+  });
   let lastY = window.scrollY;
-  window.addEventListener('scroll', () => {
+  const autoFold = () => {
     const y = window.scrollY;
-    if (Math.abs(y - lastY) < 6) return;
-    const away = y > lastY && y > 120 && !pill.classList.contains('open') && !navwrap.contains(document.activeElement);
-    navwrap.classList.toggle('away', away);
+    if (chosen) return window.removeEventListener('scroll', autoFold);
+    if (y > lastY && y > 120 && !pill.classList.contains('open') && !navwrap.contains(document.activeElement)) {
+      setMini(true);
+      return window.removeEventListener('scroll', autoFold);
+    }
     lastY = y;
-  }, { passive: true });
+  };
+  window.addEventListener('scroll', autoFold, { passive: true });
   const spy = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
