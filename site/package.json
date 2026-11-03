@@ -3,10 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev --port 6191",
-    "deploy": "wrangler deploy"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "vite build && wrangler deploy"
   },
   "devDependencies": {
+    "vite": "7.3.7",
     "wrangler": "4.153.0"
   }
 }

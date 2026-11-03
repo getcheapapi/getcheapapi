@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.wrangler/
+# Rendered by vite.config.js from src/page.html and i18n/
+/index.html
+/es/
+/ja/
+/ko/
+/pt/
+/zh/
