@@ -1,0 +1,214 @@
+// ASCII figures drawn from the product's own words, plus the small bits of page behaviour.
+(() => {
+  const STREAM =
+    'ANYAPI · DATAFORSEO · GOANYAPI · TWITTERAPI.IO · YIR · $0.01500 · $0.09000 · X1.0 · X28 · QUOTE · RUN · --MAX-USD 0.1 · EXIT 2 · SERP.GOOGLE · X.SEARCH · KEYWORD.VOLUME · BACKLINKS.SUMMARY · IMAGE.GENERATE · ';
+  const PIP = 'pip install git+https://github.com/getcheapapi/getcheapapi';
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const hash = (x, y, s) => {
+    const v = Math.sin(x * 12.9898 + y * 78.233 + s * 37.719) * 43758.5453;
+    return v - Math.floor(v);
+  };
+  // Cell kinds: 0 empty, 1 text, 2 inverted text, 3 grid dot.
+  const grid = (x, y) => (x % 4 === 0 && y % 2 === 0 ? 3 : 0);
+
+  // Five routes for one call, stepping down from the failover price to the cheapest.
+  const stairs = (cols, rows) => {
+    const levels = [0.13, 0.33, 0.49, 0.61, 0.69];
+    const w = cols / 5;
+    return (x, y) => {
+      const i = Math.min(4, Math.floor(x / w));
+      const top = Math.round(levels[i] * rows);
+      if (i > 0 && x - Math.floor(i * w) < 2 && y >= Math.round(levels[i - 1] * rows) && y <= top) return 2;
+      if (y === top) return 2;
+      if (y > top) {
+        if (hash(x >> 3, y, 1) < 0.035) return 2;
+        return hash(x, y, 2) < 0.08 ? 0 : 1;
+      }
+      return grid(x, y);
+    };
+  };
+
+  // Same job, five routes, dearest to cheapest; the cheapest is solid.
+  const bars = (cols, rows) => {
+    const hs = [0.9, 0.62, 0.44, 0.27, 0.12];
+    const w = Math.floor((cols - 2) / 5) - 2;
+    const base = rows - 2;
+    return (x, y) => {
+      for (let i = 0; i < 5; i++) {
+        const x0 = 1 + i * (w + 2);
+        const top = base - Math.round(hs[i] * (rows - 4));
+        if (x >= x0 && x < x0 + w && y >= top && y <= base) {
+          if (y === top || i === 4) return 2;
+          return hash(x, y, 4) < 0.94 ? 1 : 0;
+        }
+      }
+      return grid(x, y);
+    };
+  };
+
+  // Paper dissolving into a dark band: 8-character blocks thin out away from the dark edge.
+  const melt = (darkBelow) => (cols, rows) => (x, y) => {
+    const p = darkBelow ? y / (rows - 1) : 1 - y / (rows - 1);
+    if (p > 0.97) return 2;
+    if (hash(x >> 3, y, darkBelow ? 6 : 7) < p * p * 0.9) return 2;
+    if (hash(x, y, 8) < p * 0.45) return 1;
+    return 0;
+  };
+
+  const DARK = { text: 'rgba(255,255,255,0.55)', dot: 'rgba(255,255,255,0.2)', invBg: '#f0ede6', invText: '#232323', bg: null };
+  const PAPER = { text: '#232323', dot: 'rgba(35,35,35,0.3)', invBg: '#232323', invText: '#f0ede6', bg: '#f0ede6' };
+  const CELL_H = 15;
+
+  const fields = [...document.querySelectorAll('canvas[data-field]')].map((canvas) => {
+    const name = canvas.dataset.field;
+    const make = name === 'stairs' ? stairs : name === 'bars' ? bars : melt(canvas.dataset.dark === 'below');
+    return { canvas, make, theme: name === 'melt' ? PAPER : DARK, off: 0, kind: null };
+  });
+
+  const draw = (f) => {
+    const { canvas, theme } = f;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (!w || !h) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      f.kind = null;
+    }
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = '13px "Geist Mono", ui-monospace, Menlo, monospace';
+    ctx.textBaseline = 'top';
+    const cw = ctx.measureText('M').width;
+    const cols = Math.ceil(w / cw);
+    const rows = Math.ceil(h / CELL_H);
+    if (!f.kind || f.cols !== cols || f.rows !== rows) Object.assign(f, { kind: f.make(cols, rows), cols, rows });
+    ctx.clearRect(0, 0, w, h);
+    if (theme.bg) {
+      ctx.fillStyle = theme.bg;
+      ctx.fillRect(0, 0, w, h);
+    }
+    const inv = [];
+    const text = [];
+    const dots = [];
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const k = f.kind(x, y);
+        if (!k) continue;
+        if (k === 3) { dots.push(x, y); continue; }
+        const ch = STREAM[(x + f.off + y * 41) % STREAM.length];
+        if (k === 2) inv.push(x, y, ch);
+        else if (ch !== ' ') text.push(x, y, ch);
+      }
+    }
+    ctx.fillStyle = theme.invBg;
+    for (let i = 0; i < inv.length; i += 3) ctx.fillRect(inv[i] * cw, inv[i + 1] * CELL_H, cw + 0.6, CELL_H);
+    ctx.fillStyle = theme.invText;
+    for (let i = 0; i < inv.length; i += 3) ctx.fillText(inv[i + 2], inv[i] * cw, inv[i + 1] * CELL_H + 1);
+    ctx.fillStyle = theme.text;
+    for (let i = 0; i < text.length; i += 3) ctx.fillText(text[i + 2], text[i] * cw, text[i + 1] * CELL_H + 1);
+    ctx.fillStyle = theme.dot;
+    for (let i = 0; i < dots.length; i += 2) ctx.fillText('·', dots[i] * cw, dots[i + 1] * CELL_H + 1);
+  };
+
+  const drawAll = () => fields.forEach(draw);
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(drawAll);
+  let resizeTimer;
+  addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawAll, 120);
+  });
+
+  // The hero figure's text flows while it is on screen.
+  const live = fields.filter((f) => f.canvas.hasAttribute('data-animate'));
+  if (!still && live.length) {
+    const visible = new Set();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+    });
+    live.forEach((f) => io.observe(f.canvas));
+    setInterval(() => {
+      if (document.hidden) return;
+      for (const f of live) {
+        if (!visible.has(f.canvas)) continue;
+        f.off = (f.off + 1) % STREAM.length;
+        draw(f);
+      }
+    }, 140);
+  }
+
+  // ~28× counts up once, and the receipt prints line by line, when they scroll in.
+  const once = (el, fn) => {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      fn();
+    }, { threshold: 0.35 });
+    io.observe(el);
+  };
+  document.querySelectorAll('[data-reveal]').forEach((el) => once(el, () => el.classList.add('in')));
+  if (!still) {
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const to = Number(el.dataset.count);
+      el.textContent = '1';
+      const io = new IntersectionObserver((entries) => {
+        const e = entries[0];
+        // Jumped past it (an anchor link): show the final number without counting.
+        if (!e.isIntersecting && e.boundingClientRect.top < 0) {
+          io.disconnect();
+          el.textContent = String(to);
+          return;
+        }
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        const t0 = performance.now();
+        const step = (t) => {
+          const p = Math.min(1, (t - t0) / 1100);
+          el.textContent = String(Math.max(1, Math.round(to * (1 - (1 - p) ** 3))));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, { threshold: 0.35 });
+      io.observe(el);
+    });
+  }
+
+  // Nav: mark the section in view, and the phone menu.
+  const pill = document.querySelector('.pill');
+  const menu = document.querySelector('.menu');
+  const links = [...document.querySelectorAll('#navlinks a[href^="#"]')];
+  menu.addEventListener('click', () => {
+    const open = pill.classList.toggle('open');
+    menu.setAttribute('aria-expanded', String(open));
+  });
+  document.querySelectorAll('#navlinks a').forEach((a) => a.addEventListener('click', () => {
+    pill.classList.remove('open');
+    menu.setAttribute('aria-expanded', 'false');
+  }));
+  const spy = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${e.target.id}`));
+    }
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  links.forEach((a) => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) spy.observe(target);
+  });
+
+  // Copy the install command.
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const label = btn.querySelector('[data-copy-label]') || btn.parentElement.querySelector('[data-copy-label]');
+      const was = label ? label.textContent : '';
+      const done = () => {
+        if (!label) return;
+        label.textContent = 'copied';
+        setTimeout(() => { label.textContent = was; }, 1500);
+      };
+      navigator.clipboard?.writeText(PIP).then(done, () => {});
+    });
+  });
+})();

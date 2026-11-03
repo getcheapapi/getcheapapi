@@ -1,0 +1,17 @@
+# getcheapapi
+
+> MIT-licensed price router for paid data and media APIs, built for AI agents. Ask for a capability (serp.google, x.search, keyword.volume, backlinks.summary, image.generate…); getcheapapi prices every provider route from a local cache, runs the cheapest one you hold a key for, refuses past a --max-usd budget, stops on HTTP 402 (exit code 2), and logs every charge to a local ledger. Providers: AnyAPI, DataForSEO, GoAnyAPI, twitterapi.io (read only), Yir. Not for LLM text routing.
+
+## For AI coding agents
+
+1. Install: `pip install git+https://github.com/getcheapapi/getcheapapi` (Python 3.10+). Or link `skills/getcheapapi` from a clone into your agent's skills directory (for example `~/.claude/skills/getcheapapi`); linked from a clone it runs without installing the package.
+2. Keys: copy `.env.example` to `.env` and fill in the keys the human has. One is enough. Never ask the human to paste keys into chat.
+3. Discover: `getcheapapi caps -v` lists capabilities, inputs and examples.
+4. Price before spending: `getcheapapi quote <capability> --input '<json>'` spends nothing.
+5. Run under a cap: `getcheapapi run <capability> --input '<json>' --max-usd 0.01`. Exit code 2 means a 402 or a refused budget: stop and tell the human, do not retry.
+6. Report spend: `getcheapapi spend --days 7`.
+
+## Links
+
+- Source and README: https://github.com/getcheapapi/getcheapapi
+- Skill instructions: https://github.com/getcheapapi/getcheapapi/blob/main/skills/getcheapapi/SKILL.md
