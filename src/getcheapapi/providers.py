@@ -247,7 +247,7 @@ class Yir(Provider):
     """Image, video, audio and 3D generation. Yir already routes each model to its cheapest channel;
     getcheapapi quotes before every job, caps it server-side with max_cost, and waits for the result.
     Text prompts only; reference uploads, batches and resumable jobs live in the yir skill/CLI."""
-    name, keys, site = "yir", ("YIR_API_KEY",), "https://yir.ai"
+    name, keys, site = "yir", ("YIR_API_KEY",), "https://yir.ai/?utm_source=getcheapapi&utm_medium=cli"
 
     def __init__(self, timeout: int = 1800):
         self.base = (os.environ.get("YIR_BASE_URL") or "https://gateway.yir.ai").rstrip("/")
