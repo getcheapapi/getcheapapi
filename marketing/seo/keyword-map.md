@@ -1,9 +1,10 @@
 # getcheapapi 内容地图
 
-更新：2026-11-02。数据来源：
+更新：2026-11-03。数据来源：
 - DFS-Ads：DataForSEO Google Ads 搜索量，美国、英文，近 12 个月均值，2026-11 取数；趋势写“12 个月前 → 最近一个月”。Google Ads 会合并近似词（如 `serp api pricing` 与 `serpapi pricing`、`claude code skill(s)` 数字完全相同），两者实际怎么分不知道。
 - DFS-Labs：DataForSEO Labs keyword_suggestions，含 KD（0–100），2026-11 取数。
 - SERP：WebSearch 代看（只看页型和标题写法，不代表真实名次），2026-11。
+- DFS-Ads 本地：同口径分市场取数，2026-11-03：日本（2392/ja）、韩国（2410/ko）、墨西哥（2484/es）、巴西（2076/pt）。日本 SERP 用 Chrome 看 google.co.jp（gl=jp）。
 - GPT 证据：还没跑 `chatgpt-growth`，全部写“—”。
 
 ## 定位：我们能赢在哪
@@ -18,7 +19,7 @@
 - 比价页 `/<品类>-api-pricing`：承接“<品类> API pricing / cost / price / cheapest / best <品类> API”。必含：各家单价表（含我们不能路由的供应商，用官网公开价并写日期）、按 1k/10k/100k 调用的总价、计费陷阱、“用 `getcheapapi quote` 自己复现”的命令、更新日期、利益披露。
 - 替代品页 `/<品牌>-alternatives`：承接“<品牌> alternative(s)”，与比价页互链，不重复单价表，讲迁移、字段差异、各替代品适合谁。
 - 首页 `/`：品牌词 + “agent skill / claude code skill for API cost”类长尾。
-- 新页先只做英文；其他语种按市场单独查词后再定（见待验证候选）。
+- 新页默认只做英文；其他语种按市场查过词、有量才建，路径 `/<语种>/<slug>/`，与英文页互标 hreflang，主词用当地写法，不直译。
 
 ## 主题簇：X / Twitter API 价格
 
@@ -28,6 +29,7 @@
 | X API 免费 | twitter api free / is twitter api free | 了解 | 同上 | 比价页内一节 | 140 + 50（DFS-Labs） | — | /twitter-api-pricing#free | 已建 | 并入承接页 | FAQ：2026-02 起新注册无免费档 |
 | twitterapi.io 价格对比 | twitterapi.io / twitterapi io pricing | 导航+比价 | 已在用 twitterapi.io 的人 | 比价页内一节 | 260（140→320）/ 10（DFS-Ads） | — | /twitter-api-pricing | 已建 | 并入承接页 | 写清它在哪类请求上最便宜（单条/档案）、哪类不是（关键词搜索约贵 5×） |
 | X 搜索/抓取 API | twitter search api / twitter scraper api | 找工具 | 同上 | 比价页内一节 | 50 / 50（DFS-Ads） | — | /twitter-api-pricing | 已建 | 并入承接页 | — |
+| X API 料金（日本） | 主词 x api 料金；次词 x api 無料、x api 従量課金、twitter api 料金、x api pricing | 找价格 | 日本做 X 自动投稿、监控的个人开发者与小团队 | 比价页（日文） | x api 料金 1,000（720→1,000，涨）；x api 無料 320；x api 従量課金 210；x api pricing 210（CPC $21）；twitter api 料金 170；合计约 1,900/月，超过美国 x api pricing 880（DFS-Ads JP 2026-11） | — | （待建）/ja/twitter-api-pricing/ | 未建 | 新建页 | P1：SERP 意图对（全是官方价解读文章：ownly、uravation、Zenn、Qiita、docs.x.com），无人做官方 vs 第三方读取的比价；联想词：値上げ、無料枠、高い、料金表。必含日元换算、2026-04 URL 投稿涨价、无免费档 |
 
 ## 主题簇：SERP API 价格
 
@@ -75,7 +77,7 @@
 - **Agent 花钱失控类问题**（api spending limit、reduce api costs、ai agent api cost、api cost comparison）：Google 侧均为 0–10，可能是 GPT 侧需求。下一步交 `chatgpt-growth` probe：“how do I stop my coding agent from overspending on paid APIs”“cheapest way to get Twitter data for an AI agent”“cheapest SERP API for an agent”，每题 3–5 次。
 - **ValueSERP / ScaleSERP**：valueserp 140、scaleserp 40，有人在找。这两个服务现在的状态不知道（是否停服、并入其他产品），核实后决定在 /serpapi-alternatives 里加一节，还是放弃。
 - **Bing 搜索 API 停服**：bing search api 720（880→480），bing search api alternative 10。/serp-api-pricing#pick 已加一行（2025-08 退役、AnyAPI/GoAnyAPI 单价）；是否值得单独建页，看 SERP 意图后再定。
-- **多语种**：站点有六种语言，但上面的词都只查了美国英文。开发者 API 词在日、韩、中、西、葡市场大概率也直接搜英文，要按市场查过才能定，在那之前新页只做英文。
+- **多语种（2026-11-03 已查日韩墨巴）**：只有日本的 X API 价格簇有量，已进主表。其余结论：韩国 x api 가격 90、트위터 api 가격 40，太小；墨西哥、巴西本地写法（precio/preço）全是 0，英文写法也只有 10–70，由英文页承接；Reddit API、SERP API 的本地写法各市场都 ≤30。各市场 `serp api`/`serpapi` 有 720–2,900，基本是 SerpApi 品牌导航，由英文 /serp-api-pricing 承接。`dataforseo` 品牌词在日本（320→1,300）和巴西（170→1,600）上涨，P3 的 /dataforseo-pricing 可以提前；中文主要搜索在百度，未查。
 
 ## 派活清单
 
@@ -84,6 +86,7 @@
 | 已完成 | 新建 /twitter-api-pricing | X API 价格簇合计约 3–4k/月，CPC $8–19；有独有比价数据 | `landing-page-designer` | 单价表带日期；按 1 万条推文算各家总价；附可复现的 `quote` 命令；FAQ 写免费档；有利益披露 |
 | 已完成 | 新建 /serp-api-pricing | SERP 价格簇约 2k/月，CPC $18+；前排全是供应商自写比价 | `landing-page-designer` | 至少 7 家单价，按 1k/10k/100k 算总价；陷阱一节（运算符 5×、失败自动切到更贵来源）；不自称最便宜 |
 | 已完成 | 新建 /reddit-api-pricing | 600/月，KD 0 | `landing-page-designer` | 官方价核实到出处；第三方按 1k 条算 |
+| P1 | 新建 /ja/twitter-api-pricing/（日文 X API 料金页） | 日本簇约 1,900/月且在涨；SERP 全是官方价解读，无比价 | `landing-page-designer` | 主词 X API 料金 进 title/H1；官方料金表 + 第三方比价 + 日元换算 + 値上げ/無料枠 FAQ；与英文页互标 hreflang |
 | P2 | 新建 /serpapi-alternatives | 140→480 在涨，KD 8，CPC $32 | `landing-page-designer` | 与 /serp-api-pricing 互链，不重复单价表 |
 | P2 | 新建 /google-trends-api | 1,300/月，CPC $13.7 | `landing-page-designer` | 官方 alpha 现状、pytrends 现状、第三方单价 |
 | P2 | Skill 目录与 awesome 列表收录 | skill 词 4 万+/月，而且是列表型 SERP | `backlink` | 提交 5 个以上目录/列表，并在台账记录收录情况 |
