@@ -72,7 +72,7 @@
   "q4": "Do I need a key for every provider?",
   "a4": "No. One key is enough to start. Routes you have no key for are still priced, so you can see what adding one would save.",
   "q5": "Does my data go through your servers?",
-  "a5": "No. There are no servers of ours in the path. The price cache, ledger and saved results stay in ~/.getcheapapi on your machine.",
+  "a5": "No. Data calls go straight to the provider. The price cache, ledger and saved results stay in ~/.getcheapapi on your machine.",
   "q6": "How much will I save?",
   "a6": "It depends on the data and how much of it you buy. Run getcheapapi quote with your own input: it shows every provider's price side by side and spends nothing.",
   "q7": "How is this different from a provider’s MCP server?",

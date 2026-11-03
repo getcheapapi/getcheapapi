@@ -5,10 +5,10 @@
 ## For AI coding agents
 
 1. Install: `pip install git+https://github.com/getcheapapi/getcheapapi` (Python 3.10+). Or link `skills/getcheapapi` from a clone into your agent's skills directory (for example `~/.claude/skills/getcheapapi`); linked from a clone it runs without installing the package.
-2. Keys: copy `.env.example` to `.env` and fill in the keys the human has. One is enough. Never ask the human to paste keys into chat.
+2. Keys: put them in `~/.getcheapapi/.env` (format: `.env.example`), read from any working folder; a `.env` in the working folder or its parents also works. One is enough. Never ask the human to paste keys into chat.
 3. Discover: `getcheapapi caps -v` lists capabilities, inputs and examples.
 4. Price before spending: `getcheapapi quote <capability> --input '<json>'` spends nothing.
-5. Run under a cap: `getcheapapi run <capability> --input '<json>' --max-usd 0.01`. Exit code 2 means a 402 or a refused budget: stop and tell the human, do not retry.
+5. Run under a cap: `getcheapapi run <capability> --input '<json>' --max-usd 0.01`. Exit code 2 means out of balance (HTTP 402); a refused budget exits 1. Either way, stop and tell the human, do not retry.
 6. Report spend: `getcheapapi spend --days 7`.
 
 ## Links

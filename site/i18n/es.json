@@ -72,7 +72,7 @@
   "q4": "¿Necesito una clave por proveedor?",
   "a4": "No. Con una puedes empezar. Las rutas sin clave también se cotizan, así ves cuánto ahorrarías añadiendo una.",
   "q5": "¿Mis datos pasan por sus servidores?",
-  "a5": "No. No hay ningún servidor nuestro en el camino. La caché de precios, el registro y los resultados guardados se quedan en ~/.getcheapapi en tu máquina.",
+  "a5": "No. Las llamadas de datos van directas de tu máquina al proveedor. La caché de precios, el registro y los resultados guardados se quedan en ~/.getcheapapi en tu máquina.",
   "q6": "¿Cuánto voy a ahorrar?",
   "a6": "Depende de los datos y de cuántos compres. Ejecuta getcheapapi quote con tu propia entrada: muestra el precio de cada proveedor lado a lado y no gasta nada.",
   "q7": "¿En qué se diferencia del servidor MCP de un proveedor?",

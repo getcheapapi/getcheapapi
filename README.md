@@ -45,7 +45,7 @@ Out of scope: LLM text routing (LiteLLM and OpenRouter cover it), and any write 
 | [DataForSEO](https://dataforseo.com) | keyword volume and ideas, backlinks, SERP | published price list |
 | [GoAnyAPI](https://goanyapi.com/r/ga-ccef6a6e4f) | SERP, DR, traffic, keyword volume, backlinks | public catalog |
 | [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X search (read only) | published price list |
-| [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme) | image, video, speech generation | live quotes |
+| [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme) (same team) | image, video, speech generation | live quotes |
 
 Some provider links above carry our referral code, and the CLI prints them when a key is missing. They never affect routing: routes are ranked by price only.
 
@@ -53,7 +53,8 @@ Some provider links above carry our referral code, and the CLI prints them when 
 
 ```bash
 pip install git+https://github.com/getcheapapi/getcheapapi   # a PyPI release is coming
-cp .env.example .env   # from a clone; fill in the keys you have, one is enough
+mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheapapi/getcheapapi/main/.env.example -o ~/.getcheapapi/.env
+# fill in the keys you have in ~/.getcheapapi/.env, one is enough
 getcheapapi caps -v
 ```
 
@@ -85,7 +86,7 @@ python -m pytest
 
 ## Disclosure
 
-getcheapapi is neutral by design: routes are ranked by price only. If the maintainers ever list a service of their own, it will be labeled as such and ranked by the same rule.
+getcheapapi is neutral by design: routes are ranked by price only. Yir is run by the same team as getcheapapi; it is labeled as such and ranked by the same rule.
 
 ## License
 

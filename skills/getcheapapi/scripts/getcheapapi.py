@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run the getcheapapi CLI from this skill.
 
-Uses the installed package when there is one (pip install getcheapapi); otherwise the src/ folder of the
+Uses the installed package when there is one; otherwise the src/ folder of the
 getcheapapi repository this skill was linked from. Standard library only.
 """
 import importlib.util
@@ -15,8 +15,8 @@ sys.path[:] = [p for p in sys.path if Path(p or ".").resolve() != HERE]
 if importlib.util.find_spec("getcheapapi") is None:
     src = Path(__file__).resolve().parents[3] / "src"  # scripts -> skill -> skills -> repo root
     if not (src / "getcheapapi").is_dir():
-        sys.exit("getcheapapi is not installed. Install it with `pip install getcheapapi`, "
-                 "or `pip install git+https://github.com/getcheapapi/getcheapapi`, or link this skill from a clone of https://github.com/getcheapapi/getcheapapi.")
+        sys.exit("getcheapapi is not installed. Install it with "
+                 "`pip install git+https://github.com/getcheapapi/getcheapapi`, or link this skill from a clone of https://github.com/getcheapapi/getcheapapi.")
     sys.path.insert(0, str(src))
 
 from getcheapapi.cli import main  # noqa: E402
