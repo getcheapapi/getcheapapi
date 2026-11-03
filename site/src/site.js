@@ -112,7 +112,23 @@
     for (let i = 0; i < dots.length; i += 2) ctx.fillText('·', dots[i] * cw, dots[i + 1] * CELL_H + 1);
   };
 
-  const drawAll = () => fields.forEach(draw);
+  // Size the footer wordmark so its ink spans exactly gutter to gutter.
+  const mark = document.querySelector('.wordmark');
+  const fitMark = () => {
+    if (!mark) return;
+    const cs = getComputedStyle(mark);
+    const gutter = parseFloat(getComputedStyle(mark.nextElementSibling || mark).paddingLeft) || 0;
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
+    const text = mark.textContent;
+    const m = ctx.measureText(text);
+    const em = (m.actualBoundingBoxLeft + m.actualBoundingBoxRight) / 100 + (parseFloat(cs.letterSpacing) / parseFloat(cs.fontSize)) * (text.length - 1);
+    const size = (mark.clientWidth - 2 * gutter) / em;
+    mark.style.fontSize = `${size}px`;
+    mark.style.paddingLeft = `${gutter + (m.actualBoundingBoxLeft / 100) * size}px`;
+  };
+
+  const drawAll = () => { fields.forEach(draw); fitMark(); };
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(drawAll);
   let resizeTimer;
   addEventListener('resize', () => {
