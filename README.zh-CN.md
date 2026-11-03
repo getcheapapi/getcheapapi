@@ -129,7 +129,7 @@ getcheapapi balance anyapi
 | 供应商 | 用途 | 价格来源 |
 |---|---|---|
 | [AnyAPI](https://getanyapi.com/?via=q89thkytbw) | SERP、X、Reddit、TikTok、Google Trends | 各来源实时价格 |
-| [DataForSEO](https://dataforseo.com) | 关键词搜索量与拓词、外链、SERP | 公开价目表 |
+| [DataForSEO](https://try.dataforseo.com/lhyz26vduxeo) | 关键词搜索量与拓词、外链、SERP | 公开价目表 |
 | [GoAnyAPI](https://goanyapi.com/r/ga-ccef6a6e4f) | SERP、DR、流量、关键词搜索量、外链 | 公开目录 |
 | [twitterapi.io](https://twitterapi.io/?ref=wn7a9fzv) | X 搜索（只读） | 公开价目表 |
 | [Yir](https://yir.ai/?utm_source=getcheapapi&utm_medium=readme)（同一团队） | 图片、视频、语音生成 | 实时报价 |

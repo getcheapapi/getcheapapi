@@ -150,7 +150,7 @@ class GoAnyAPI(Provider):
 
 
 class DataForSEO(Provider):
-    name, keys, site = "dataforseo", ("DATAFORSEO_LOGIN", "DATAFORSEO_PASSWORD"), "https://dataforseo.com"
+    name, keys, site = "dataforseo", ("DATAFORSEO_LOGIN", "DATAFORSEO_PASSWORD"), "https://try.dataforseo.com/lhyz26vduxeo"
     base = "https://api.dataforseo.com/v3"
 
     @property
