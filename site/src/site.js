@@ -212,8 +212,9 @@
     copies.set(a.getAttribute('hreflang').split('-')[0], a);
     a.addEventListener('click', remember);
   });
-  let quiet = true;
-  try { quiet = localStorage.getItem(OFFER) === 'off'; } catch {}
+  // Crawlers render with an English browser; keep the prompt out of what they index for the other languages.
+  let quiet = /bot|crawl|spider|slurp|lighthouse/i.test(navigator.userAgent);
+  try { quiet ||= localStorage.getItem(OFFER) === 'off'; } catch {}
   const current = document.documentElement.lang.split('-')[0];
   const wanted = (navigator.languages || [navigator.language || '']).map((l) => l.split('-')[0].toLowerCase()).find((l) => copies.has(l));
   if (!quiet && wanted && wanted !== current) {
@@ -232,6 +233,9 @@
     close.setAttribute('aria-label', link.dataset.close);
     close.addEventListener('click', () => { remember(); box.remove(); });
     document.body.append(box);
+    // Step aside at the foot of the page, where it would cover the footer's own language menu.
+    const foot = document.querySelector('.foot-bar');
+    if (foot) new IntersectionObserver((entries) => box.classList.toggle('away', entries[0].isIntersecting)).observe(foot);
   }
 
   // Nav: the phone menu.
