@@ -187,10 +187,9 @@
     });
   }
 
-  // Nav: mark the section in view, and the phone menu.
+  // Nav: the phone menu.
   const pill = document.querySelector('.pill');
   const menu = document.querySelector('.menu');
-  const links = [...document.querySelectorAll('#navlinks a[href^="#"]')];
   menu.addEventListener('click', () => {
     const open = pill.classList.toggle('open');
     menu.setAttribute('aria-expanded', String(open));
@@ -199,47 +198,6 @@
     pill.classList.remove('open');
     menu.setAttribute('aria-expanded', 'false');
   }));
-  // Slide the nav up out of view; a corner button brings it back. It folds itself once on the first scroll down
-  // and never unfolds on its own; after the visitor toggles it, only their choice counts.
-  const fold = document.querySelector('.fold');
-  const navwrap = document.querySelector('.navwrap');
-  const setMini = (mini) => {
-    navwrap.classList.toggle('mini', mini);
-    fold.setAttribute('aria-expanded', String(!mini));
-    pill.querySelectorAll('.pill-row, .marq').forEach((el) => { el.inert = mini; });
-    if (mini) { pill.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); }
-  };
-  let chosen = null;
-  try { chosen = localStorage.getItem('nav-mini'); } catch {}
-  if (chosen) setMini(chosen === '1');
-  const choose = (mini) => {
-    chosen = mini ? '1' : '0';
-    setMini(mini);
-    try { localStorage.setItem('nav-mini', chosen); } catch {}
-  };
-  fold.addEventListener('click', () => choose(true));
-  document.querySelector('.navopen').addEventListener('click', () => choose(false));
-  let lastY = window.scrollY;
-  const autoFold = () => {
-    const y = window.scrollY;
-    if (chosen) return window.removeEventListener('scroll', autoFold);
-    if (y > lastY && y > 120 && !pill.classList.contains('open') && !navwrap.contains(document.activeElement)) {
-      setMini(true);
-      return window.removeEventListener('scroll', autoFold);
-    }
-    lastY = y;
-  };
-  window.addEventListener('scroll', autoFold, { passive: true });
-  const spy = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (!e.isIntersecting) continue;
-      links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${e.target.id}`));
-    }
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  links.forEach((a) => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) spy.observe(target);
-  });
 
   // Copy the install command.
   document.querySelectorAll('[data-copy]').forEach((btn) => {

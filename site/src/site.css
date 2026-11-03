@@ -27,7 +27,7 @@
 :lang(ko) { word-break: keep-all; }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 120px; }
+html { scroll-behavior: smooth; scroll-padding-top: 32px; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 p, h1, h2, h3, ol, figure { margin: 0; }
 h1, h2, h3 { font-weight: 500; text-wrap: balance; }
@@ -48,27 +48,18 @@ canvas { display: block; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* nav pill */
-.navwrap { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; display: flex; justify-content: center; pointer-events: none; padding: 16px 16px 0; transition: transform .3s ease; }
-.navwrap.mini { transform: translateY(calc(-100% - 4px)); }
+.navwrap { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; display: flex; justify-content: center; pointer-events: none; padding: 16px 16px 0; }
 .pill { pointer-events: auto; width: min(660px, 100%); background: var(--ink); color: #fff; border: 1px dotted var(--w40); border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 0 0 3px var(--ink); position: relative; }
 .pill-row { display: flex; align-items: center; gap: 20px; padding: 0 4px; min-height: 32px; }
 .mark { display: flex; width: 30px; height: 30px; flex: none; background: #fff; color: var(--ink); border-radius: 2px; align-items: center; justify-content: center; }
 .links { display: flex; gap: 20px; font-size: 13px; color: var(--w60); }
 .links a { text-decoration: none; white-space: nowrap; }
-.links a.on { color: #fff; outline: 1px dotted var(--w40); outline-offset: 4px; }
 .has-dot { position: relative; }
 .has-dot::after { content: ""; position: absolute; top: -3px; right: -8px; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
 .grow { flex: 1; }
 .links .only-sm { display: none; }
 .gh { font-size: 13px; text-decoration: none; }
 .menu { display: none; width: 40px; height: 40px; background: transparent; color: #fff; border: 1px dotted var(--w40); border-radius: 4px; align-items: center; justify-content: center; cursor: pointer; }
-.fold { position: absolute; top: calc(100% + 3px); left: 50%; transform: translateX(-50%); width: 44px; height: 18px; padding: 0; background: var(--ink); color: var(--w60); border: 1px dotted var(--w40); border-top: 0; border-radius: 0 0 6px 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.fold:hover { color: #fff; }
-.mini .fold { visibility: hidden; }
-.navopen { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 16px); right: 16px; z-index: 20; width: 36px; height: 36px; padding: 0; background: var(--ink); color: var(--w60); border: 1px dotted var(--w40); border-radius: 6px; display: none; align-items: center; justify-content: center; cursor: pointer; }
-.navopen:hover { color: #fff; }
-.navwrap.mini + .navopen { display: flex; }
-@media (prefers-reduced-motion: reduce) { .navwrap { transition: none; } }
 .lang { position: relative; font-size: 13px; }
 .lang summary { list-style: none; cursor: pointer; color: var(--w60); padding: 4px 6px; border: 1px dotted transparent; border-radius: 3px; }
 .lang summary::-webkit-details-marker { display: none; }
@@ -146,13 +137,13 @@ canvas { display: block; }
 .what article p { color: var(--w60); font-size: 16px; }
 .what code { color: #fff; }
 .what-fig { position: relative; }
-.what-fig .sticky { position: sticky; top: 140px; height: min(760px, calc(100svh - 180px)); }
+.what-fig .sticky { position: sticky; top: 48px; height: min(760px, calc(100svh - 180px)); }
 .what-fig canvas { width: 100%; height: calc(100% - 40px); }
 .what-fig figcaption { margin-top: 18px; font-size: 11px; color: var(--w40); }
 
 /* coverage */
 .coverage { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 140px var(--gutter) 72px; align-items: start; }
-.cov-copy { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 140px; }
+.cov-copy { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 48px; }
 .cov { width: 100%; border-collapse: collapse; font-size: 13.5px; border-bottom: 1px dashed var(--line); }
 .cov td, .cov th { padding: 15px 0; border-top: 1px dashed var(--line); text-align: left; font-weight: 400; vertical-align: top; }
 .cov td:first-child { width: 92px; color: var(--muted); }

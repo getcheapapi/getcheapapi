@@ -20,7 +20,7 @@
 @keyframes grow { from { transform: scaleX(0); } }
 
 .p-sec { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; padding: 96px var(--gutter); border-top: 1px dashed var(--line); align-items: start; }
-.p-head { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 140px; }
+.p-head { display: flex; flex-direction: column; gap: 18px; position: sticky; top: 48px; }
 .p-head h2 { max-width: 16ch; }
 .p-body { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .p-scroll { overflow-x: auto; }
