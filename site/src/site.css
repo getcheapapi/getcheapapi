@@ -75,7 +75,6 @@ canvas { display: block; }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: max(760px, 100svh); }
 .hero-copy { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 28px; padding: 140px var(--gutter) 88px; }
-.eyebrow { font-size: 15px; }
 .hero h1 { font-size: clamp(40px, 3.7vw, 54px); line-height: 1.06; letter-spacing: -0.02em; max-width: 16ch; }
 .hero-lede { max-width: 46ch; }
 .ctas { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -84,25 +83,24 @@ canvas { display: block; }
 .btn.dark { background: var(--ink); color: #fff; }
 .btn.dark:hover { background: #000; color: #fff; }
 .btn.dotted::after { content: ""; position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
-.btn.grey { background: var(--grey); color: var(--ink); margin-left: 4px; }
+.btn.grey { background: var(--grey); color: var(--ink); }
 .btn.grey:hover { background: #d2d2d2; color: var(--ink); }
-.cmd-line { font-size: 12.5px; color: var(--muted); overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.cmd-note { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); max-width: 52ch; }
+.cmd-line { display: block; font-size: 12.5px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
 .scroll-hint { position: absolute; left: var(--gutter); bottom: 32px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
 .scroll-hint span { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 50%; align-items: center; justify-content: center; font-size: 10px; }
-.hero-fig { position: relative; background-color: var(--ink); overflow: hidden; min-height: 420px; }
-.hero-fig canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.tag, .hero-fig figcaption { position: absolute; background: var(--ink); padding: 3px 8px; }
-.tag { font-size: 11.5px; display: flex; gap: 8px; align-items: center; }
-.tag-hi { color: #fff; left: 16px; top: calc(13% + 30px); }
-.tag-lo { color: #fff; right: 16px; top: calc(69% - 28px); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
-.hero-fig figcaption { left: 16px; bottom: 16px; font-size: 11px; color: var(--w60); }
+/* The receipt is printed on paper over the stairs field, which stays behind it as texture. */
+.hero-fig { position: relative; background-color: var(--ink); overflow: hidden; min-height: 420px; display: flex; align-items: center; justify-content: center; padding: 120px 48px 72px; }
+.hero-fig canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; }
+.hero-fig .ledger { width: min(100%, 500px); background: var(--paper); border-left: 0; padding: 26px 28px 22px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); gap: 20px; }
+.hero-fig .ledger > .node { display: none; }
+.hero-fig .ledger-head { border-top: 0; padding-top: 0; }
 
 /* receipt */
-.receipt { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; padding: 160px var(--gutter) 140px; align-items: start; }
+.receipt { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; padding: 140px var(--gutter) 120px; align-items: end; }
 .receipt-copy { display: flex; flex-direction: column; gap: 22px; }
 .receipt-copy h2 { max-width: 15ch; }
-.big { margin-top: 80px; display: flex; flex-direction: column; gap: 14px; }
+.big { display: flex; flex-direction: column; gap: 14px; }
 .big-num { font-size: clamp(140px, 18.4vw, 265px); line-height: 0.8; font-weight: 500; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
 .big-cap { font-size: 13.5px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .ledger { position: relative; font-size: 13.5px; border-left: 1px dashed var(--line); padding-left: 28px; display: flex; flex-direction: column; gap: 26px; }
@@ -112,6 +110,7 @@ canvas { display: block; }
 .ledger-group { display: flex; flex-direction: column; gap: 4px; }
 .lead { display: flex; align-items: baseline; gap: 8px; }
 .lead i { flex: 1; min-width: 12px; border-bottom: 1px dotted currentColor; opacity: 0.45; transform: translateY(-4px); }
+.lead .amt { white-space: nowrap; }
 .lead.inv { background: var(--ink); color: var(--paper); padding: 2px 6px; }
 .ledger-foot { border-top: 1px dashed var(--line); padding-top: 14px; color: var(--muted); font-size: 12px; }
 /* Ledger lines print one after another when the receipt scrolls in (only with JS, so the page is complete without it). */
@@ -213,9 +212,8 @@ canvas { display: block; }
   .hero, .receipt, .what, .coverage, .faq, .card { grid-template-columns: minmax(0, 1fr); }
   .hero-copy { padding-top: 128px; padding-bottom: 56px; }
   .scroll-hint { display: none; }
-  .hero-fig { min-height: 0; aspect-ratio: 4 / 3; }
+  .hero-fig { min-height: 0; padding: 56px var(--gutter); }
   .receipt { padding-top: 96px; padding-bottom: 88px; gap: 56px; }
-  .big { margin-top: 40px; }
   .what { padding: 72px var(--gutter) 88px; }
   .what-list { max-width: none; gap: 48px; }
   .what-fig { display: none; }
@@ -236,7 +234,7 @@ canvas { display: block; }
   body { font-size: 16px; }
   .gh { display: none; }
   .links .only-sm { display: block; }
-  .hero-fig figcaption { display: none; }
+  .hero-fig .ledger { padding: 20px 18px 18px; font-size: 12.5px; }
   .install { padding-bottom: 96px; }
   .card-main, .card-list { padding-left: 22px; padding-right: 22px; }
   .zero { font-size: 104px; }

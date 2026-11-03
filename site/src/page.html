@@ -72,22 +72,46 @@
     <main>
       <section id="top" class="hero">
         <div class="hero-copy">
-          <p class="mono eyebrow">{{eyebrow}}</p>
           <h1>{{h1}}</h1>
           <p class="hero-lede">{{lede}}</p>
           <div class="ctas">
-            <button class="btn dark mono" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}">{{btn_skill}}</button>
-            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{copy}}</span></button>
+            <button class="btn dark mono dotted" type="button" data-copy="git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi" data-copied="{{copied}}"><span data-copy-label>{{btn_skill}}</span></button>
             <a class="btn grey mono" href="https://github.com/getcheapapi/getcheapapi">{{btn_source}}</a>
           </div>
-          <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+          <div class="cmd-note">
+            <code class="cmd-line">$ git clone https://github.com/getcheapapi/getcheapapi ~/getcheapapi &amp;&amp; ln -s ~/getcheapapi/skills/getcheapapi ~/.claude/skills/getcheapapi</code>
+            <p>{{cmd_note}}</p>
+          </div>
           <p class="mono scroll-hint"><span aria-hidden="true">↓</span>{{scroll_hint}}</p>
         </div>
-        <figure class="hero-fig dots" aria-label="{{fig1_aria}}">
-          <canvas data-field="stairs" data-animate></canvas>
-          <span class="mono tag tag-hi"><i class="dot" aria-hidden="true"></i>x28 · {{tag_hi}}</span>
-          <span class="mono tag tag-lo">x1.0 · {{tag_lo}} ↓</span>
-          <figcaption class="mono">fig. 01 · {{fig1_cap}}</figcaption>
+        <figure class="hero-fig dots">
+          <canvas data-field="stairs" data-animate aria-hidden="true"></canvas>
+          <div class="ledger mono" data-reveal>
+            <i class="node" aria-hidden="true"></i>
+            <p class="ledger-head">{{led_head}}</p>
+            <div class="ledger-group">
+              <p class="muted">{{led_q1}}</p>
+              <p class="lead">goanyapi keyword-search-volume<i></i>$0.01500</p>
+              <p class="lead muted">dataforseo search_volume/live<i></i>$0.09000</p>
+            </div>
+            <div class="ledger-group">
+              <p class="muted">{{led_q2}}</p>
+              <p class="lead">dataforseo search_volume/live<i></i>$0.09000</p>
+              <p class="lead muted">goanyapi keyword-search-volume<i></i>$0.15000</p>
+            </div>
+            <div class="ledger-group">
+              <p class="muted">{{led_leaks}}</p>
+              <p class="lead">{{led_failover}}<i></i><span class="amt">{{led_upto}} x28</span></p>
+              <p class="lead">{{led_operator}}<i></i>x5</p>
+              <p class="lead">{{led_batch}}<i></i>x15</p>
+              <p class="lead">{{led_402}}<i></i><span class="amt">{{led_reqs}}</span></p>
+            </div>
+            <div class="ledger-group">
+              <p class="muted">{{led_every}}</p>
+              <p class="lead inv">{{led_routes}}<i></i>{{led_cheapest}}</p>
+            </div>
+            <p class="ledger-foot">{{led_foot}}</p>
+          </div>
         </figure>
       </section>
 
@@ -95,36 +119,10 @@
         <div class="receipt-copy">
           <h2>{{r_h2}}</h2>
           <p class="sub">{{r_sub}}</p>
-          <div class="big">
-            <p class="big-num" aria-label="{{big_aria}}"><span aria-hidden="true">~<span data-count="28">28</span>×</span></p>
-            <p class="mono big-cap">{{big_cap}} <span class="chip">AnyAPI</span></p>
-          </div>
         </div>
-        <div class="ledger mono" data-reveal>
-          <i class="node" aria-hidden="true"></i>
-          <p class="ledger-head">{{led_head}}</p>
-          <div class="ledger-group">
-            <p class="muted">{{led_q1}}</p>
-            <p class="lead">goanyapi keyword-search-volume<i></i>$0.01500</p>
-            <p class="lead muted">dataforseo search_volume/live<i></i>$0.09000</p>
-          </div>
-          <div class="ledger-group">
-            <p class="muted">{{led_q2}}</p>
-            <p class="lead">dataforseo search_volume/live<i></i>$0.09000</p>
-            <p class="lead muted">goanyapi keyword-search-volume<i></i>$0.15000</p>
-          </div>
-          <div class="ledger-group">
-            <p class="muted">{{led_leaks}}</p>
-            <p class="lead">{{led_failover}}<i></i>{{led_upto}} x28</p>
-            <p class="lead">{{led_operator}}<i></i>x5</p>
-            <p class="lead">{{led_batch}}<i></i>x15</p>
-            <p class="lead">{{led_402}}<i></i>211</p>
-          </div>
-          <div class="ledger-group">
-            <p class="muted">{{led_every}}</p>
-            <p class="lead inv">{{led_routes}}<i></i>{{led_cheapest}}</p>
-          </div>
-          <p class="ledger-foot">{{led_foot}}</p>
+        <div class="big">
+          <p class="big-num" aria-label="{{big_aria}}"><span aria-hidden="true">~<span data-count="28">28</span>×</span></p>
+          <p class="mono big-cap">{{big_cap}} <span class="chip">AnyAPI</span></p>
         </div>
       </section>
 
