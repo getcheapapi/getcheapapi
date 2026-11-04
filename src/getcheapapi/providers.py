@@ -338,7 +338,7 @@ class Yir(Provider):
         return paths
 
     def balance(self):
-        raise Stop("Yir has no balance API here; see the Yir Console at https://yir.ai.")
+        return http("GET", f"{self.base}/v1/balance", self.auth)
 
 
 PROVIDERS: dict[str, type[Provider]] = {p.name: p for p in (AnyAPI, GoAnyAPI, DataForSEO, TwitterAPI, Yir)}

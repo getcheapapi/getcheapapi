@@ -116,6 +116,20 @@ def test_yir_quote_does_not_retry_client_errors(monkeypatch):
     assert len(calls) == 1
 
 
+def test_yir_balance_reads_gateway_with_the_gateway_key(monkeypatch):
+    from getcheapapi import providers
+    monkeypatch.setenv("YIR_API_KEY", "x")
+    calls = []
+
+    def fake_http(method, url, headers=None, body=None, timeout=0):
+        calls.append((method, url, headers))
+        return {"object": "balance", "available_amount": "1.5"}
+
+    monkeypatch.setattr(providers, "http", fake_http)
+    assert providers.Yir().balance()["available_amount"] == "1.5"
+    assert calls == [("GET", "https://gateway.yir.ai/v1/balance", {"Authorization": "Bearer x"})]
+
+
 def test_env_file_pointer_loads_keys_without_copying(tmp_path, monkeypatch):
     from getcheapapi.core import load_env
     keys = tmp_path / "elsewhere.env"
