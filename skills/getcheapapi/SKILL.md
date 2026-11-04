@@ -59,6 +59,17 @@ getcheapapi accept-price reddit.search   # only after the user accepts a higher 
 - **Stops on trouble**: exit code 2 means out of balance; any first failure stops the batch.
 - **Keeps records**: full responses in `~/.getcheapapi/results/<provider>/`, one ledger line per call in `~/.getcheapapi/ledger.jsonl`; `--project` defaults to the current folder name. `GETCHEAPAPI_HOME` moves this folder.
 
+## From a script
+
+Scripts that make their own paid calls use the library, never a raw HTTP call, so the same guards apply and the spend lands in the ledger:
+
+```python
+from getcheapapi.api import NotServed, Refused, Stop, call
+result, cost = call("anyapi", "twitter.search", {"query": "x"}, max_usd=0.01)
+```
+
+`Refused` means nothing was spent; `NotServed` means this call failed with no charge and a batch may go on; any other `Stop` ends the batch.
+
 ## Tell the user what the comparison found
 
 `quote` prints a `summary:` line and every `run` ends with a `{"summary": ...}` line: routes priced, the pick, calls, cost, the cap, and `savedUsd`/`savedPct` against the dearest priced route (media: against the official price). After each comparison or paid run, give the user those numbers in two or three lines, in their language, before the data itself, for example:

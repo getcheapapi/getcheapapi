@@ -15,7 +15,8 @@ from pathlib import Path
 
 from getcheapapi import lanes as L
 from getcheapapi import router
-from getcheapapi.core import Stop, env, home, key_source, ledger_path, load_env, now, record, write_json
+from getcheapapi.api import DEFAULT_MAX_USD, charged_call, client_for as api_client
+from getcheapapi.core import Refused, Stop, env, home, key_source, ledger_path, load_env, write_json
 from getcheapapi.providers import DATA_DIR, PROVIDERS, AnyAPI, GoAnyAPI, Provider
 
 
@@ -28,7 +29,7 @@ def read_input(raw: str):
 
 
 def client_for(name: str, args) -> Provider:
-    return AnyAPI(args.max_ratio) if name == "anyapi" else PROVIDERS[name]()
+    return api_client(name, args.max_ratio)
 
 
 def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: str, extra: dict | None = None) -> int:
@@ -38,7 +39,7 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
     print(json.dumps({"route": label, "calls": len(bodies), "estimateUsd": round(estimate, 5), "maxUsd": args.max_usd,
                       "keys": key_source(*client.keys)}))
     if estimate > args.max_usd:
-        raise Stop(f"estimate ${estimate:.4f} exceeds --max-usd {args.max_usd}; tell the user the count and total, "
+        raise Refused(f"estimate ${estimate:.4f} exceeds --max-usd {args.max_usd}; tell the user the count and total, "
                    "then rerun with a higher --max-usd once they agree.")
 
     stamp = f"{datetime.now():%Y%m%d-%H%M%S}"
@@ -46,21 +47,15 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
     out.parent.mkdir(parents=True, exist_ok=True)
     responses, files, spent, code = [], [], 0.0, 0
     for body in bodies:
-        row = {"at": now(), "provider": client.name, "endpoint": endpoint, "project": args.project,
-               "input": {k: v for k, v in body.items() if k not in ("source", "allowFallbacks")}, **(extra or {})}
         try:
-            result, cost, rows, ok = client.call(endpoint, body)
+            result, cost, _, ok = charged_call(client, endpoint, body, args.project, extra)
         except Stop as exc:
             spent += exc.cost
-            record({**row, "costUsd": round(exc.cost, 6), "error": str(exc)[:300]})
             print(str(exc), file=sys.stderr)
             code = exc.code
             break
         spent += cost
         responses.append(result)
-        source = (result.get("source") or {}).get("id") if isinstance(result, dict) else None
-        record({**row, "costUsd": round(cost, 6), "rows": rows, **({"source": source} if source else {}),
-                **({} if ok else {"error": "call failed"})})
         if isinstance(result, dict) and result.get("nextAction"):  # async AnyAPI: poll, never resubmit
             print(json.dumps({"requestId": result.get("requestId"), "nextAction": result["nextAction"]}))
         if client.name == "yir" and ok:
@@ -237,7 +232,7 @@ def cmd_accept(args) -> int:
 
 def add_spend_flags(p):
     p.add_argument("--input", required=True, help="JSON object or list of objects, or @file.json")
-    p.add_argument("--max-usd", type=float, default=0.1, help="refuse when the estimate, or stop when spend, passes this")
+    p.add_argument("--max-usd", type=float, default=DEFAULT_MAX_USD, help="refuse when the estimate, or stop when spend, passes this")
     p.add_argument("--max-ratio", type=float, default=L.DEFAULT_MAX_RATIO,
                    help="anyapi: only sources priced within this multiple of the cheapest may serve")
     p.add_argument("--project", default=Path.cwd().name, help="tag for the ledger (default: current folder)")

@@ -15,7 +15,7 @@ import uuid
 from pathlib import Path
 
 from getcheapapi import lanes as L
-from getcheapapi.core import EXIT_NO_BALANCE, Stop, env, has_env, home, http, list_len, now, read_json, write_json
+from getcheapapi.core import EXIT_NO_BALANCE, NotServed, Refused, Stop, env, has_env, home, http, list_len, now, read_json, write_json
 
 DAY = 86400
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -59,7 +59,7 @@ class AnyAPI(Provider):
             pinned, allowed, price = L.pin(endpoint, body, L.fetch_lanes(endpoint, self.key), self.max_ratio)
         except L.PricierOnly as exc:
             hint = "" if isinstance(exc, L.PriceRose) else "(--max-ratio N raises the ratio.) "
-            raise Stop(f"{exc}\n{hint}Show the user this table and wait for their decision.") from None
+            raise Refused(f"{exc}\n{hint}Show the user this table and wait for their decision.") from None
         self._pinned[id(pinned)] = (allowed, price)
         return pinned
 
@@ -82,9 +82,11 @@ class AnyAPI(Provider):
         try:
             result = http("POST", f"{self.base}/run/{endpoint}", {"X-API-Key": self.key}, body)
         except Stop as exc:
-            if exc.code == EXIT_NO_BALANCE or "invalid_input" in str(exc):  # bad fields: see `describe anyapi`
+            if exc.code == EXIT_NO_BALANCE:
                 raise
-            raise Stop(f"{exc}\nThe pinned cheap sources {sorted(allowed)} cannot serve it now (no charge); "
+            if "invalid_input" in str(exc):  # bad fields: see `describe anyapi`
+                raise NotServed(str(exc)) from None
+            raise NotServed(f"{exc}\nThe pinned cheap sources {sorted(allowed)} cannot serve it now (no charge); "
                        f"others cost more:\n{L.price_table(endpoint, body, L.fetch_lanes(endpoint, self.key))}\n"
                        "Ask the user before rerunning with --max-ratio N.") from None
         cost = float(result.get("costUsd") or 0)

@@ -28,6 +28,14 @@ class Stop(Exception):
         self.cost = cost  # charged before stopping, e.g. served by an unexpected source
 
 
+class Refused(Stop):
+    """Stopped before spending: the price needs a person, or the estimate passes the cap."""
+
+
+class NotServed(Stop):
+    """This one call failed and nothing was charged; a batch may go on to the next item."""
+
+
 KEY_SOURCES: dict[str, str] = {}  # variable -> .env file it was loaded from
 
 

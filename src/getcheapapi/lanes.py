@@ -48,7 +48,14 @@ def fetch_lanes(sku: str, key: str, max_age: float = 0) -> list:
     hit = cache.get(sku)
     if hit and max_age > 0 and time.time() - datetime.fromisoformat(hit["at"]).timestamp() < max_age:
         return hit["lanes"]
-    info = http("GET", f"{BASE}/apis/{sku}", {"X-API-Key": key, "User-Agent": USER_AGENT}, timeout=60)
+    for attempt in range(3):  # reading prices is free, and connections drop now and then
+        try:
+            info = http("GET", f"{BASE}/apis/{sku}", {"X-API-Key": key, "User-Agent": USER_AGENT}, timeout=60)
+            break
+        except OSError:
+            if attempt == 2:
+                raise
+            time.sleep(2)
     lanes = info.get("lanes") or []
     cache = read_json(cache_path(), {})  # reread: another process may have written meanwhile
     cache[sku] = {"at": now(), "lanes": lanes}
