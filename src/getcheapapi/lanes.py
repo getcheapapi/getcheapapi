@@ -18,7 +18,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from getcheapapi.core import USER_AGENT, home, http, now, read_json, write_json
+from getcheapapi.core import DROPPED, USER_AGENT, home, http, now, read_json, write_json
 
 BASE = "https://api.getanyapi.com/v1"
 DEFAULT_MAX_RATIO = 1.5
@@ -52,7 +52,7 @@ def fetch_lanes(sku: str, key: str, max_age: float = 0) -> list:
         try:
             info = http("GET", f"{BASE}/apis/{sku}", {"X-API-Key": key, "User-Agent": USER_AGENT}, timeout=60)
             break
-        except OSError:
+        except DROPPED:
             if attempt == 2:
                 raise
             time.sleep(2)

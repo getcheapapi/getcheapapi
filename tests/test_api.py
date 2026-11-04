@@ -1,4 +1,5 @@
 """Library calls: same guards as the CLI, and every call lands in the ledger. Offline."""
+import http.client
 import json
 import urllib.error
 
@@ -95,6 +96,14 @@ def test_retries_a_dropped_connection_then_gives_up(post):
     with pytest.raises(api.NotServed, match="connection failed"):
         api.call("anyapi", "twitter.search", {"query": "x"}, retries=2)
     assert len(calls) == 3 and len(ledger()) == 1
+
+
+def test_response_cut_off_midway_counts_as_a_dropped_connection(post):
+    calls, http_stub = post
+    http_stub.answer = http.client.IncompleteRead(b"{")
+    with pytest.raises(api.NotServed, match="connection failed"):
+        api.call("anyapi", "twitter.search", {"query": "x"}, retries=1)
+    assert len(calls) == 2 and "connection" in ledger()[0]["error"]
 
 
 def test_twitterapi_read_is_priced_and_recorded(post):

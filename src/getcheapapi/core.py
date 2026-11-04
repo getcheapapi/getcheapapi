@@ -1,6 +1,7 @@
 """Shared plumbing: local state dir, .env loading, HTTP with 402 detection, the spend ledger."""
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import urllib.error
@@ -11,6 +12,7 @@ from pathlib import Path
 from getcheapapi import __version__
 
 EXIT_NO_BALANCE = 2  # batch loops calling the CLI stop on it
+DROPPED = (OSError, http.client.HTTPException)  # connection lost, including mid-response
 USER_AGENT = f"getcheapapi/{__version__}"
 
 

@@ -12,7 +12,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from getcheapapi import lanes as L
-from getcheapapi.core import NotServed, Refused, Stop, load_env, now, record
+from getcheapapi.core import DROPPED, NotServed, Refused, Stop, load_env, now, record
 from getcheapapi.providers import PROVIDERS, AnyAPI, Provider
 
 __all__ = ["DEFAULT_MAX_USD", "NotServed", "Refused", "Stop", "call", "quote"]
@@ -35,7 +35,7 @@ def charged_call(client: Provider, endpoint: str, body: dict, project: str, extr
         except Stop as exc:
             record({**row, "costUsd": round(exc.cost, 6), "error": str(exc)[:300]})
             raise
-        except OSError as exc:
+        except DROPPED as exc:
             if attempt == retries:
                 record({**row, "costUsd": 0, "error": f"connection: {exc}"[:300]})
                 raise NotServed(f"{client.name} {endpoint}: connection failed: {exc}") from None
@@ -49,7 +49,7 @@ def prepared(client: Provider, endpoint: str, body: dict) -> tuple[dict, float]:
     try:
         body = client.prepare(endpoint, body)
         return body, client.estimate(endpoint, body)
-    except OSError as exc:
+    except DROPPED as exc:
         raise Refused(f"{client.name} {endpoint}: could not read prices: {exc}") from None
 
 

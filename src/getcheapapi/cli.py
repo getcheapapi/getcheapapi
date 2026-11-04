@@ -16,7 +16,7 @@ from pathlib import Path
 from getcheapapi import lanes as L
 from getcheapapi import router
 from getcheapapi.api import DEFAULT_MAX_USD, charged_call, client_for as api_client
-from getcheapapi.core import Refused, Stop, env, home, key_source, ledger_path, load_env, write_json
+from getcheapapi.core import Refused, Stop, env, home, key_source, ledger_path, load_env, now, write_json
 from getcheapapi.providers import DATA_DIR, PROVIDERS, AnyAPI, GoAnyAPI, Provider
 
 
