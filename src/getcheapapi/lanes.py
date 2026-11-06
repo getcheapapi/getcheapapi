@@ -1,9 +1,10 @@
 """Pin AnyAPI calls to the cheapest upstream source.
 
 One AnyAPI SKU is served by several upstream sources whose prices differ by up to 200x, and by default a
-failing cheap source fails over to a dearer one at the dearer price. pin() lists only the cheapest source
-(sources tied with it too, which cost the same) and turns fallbacks off, so a dearer source never serves
-silently: when it cannot serve, AnyAPI refuses with no charge and the caller waits for it or stops. Only a
+failing cheap source fails over to a dearer one at the dearer price. pin() names one source, the cheapest,
+and turns fallbacks off, so a dearer source never serves silently: when it cannot serve, AnyAPI refuses with
+no charge and the caller waits for it or stops. Listing two is not safe: on 2026-11-06 a two-source list was
+served by the dearer one, and an empty result reported as the cheap one was charged the dearer price. Only a
 person raises max_ratio to let dearer sources in.
 
 Lane prices are cached on disk (prices/anyapi.json). Comparing routes reads the cache; a paid run always
@@ -127,8 +128,9 @@ def pin(sku: str, body: dict, lanes: list, max_ratio: float = DEFAULT_MAX_RATIO,
     """
     if baseline is True:
         baseline = baseline_path()
-    if body.get("source"):  # sources chosen explicitly: price them as given
-        chosen = lanes if body.get("allowFallbacks", True) else [l for l in lanes if l["source"]["id"] in body["source"]]
+    if body.get("source"):  # sources chosen explicitly: only those, unless the caller asked for fallbacks
+        body = {"allowFallbacks": False, **body}
+        chosen = lanes if body["allowFallbacks"] else [l for l in lanes if l["source"]["id"] in body["source"]]
         return body, {l["source"]["id"] for l in chosen}, max((lane_price(l, body) for l in chosen), default=0)
     if not lanes:
         raise PricierOnly(f"{sku}: the catalog lists no sources, so the price cannot be capped")
@@ -141,6 +143,8 @@ def pin(sku: str, body: dict, lanes: list, max_ratio: float = DEFAULT_MAX_RATIO,
         raise PricierOnly(f"no source within x{max_ratio} of the cheapest returns {sorted(need)}\n"
                           + price_table(sku, body, lanes)
                           + "\nAfter the user accepts a price, rerun with a higher --max-ratio or name the source.")
+    if max_ratio <= 1:
+        ok = ok[:1]
     ids = [l["source"]["id"] for l in ok]
     return {**body, "source": ids, "allowFallbacks": False}, set(ids), lane_price(ok[-1], body)
 
