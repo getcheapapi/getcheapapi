@@ -1,7 +1,7 @@
 """Offline tests: no network, no keys, no money."""
 import pytest
 
-from getcheapapi import router
+from getcheapapi import core, providers, router
 from getcheapapi.core import Stop
 from getcheapapi.providers import DataForSEO, GoAnyAPI
 
@@ -228,3 +228,23 @@ def test_summary_saves_against_dearest_priced_route(monkeypatch):
     assert s["pick"] == best.label and s["calls"] == 3 and s["routes"] == 2
     assert s["savedUsd"] == round(s["vsUsd"] - s["usd"], 5) and 0 < s["savedPct"] < 100
     assert "savedUsd" not in router.summary([best], best)
+
+
+def test_unpriced_route_with_a_key_stops_the_run(monkeypatch):
+    monkeypatch.setattr(providers.AnyAPI, "configured", classmethod(lambda cls: True))
+    ok = router.Option("dataforseo", "e", {}, usd=0.09)
+    bad = router.Option("anyapi", "e", {}, status="error: HTTP 503")
+    with pytest.raises(core.Refused, match="cheapest is unknown"):
+        router.choose([ok, bad])
+
+
+def test_unpriced_route_without_a_key_does_not_block(monkeypatch):
+    monkeypatch.setattr(providers.AnyAPI, "configured", classmethod(lambda cls: False))
+    ok = router.Option("dataforseo", "e", {}, usd=0.09)
+    assert router.choose([ok, router.Option("anyapi", "e", {}, status="error: no snapshot price")]) is ok
+
+
+def test_yir_failover_is_off_unless_asked():
+    assert providers.Yir.request({"model": "m", "prompt": "p"})["routing"] == {"fallback": False}
+    asked = providers.Yir.request({"model": "m", "prompt": "p", "routing": {"fallback": True, "preference": "speed"}})
+    assert asked["routing"] == {"fallback": True, "preference": "speed"}

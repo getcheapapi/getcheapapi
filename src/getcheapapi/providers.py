@@ -15,7 +15,7 @@ import uuid
 from pathlib import Path
 
 from getcheapapi import lanes as L
-from getcheapapi.core import EXIT_NO_BALANCE, NotServed, Refused, Stop, env, has_env, home, http, list_len, now, read_json, write_json
+from getcheapapi.core import EXIT_NO_BALANCE, EXIT_UNAVAILABLE, NotServed, Refused, Stop, Unavailable, env, has_env, home, http, list_len, now, read_json, write_json
 
 DAY = 86400
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -86,9 +86,9 @@ class AnyAPI(Provider):
                 raise
             if "invalid_input" in str(exc):  # bad fields: see `describe anyapi`
                 raise NotServed(str(exc)) from None
-            raise NotServed(f"{exc}\nThe pinned cheap sources {sorted(allowed)} cannot serve it now (no charge); "
-                       f"others cost more:\n{L.price_table(endpoint, body, L.fetch_lanes(endpoint, self.key))}\n"
-                       "Ask the user before rerunning with --max-ratio N.") from None
+            raise Unavailable(f"{exc}\nThe pinned source {sorted(allowed)} cannot serve it now (no charge). Wait and run "
+                              f"the same command again; others cost more:\n{L.price_table(endpoint, body, L.fetch_lanes(endpoint, self.key))}\n"
+                              "Ask the user before rerunning with --max-ratio N.", EXIT_UNAVAILABLE) from None
         cost = float(result.get("costUsd") or 0)
         if result.get("requestId") and result.get("nextAction") and not result.get("output"):
             return result, cost, 0, True  # async SKU accepted; the source is known only when polled
@@ -246,8 +246,9 @@ YIR_PATHS = {"image": "/v1/images", "video": "/v1/videos", "audio": "/v1/audio",
 
 
 class Yir(Provider):
-    """Image, video, audio and 3D generation. Yir already routes each model to its cheapest channel;
-    getcheapapi quotes before every job, caps it server-side with max_cost, and waits for the result.
+    """Image, video, audio and 3D generation. Yir starts on the model's cheapest channel; getcheapapi turns its
+    failover off, since a failed attempt a channel billed is charged too, unless the input sets routing.fallback.
+    It quotes before every job, caps it server-side with max_cost, and waits for the result.
     Text prompts only; reference uploads, batches and resumable jobs live in the yir skill/CLI."""
     name, keys, site = "yir", ("YIR_API_KEY",), "https://yir.ai/?utm_source=getcheapapi&utm_medium=cli"
 
@@ -264,9 +265,7 @@ class Yir(Provider):
     def request(body: dict) -> dict:
         """Capability body {model, prompt, parameters, input_type} -> Yir request body."""
         req = {"model": body["model"], "input": {"type": body.get("input_type", "text"), "prompt": body.get("prompt")},
-               "parameters": body.get("parameters") or {}}
-        if body.get("routing"):
-            req["routing"] = body["routing"]
+               "parameters": body.get("parameters") or {}, "routing": {"fallback": False, **(body.get("routing") or {})}}
         return req
 
     def quote(self, kind: str, body: dict) -> dict:

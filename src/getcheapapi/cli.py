@@ -2,7 +2,8 @@
 
 Every paid run: price all routes, pick the cheapest one you have a key for, re-price it on fresh prices,
 refuse past --max-usd, stop on 402 or the first failure, save the full response, and append one ledger
-line per call. AnyAPI calls are pinned to sources within --max-ratio of the cheapest, with failover off.
+line per call. AnyAPI calls are pinned to the cheapest source with failover off, and so are Yir jobs; a
+source that is down is waited for (--wait), never replaced by a dearer one.
 """
 from __future__ import annotations
 
@@ -18,6 +19,9 @@ from getcheapapi import router
 from getcheapapi.api import DEFAULT_MAX_USD, charged_call, client_for as api_client
 from getcheapapi.core import Refused, Stop, env, home, key_source, ledger_path, load_env, now, write_json
 from getcheapapi.providers import DATA_DIR, PROVIDERS, AnyAPI, GoAnyAPI, Provider
+
+
+DEFAULT_WAIT = 90  # inside the two minutes an Agent shell usually allows a command
 
 
 def read_input(raw: str):
@@ -48,7 +52,7 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
     responses, files, spent, code = [], [], 0.0, 0
     for body in bodies:
         try:
-            result, cost, _, ok = charged_call(client, endpoint, body, args.project, extra)
+            result, cost, _, ok = charged_call(client, endpoint, body, args.project, extra, wait=args.wait)
         except Stop as exc:
             spent += exc.cost
             print(str(exc), file=sys.stderr)
@@ -234,7 +238,9 @@ def add_spend_flags(p):
     p.add_argument("--input", required=True, help="JSON object or list of objects, or @file.json")
     p.add_argument("--max-usd", type=float, default=DEFAULT_MAX_USD, help="refuse when the estimate, or stop when spend, passes this")
     p.add_argument("--max-ratio", type=float, default=L.DEFAULT_MAX_RATIO,
-                   help="anyapi: only sources priced within this multiple of the cheapest may serve")
+                   help="anyapi: let sources up to this multiple of the cheapest serve; raise it only after the user agrees")
+    p.add_argument("--wait", type=float, default=DEFAULT_WAIT,
+                   help="seconds to keep trying the same source while it is unavailable (no charge)")
     p.add_argument("--project", default=Path.cwd().name, help="tag for the ledger (default: current folder)")
     p.add_argument("-o", "--output")
 

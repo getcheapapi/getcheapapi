@@ -9,7 +9,7 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from getcheapapi.core import Stop
+from getcheapapi.core import Refused, Stop
 from getcheapapi.providers import PROVIDERS, Provider
 
 CATALOG = Path(__file__).resolve().parent / "data" / "catalog.json"
@@ -148,7 +148,13 @@ def plan(cap: dict, inputs: list[dict], clients: dict[str, Provider], only: str 
 
 
 def choose(options: list[Option]) -> Option:
+    # A route that could not be priced may be the cheapest: moving on to the next would spend more unnoticed.
+    unpriced = [o for o in options if o.status.startswith("error") and PROVIDERS[o.provider].configured()]
     runnable = [o for o in options if o.status == "ok"]
+    if unpriced and runnable:
+        reasons = "; ".join(f"{o.label}: {o.status}" for o in unpriced)
+        raise Refused(f"could not price every route, so the cheapest is unknown: {reasons}\n"
+                      f"Wait and run again, or ask the user before forcing {runnable[0].provider} with --via.")
     if not runnable:
         reasons = "; ".join(f"{o.label}: {o.status}" for o in options) or "no routes"
         keyless = [o for o in options if o.status == "no key"]

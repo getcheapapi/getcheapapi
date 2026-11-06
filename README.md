@@ -97,7 +97,7 @@ The same data can cost 2x to 200x more depending on the route, and the default r
 
 | Trap | What getcheapapi does |
 |---|---|
-| Aggregators quietly fail over to a dearer source (up to 28x on one X search) | Pins AnyAPI to the cheapest sources with failover off |
+| Aggregators quietly fail over to a dearer source (up to 28x on one X search) | Pins AnyAPI to the cheapest source with failover off, and waits when it is down |
 | Options that look harmless raise the price (a search operator: 5x on DataForSEO SERP) | Prices the exact input, options included, before running |
 | Billing differs everywhere: per call, per row, per keyword, batches | Dedupes inputs and sends one batch when that is cheaper |
 | Prices change | Re-checks prices before spending; stops if the cheapest price jumps |

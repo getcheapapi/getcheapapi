@@ -18,6 +18,17 @@ def test_pin_keeps_sources_within_ratio_and_disables_fallback(tmp_path):
     assert allowed == {"cheap", "near"} and price == pytest.approx(0.0007)
 
 
+def test_pin_defaults_to_the_cheapest_source_only(tmp_path):
+    body, allowed, price = L.pin("sku", {"query": "x"}, LANES, baseline=tmp_path / "b.json")
+    assert body["source"] == ["cheap"] and body["allowFallbacks"] is False
+    assert allowed == {"cheap"} and price == pytest.approx(0.0005)
+
+
+def test_pin_keeps_sources_tied_with_the_cheapest(tmp_path):
+    _, allowed, price = L.pin("sku", {}, LANES + [lane("tied", 0.0005)], baseline=tmp_path / "b.json")
+    assert allowed == {"cheap", "tied"} and price == pytest.approx(0.0005)
+
+
 def test_pin_refuses_when_only_dear_sources_return_required_field(tmp_path):
     with pytest.raises(L.PricierOnly):
         L.pin("sku", {"requireFields": ["nextCursor"]}, [LANES[0], LANES[2]], 1.5, tmp_path / "b.json")

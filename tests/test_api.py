@@ -45,7 +45,7 @@ def test_call_pins_sources_and_writes_ledger(post):
     calls, _ = post
     result, cost = api.call("anyapi", "twitter.search", {"query": "x"}, project="p")
     assert cost == 0.0005 and result["output"]["data"]["items"] == [1, 2]
-    assert calls[0]["source"] == ["cheap", "near"] and calls[0]["allowFallbacks"] is False
+    assert calls[0]["source"] == ["cheap"] and calls[0]["allowFallbacks"] is False
     row = ledger()[0]
     assert (row["project"], row["costUsd"], row["source"], row["input"]) == ("p", 0.0005, "cheap", {"query": "x"})
 
@@ -72,6 +72,37 @@ def test_refusal_from_cheap_sources_is_not_served(post):
     with pytest.raises(api.NotServed):
         api.call("anyapi", "twitter.search", {"query": "x"})
     assert "503" in ledger()[0]["error"]
+
+
+def test_unavailable_source_is_waited_for_not_replaced(post, monkeypatch):
+    calls, http = post
+    http.answer = core.Stop("HTTP 503: no capacity")
+    slept = []
+    monkeypatch.setattr(api.time, "sleep", slept.append)
+    with pytest.raises(api.Unavailable) as err:
+        api.call("anyapi", "twitter.search", {"query": "x"}, wait=90)
+    assert err.value.code == core.EXIT_UNAVAILABLE and err.value.cost == 0
+    assert slept == [30, 60] and len(calls) == 3
+    assert all(c["source"] == ["cheap"] for c in calls)
+    assert all(r["costUsd"] == 0 for r in ledger())
+
+
+def test_wait_ends_when_the_source_comes_back(post, monkeypatch):
+    calls, http = post
+    good = http.answer
+    http.answer = core.Stop("HTTP 503: no capacity")
+    monkeypatch.setattr(api.time, "sleep", lambda _: setattr(http, "answer", good))
+    result, cost = api.call("anyapi", "twitter.search", {"query": "x"}, wait=90)
+    assert cost == 0.0005 and len(calls) == 2
+
+
+def test_bad_input_is_not_waited_for(post, monkeypatch):
+    calls, http = post
+    http.answer = core.Stop("HTTP 400: invalid_input")
+    monkeypatch.setattr(api.time, "sleep", lambda _: pytest.fail("waited"))
+    with pytest.raises(api.NotServed) as err:
+        api.call("anyapi", "twitter.search", {"query": "x"}, wait=90)
+    assert not isinstance(err.value, api.Unavailable) and len(calls) == 1
 
 
 def test_no_balance_ends_the_batch(post):

@@ -1,9 +1,10 @@
-"""Pin AnyAPI calls to the cheapest upstream sources.
+"""Pin AnyAPI calls to the cheapest upstream source.
 
 One AnyAPI SKU is served by several upstream sources whose prices differ by up to 200x, and by default a
-failing cheap source fails over to a dearer one at the dearer price. pin() lists only the sources priced
-within max_ratio of the cheapest and turns fallbacks off, so a dearer source never serves silently: when
-none of them can serve, AnyAPI refuses with no charge and the caller stops for a person to confirm.
+failing cheap source fails over to a dearer one at the dearer price. pin() lists only the cheapest source
+(sources tied with it too, which cost the same) and turns fallbacks off, so a dearer source never serves
+silently: when it cannot serve, AnyAPI refuses with no charge and the caller waits for it or stops. Only a
+person raises max_ratio to let dearer sources in.
 
 Lane prices are cached on disk (prices/anyapi.json). Comparing routes reads the cache; a paid run always
 refetches the SKU it is about to call, so spending never relies on a stale price.
@@ -21,13 +22,13 @@ from pathlib import Path
 from getcheapapi.core import DROPPED, USER_AGENT, home, http, now, read_json, write_json
 
 BASE = "https://api.getanyapi.com/v1"
-DEFAULT_MAX_RATIO = 1.5
+DEFAULT_MAX_RATIO = 1.0
 BASELINE_MAX_RISE = 1.5
 ACCEPT_HINT = "getcheapapi accept-price {sku}"
 
 
 class PricierOnly(Exception):
-    """No source within the ratio can serve this body; a person must accept the dearer price."""
+    """The cheapest source cannot serve this body; a person must accept the dearer price."""
 
 
 class PriceRose(PricierOnly):

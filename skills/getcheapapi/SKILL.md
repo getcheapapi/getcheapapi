@@ -38,7 +38,7 @@ Defaults behind the catalog (2026-11 prices; `quote` always has the current ones
 | Bulk domain rank, referring domains | dataforseo `backlinks/bulk_*` | $0.024 + $0.000036/row, ≤1,000 domains | never query domains one by one |
 | One domain's backlink summary | goanyapi `backlink` or dataforseo `backlinks/summary/live` | $0.004 / ~$0.024 | GoAnyAPI dofollow counts are unreliable |
 | Website traffic, DR | goanyapi `traffic`, `dr` | $0.002–0.006 | |
-| Image / video / speech | yir | per quote | pick the model by quality; Yir picks the cheapest channel |
+| Image / video / speech | yir | per quote | pick the model by quality; Yir starts on the cheapest channel, failover off |
 
 Endpoints outside the catalog: `getcheapapi call <provider> <endpoint> --input ...` runs them with the same guards. Before choosing one, compare the total for the whole batch across endpoints and providers (calls × price after pinning, including paging and items per page); AnyAPI endpoints can differ by tens of times. `getcheapapi describe anyapi|goanyapi <endpoint>` shows the schema and every source's price; [references/providers.md](references/providers.md) has each provider's billing rules and the routes compared so far. Do not copy field names from another provider's endpoint.
 
@@ -54,9 +54,10 @@ getcheapapi accept-price reddit.search   # only after the user accepts a higher 
 ## What every paid run does
 
 - **Prices first**: estimates the run on fresh prices and refuses when it passes `--max-usd` (default $0.1). Tell the user the number of calls and the total, and rerun with a higher cap once they agree.
-- **AnyAPI cheap sources only**: one AnyAPI endpoint is served by several sources up to 200x apart, and by default a failing cheap source fails over to a dearer one. Calls are pinned to sources within `--max-ratio` (default 1.5) of the cheapest, with failover off. When none of them can serve, AnyAPI refuses without charging and the run stops with a price table: show it to the user, and rerun with `--max-ratio` or a named `source` only after they agree. It also stops when a call is served by an unexpected source or charged more than expected.
+- **Cheapest source only, no switching**: one AnyAPI endpoint is served by several sources up to 200x apart, and by default a failing cheap source fails over to a dearer one. Calls are pinned to the cheapest source with failover off (sources tied with it cost the same and stay in), and a run served by any other source stops. Yir jobs go out with `routing.fallback` off, since an attempt a channel billed is charged even when it fails; set `"routing":{"fallback":true}` in the input only when the user asks. A route that could not be priced stops the run instead of being skipped for the next one.
+- **Waits instead of switching**: a source that is down refuses with no charge. The run keeps trying the same source for `--wait` seconds (default 90), then exits with code 3. Run the same command again later, or tell the user it is waiting. Never add `--max-ratio`, `--via` or another endpoint to get around it without the user's OK: those are the dearer routes.
 - **Price baseline**: the lowest cheapest-price seen per AnyAPI endpoint is kept in `~/.getcheapapi/price-baseline.json`. When the cheapest price passes 1.5x the baseline, the run stops before spending and prints both prices; after the user accepts, run `accept-price <sku>`. Never accept on your own.
-- **Stops on trouble**: exit code 2 means out of balance; any first failure stops the batch.
+- **Stops on trouble**: exit code 2 means out of balance, 3 means the source is still down after waiting; any first failure stops the batch.
 - **Keeps records**: full responses in `~/.getcheapapi/results/<provider>/`, one ledger line per call in `~/.getcheapapi/ledger.jsonl`; `--project` defaults to the current folder name. `GETCHEAPAPI_HOME` moves this folder.
 
 ## From a script
@@ -68,7 +69,7 @@ from getcheapapi.api import NotServed, Refused, Stop, call
 result, cost = call("anyapi", "twitter.search", {"query": "x"}, max_usd=0.01)
 ```
 
-`Refused` means nothing was spent; `NotServed` means this call failed with no charge and a batch may go on; any other `Stop` ends the batch.
+`Refused` means nothing was spent; `NotServed` means this call failed with no charge and a batch may go on; `Unavailable` is a `NotServed` for a source that is down, and `call(..., wait=300)` keeps trying it; any other `Stop` ends the batch.
 
 ## Tell the user what the comparison found
 

@@ -12,6 +12,7 @@ from pathlib import Path
 from getcheapapi import __version__
 
 EXIT_NO_BALANCE = 2  # batch loops calling the CLI stop on it
+EXIT_UNAVAILABLE = 3  # the cheapest source is down, nothing charged: wait and run the same command again
 DROPPED = (OSError, http.client.HTTPException)  # connection lost, including mid-response
 USER_AGENT = f"getcheapapi/{__version__}"
 
@@ -36,6 +37,10 @@ class Refused(Stop):
 
 class NotServed(Stop):
     """This one call failed and nothing was charged; a batch may go on to the next item."""
+
+
+class Unavailable(NotServed):
+    """The chosen source refused for now, with no charge: wait for it rather than pay another."""
 
 
 KEY_SOURCES: dict[str, str] = {}  # variable -> .env file it was loaded from
