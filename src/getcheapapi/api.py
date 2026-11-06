@@ -20,7 +20,7 @@ from getcheapapi.providers import PROVIDERS, AnyAPI, Provider
 __all__ = ["DEFAULT_MAX_USD", "NotServed", "Refused", "Stop", "Unavailable", "call", "quote"]
 
 DEFAULT_MAX_USD = 0.1
-FIRST_WAIT = 30  # seconds before trying an unavailable source again; doubles each time
+FIRST_WAIT = 5  # seconds before trying an unavailable source again; doubles each time. Rate limits clear in seconds
 
 
 def client_for(provider: str, max_ratio: float = L.DEFAULT_MAX_RATIO) -> Provider:

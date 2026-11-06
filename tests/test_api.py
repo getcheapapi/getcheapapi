@@ -82,7 +82,7 @@ def test_unavailable_source_is_waited_for_not_replaced(post, monkeypatch):
     with pytest.raises(api.Unavailable) as err:
         api.call("anyapi", "twitter.search", {"query": "x"}, wait=90)
     assert err.value.code == core.EXIT_UNAVAILABLE and err.value.cost == 0
-    assert slept == [30, 60] and len(calls) == 3
+    assert slept == [5, 10, 20, 40, 15] and len(calls) == 6
     assert all(c["source"] == ["cheap"] for c in calls)
     assert all(r["costUsd"] == 0 for r in ledger())
 
