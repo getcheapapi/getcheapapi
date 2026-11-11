@@ -8,7 +8,8 @@ Prices as of 2026-11. The charge in each response and each provider's pricing pa
 |---|---|---|
 | Google top 100 | anyapi `google.search` paged 10 times ≈ $0.005; dataforseo `serp/google/organic/task_post` for 100 results ≈ $0.006 (priced per 10 results, queued); anyapi `google.search_100` $0.024 | Page `google.search`. The cheap source returns about 10 results even with `limit:100`; follow `nextCursor` (page 2 is results 11–20). |
 | Google Trends | anyapi `google.trends` $0.002 (one other source charges $0.018); goanyapi `google-trends` 6 credits per keyword, empty results charged | anyapi; when the cheap source refuses, stop and quote rather than allow the $0.018 one |
-| Search volume, keyword ideas, backlinks | dataforseo batch endpoints; anyapi `seo.*` is DataForSEO data resold at about +20% with no batching | dataforseo (goanyapi for a handful of keywords) |
+| Search volume | official Google Ads $0; DataForSEO batch and GoAnyAPI per keyword | `--via googleads` when authorized. Use DataForSEO when a paid Google Ads–sourced fallback is needed. |
+| Keyword ideas, backlinks | dataforseo batch endpoints; anyapi `seo.*` is DataForSEO data resold at about +20% with no batching | dataforseo |
 | Bing top 10 | anyapi `bing.search` $0.00085; `brave.search` $0.00085 is a different engine with different results | `bing.search` for Bing results |
 
 A real overspend these rules prevent: search volumes split into 15 calls at $0.108 when one call takes 1,000 keywords, backlinks fetched one domain at a time at $0.029 each, and a script that kept sending 211 requests after a 402.
@@ -36,6 +37,15 @@ A real overspend these rules prevent: search volumes split into 15 calls at $0.1
   - `preferLatencyUnderMs`: prefers faster, dearer sources.
 - X query syntax: bare words are ANDed. Use `A OR B` for either; wrap it when other operators follow, e.g. `(A OR B) -filter:replies`.
 - `seo.*` SKUs resell DataForSEO at about +20% without batching; use DataForSEO directly.
+
+## Google Ads Keyword Planner
+
+- Use `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`. The JSON takes `keywords`, optional `location_code` (Google Ads geographic criterion ID, defaults to US `2840`) and `language_code` (defaults to `en`, use `zh_CN` or `zh_TW` for Chinese). Searches cover Google Search. The CLI batches up to 10,000 terms per call and spaces calls at least one second apart within the run. Google also enforces quota across concurrent runs. [Historical metrics](https://developers.google.com/google-ads/api/docs/keyword-planning/generate-historical-metrics) · [Quotas](https://developers.google.com/google-ads/api/docs/best-practices/quotas)
+- Price savings depend on the number of DataForSEO tasks replaced. As of 2026-11-10, Google Ads costs $0 per request. DataForSEO charges $0.09 live or $0.06 queued per task of up to 1,000 terms. The tested 127-term batch saves $0.09 live or $0.06 queued. One full 10,000-term Google Ads request replaces ten DataForSEO tasks, saving $0.90 live or $0.60 queued at those rates. [Google Ads pricing](https://developers.google.com/google-ads/api/docs/productionize/access-levels#pricing) · [DataForSEO pricing](https://dataforseo.com/pricing/keywords-data/google-ads)
+- Set up a Cloud project with Google Ads API Basic and an enabled Ads customer account. Complete brand verification on the project's External production OAuth app, then request Basic in the Google Ads API overview. Create a desktop OAuth client in the same project and authorize it in the browser with the Ads account's Google user. The [Google single-user OAuth guide](https://developers.google.com/google-ads/api/docs/oauth/single-user-authentication) shows how to generate an `authorized_user` JSON. Basic access follows the Cloud project. [Brand verification](https://developers.google.com/google-ads/api/docs/api-policy/brand-verification)
+- Keep the authorized-user JSON at `~/.getcheapapi/google-ads-oauth.json` or point `GOOGLE_ADS_OAUTH_FILE` at it. The file contains `client_id`, `client_secret`, and `refresh_token`. Set `GOOGLE_ADS_CUSTOMER_ID` if the identity can access several Ads accounts. For a client accessed through a manager, set the client ID and `GOOGLE_ADS_LOGIN_CUSTOMER_ID`. Keep credentials and account IDs local.
+- Read `results[].keywordMetrics.avgMonthlySearches` and `monthlySearchVolumes`. Map `results[].text` and `closeVariants` to the inputs. Use one volume per returned group when totaling, and record missing metrics separately from zero.
+- `CUSTOMER_NOT_ENABLED` calls for checking the Ads account in the Google Ads UI. After reactivation, allow time for the API to reflect the new state and retry the same route. The CLI stops on access and quota errors. [Common errors](https://developers.google.com/google-ads/api/docs/common-errors)
 
 ## DataForSEO (dataforseo.com)
 

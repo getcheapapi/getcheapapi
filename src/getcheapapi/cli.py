@@ -17,7 +17,7 @@ from pathlib import Path
 from getcheapapi import lanes as L
 from getcheapapi import router
 from getcheapapi.api import DEFAULT_MAX_USD, charged_call, client_for as api_client
-from getcheapapi.core import Refused, Stop, env, home, key_source, ledger_path, load_env, now, write_json
+from getcheapapi.core import Refused, Stop, env, home, ledger_path, load_env, now, write_json
 from getcheapapi.providers import DATA_DIR, PROVIDERS, AnyAPI, GoAnyAPI, Provider
 
 
@@ -41,7 +41,7 @@ def execute(client: Provider, endpoint: str, bodies: list[dict], args, label: st
     bodies = [client.prepare(endpoint, b) for b in bodies]
     estimate = sum(client.estimate(endpoint, b) for b in bodies)
     print(json.dumps({"route": label, "calls": len(bodies), "estimateUsd": round(estimate, 5), "maxUsd": args.max_usd,
-                      "keys": key_source(*client.keys)}))
+                      "keys": client.credential_source()}))
     if estimate > args.max_usd:
         raise Refused(f"estimate ${estimate:.4f} exceeds --max-usd {args.max_usd}; tell the user the count and total, "
                    "then rerun with a higher --max-usd once they agree.")
@@ -204,8 +204,9 @@ def cmd_spend(args) -> int:
 
 
 def cmd_balance(args) -> int:
-    print(f"{args.provider} keys: {key_source(*PROVIDERS[args.provider].keys)}", file=sys.stderr)
-    print(json.dumps(PROVIDERS[args.provider]().balance()))
+    client = PROVIDERS[args.provider]()
+    print(f"{args.provider} keys: {client.credential_source()}", file=sys.stderr)
+    print(json.dumps(client.balance()))
     return 0
 
 
@@ -262,7 +263,8 @@ def main() -> None:
     add_spend_flags(r)
     k = sub.add_parser("call", help="call one provider endpoint directly, with the same guards")
     k.add_argument("provider", choices=PROVIDERS)
-    k.add_argument("endpoint", help="anyapi SKU, goanyapi id, dataforseo path after /v3/, twitterapi path, yir image|video|audio")
+    k.add_argument("endpoint", help="anyapi SKU, goanyapi id, dataforseo path after /v3/, twitterapi path, "
+                                   "yir image|video|audio, googleads generateKeywordHistoricalMetrics")
     add_spend_flags(k)
     p = sub.add_parser("prices", help="refresh or show the local price cache")
     p.add_argument("action", choices=["refresh", "show"])

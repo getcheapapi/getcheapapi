@@ -1,4 +1,6 @@
 .env
+google-ads-oauth.json
+client_secret_*.json
 __pycache__/
 *.egg-info/
 build/

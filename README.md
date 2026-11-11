@@ -72,6 +72,8 @@ Fill in the keys you already have in `~/.getcheapapi/.env`. One provider is enou
 
 The agent quotes every route, picks the cheapest, and tells you what it spent.
 
+For official Google Ads monthly keyword estimates, run `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`. This route requires Basic access and a local OAuth file. [Google Ads setup and result format](skills/getcheapapi/references/providers.md#google-ads-keyword-planner)
+
 ## What you can ask for
 
 | Capability | What you get | Providers compared |
@@ -82,7 +84,7 @@ The agent quotes every route, picks the cheapest, and tells you what it spent.
 | `reddit.search` | Reddit post search, about 25 posts a page | AnyAPI |
 | `tiktok.search` | TikTok video search, about 20 videos a page | AnyAPI |
 | `google.trends` | Interest over time, up to 5 keywords | AnyAPI, GoAnyAPI |
-| `keyword.volume` | Monthly Google search volume for a keyword list | DataForSEO, GoAnyAPI |
+| `keyword.volume` | Monthly Google search volume for a keyword list | DataForSEO, GoAnyAPI. Google Ads is available via `--via googleads`. |
 | `keyword.ideas` | Keyword ideas around a seed | DataForSEO, GoAnyAPI |
 | `backlinks.summary` | Backlink overview of a domain | DataForSEO, GoAnyAPI |
 | `domain.rank` / `domain.dr` | Domain rank or Domain Rating for a list of domains | DataForSEO / GoAnyAPI |

@@ -1,5 +1,6 @@
 """Library calls: same guards as the CLI, and every call lands in the ledger. Offline."""
 import http.client
+import io
 import json
 import urllib.error
 
@@ -48,6 +49,27 @@ def test_call_pins_sources_and_writes_ledger(post):
     assert calls[0]["source"] == ["cheap"] and calls[0]["allowFallbacks"] is False
     row = ledger()[0]
     assert (row["project"], row["costUsd"], row["source"], row["input"]) == ("p", 0.0005, "cheap", {"query": "x"})
+
+
+def test_googleads_token_error_keeps_credentials_out_of_ledger(tmp_path, monkeypatch):
+    monkeypatch.setenv("GETCHEAPAPI_HOME", str(tmp_path))
+    monkeypatch.delenv("GOOGLE_ADS_OAUTH_FILE", raising=False)
+    monkeypatch.setenv("GOOGLE_ADS_CUSTOMER_ID", "1234567890")
+    monkeypatch.delenv("GOOGLE_ADS_LOGIN_CUSTOMER_ID", raising=False)
+    monkeypatch.setattr(api, "load_env", lambda: [])
+    credentials = {"client_id": "test-client", "client_secret": "local-secret", "refresh_token": "local-token"}
+    (tmp_path / "google-ads-oauth.json").write_text(json.dumps(credentials), encoding="utf-8")
+
+    def expired_token(request, timeout):
+        raise urllib.error.HTTPError(request.full_url, 400, "invalid_grant", {}, io.BytesIO(request.data))
+
+    monkeypatch.setattr(providers.urllib.request, "urlopen", expired_token)
+    with pytest.raises(api.NotServed, match=r"OAuth token refresh failed \(HTTP 400\)") as exc:
+        api.call("googleads", "generateKeywordHistoricalMetrics", {"keywords": ["car"]}, max_usd=0)
+    row = ledger()[0]
+    assert row["costUsd"] == 0
+    for secret in credentials.values():
+        assert secret not in str(exc.value) and secret not in json.dumps(row)
 
 
 def test_refused_past_cap_spends_nothing(post):

@@ -63,19 +63,23 @@ def render(template: dict, inp: dict, item=None) -> dict:
     return out
 
 
+def _unique_items(inp: dict, field: str) -> list:
+    items = inp.get(field)
+    if not isinstance(items, list) or not items:
+        raise NotApplicable(f"needs a non-empty list in {field}")
+    try:
+        return list(dict.fromkeys(items))  # dedupe, keep order
+    except TypeError:
+        raise NotApplicable(f"{field} must be a flat list") from None
+
+
 def bodies(route: dict, inp: dict) -> list[dict]:
     """The request bodies one route sends for this input."""
     if route.get("each"):
-        items = inp.get(route["each"])
-        if not isinstance(items, list) or not items:
-            raise NotApplicable(f"needs a non-empty list in {route['each']}")
-        return [render(route["body"], inp, item) for item in dict.fromkeys(items)]  # dedupe, keep order
+        return [render(route["body"], inp, item) for item in _unique_items(inp, route["each"])]
     chunk = route.get("chunk")
     if chunk:
-        items = inp.get(chunk["field"])
-        if not isinstance(items, list) or not items:
-            raise NotApplicable(f"needs a non-empty list in {chunk['field']}")
-        items = list(dict.fromkeys(items))
+        items = _unique_items(inp, chunk["field"])
         size = int(chunk["size"])
         return [render(route["body"], {**inp, chunk["field"]: items[i:i + size]}) for i in range(0, len(items), size)]
     return [render(route["body"], inp)]
@@ -117,6 +121,8 @@ def plan(cap: dict, inputs: list[dict], clients: dict[str, Provider], only: str 
     options = []
     for route in expand(cap, inputs[0]):
         if only and route["provider"] != only:
+            continue
+        if not only and route.get("explicit_only"):
             continue
         opt = Option(route["provider"], route["endpoint"], route)
         cls = PROVIDERS[route["provider"]]

@@ -1,6 +1,6 @@
 ---
 name: getcheapapi
-description: One cost-guarded entry point for paid data and media APIs. Picks the cheapest provider for each job across AnyAPI, DataForSEO, GoAnyAPI, twitterapi.io (read only) and Yir, prices it before any spend, refuses past a budget, stops on 402, and logs every charge. Use for X/Reddit/TikTok search, Google/Bing SERP, Google Trends, keyword search volume and ideas, backlinks, domain rank/DR, website traffic, image/video/speech generation, comparing which API is cheapest for a job, and checking provider balances or recent spend. Use it for every AnyAPI call instead of AnyAPI's own CLI, MCP or raw curl, which fail over to pricier sources. Not for X account writes, logins or monitoring.
+description: One cost-guarded entry point for data and media APIs. Prefer suitable free sources, including Google Ads Keyword Planner for monthly keyword volume, then quote eligible paid routes. Use for X/Reddit/TikTok search, Google/Bing SERP, Google Trends, keyword search volume and ideas, backlinks, domain rank/DR, website traffic, image/video/speech generation, provider comparisons, balances, or recent spend. Use it for all AnyAPI calls to control provider failover. Excludes X account writes, logins and monitoring.
 ---
 
 # getcheapapi
@@ -13,15 +13,19 @@ Keys: `ANYAPI_API_KEY`, `DATAFORSEO_LOGIN` + `DATAFORSEO_PASSWORD`, `GOANYAPI_AP
 
 ## Pick the route
 
-Ask for a capability and let the router price every route:
+Choose a free source first when it meets the requested data, market, and date range. Follow the user's choice when they specify a provider.
+
+1. For monthly keyword volume, start with the Google Ads route below when Basic and local OAuth are configured. Use the $0 cap on the run.
+2. If Google Ads is unavailable or leaves gaps, check saved Google Ads or DataForSEO results for the same market, network, and month. Keep missing results distinct from zeros. Use the [Google Ads provider notes](references/providers.md#google-ads-keyword-planner) to diagnose access or quota errors.
+3. If the request still needs data, quote only the outstanding work and get approval before the first paid call. For a keyword volume price comparison, quote the paid routes and use `quote keyword.volume --via googleads` for the official route.
 
 ```bash
 getcheapapi caps -v                                                     # capabilities, input fields, examples
-getcheapapi quote keyword.volume --input '{"keywords":["a","b","c"]}'    # every route priced, nothing spent
-getcheapapi run serp.google --input '{"query":"cheap serp api","gl":"us"}' --max-usd 0.01
+getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0
+getcheapapi quote serp.google --input '{"query":"cheap serp api","gl":"us"}'
 ```
 
-The router counts calls, batching, per-keyword pricing and paging into the total, picks the cheapest route the user has a key for, and shows what a key for another provider would save. Keyword volume, for example, goes to GoAnyAPI below about 30 keywords and to DataForSEO's batch endpoint above.
+The router counts calls, batching, per-keyword pricing and paging into the total, picks the cheapest eligible route the user has a key for, and shows what a key for another provider would save. Among the default paid routes for keyword volume, GoAnyAPI wins below about 30 keywords and DataForSEO's batch endpoint wins above that.
 
 Defaults behind the catalog (2026-11 prices; `quote` always has the current ones):
 
@@ -33,7 +37,7 @@ Defaults behind the catalog (2026-11 prices; `quote` always has the current ones
 | Reddit / TikTok search | anyapi `reddit.search`, `tiktok.search_keyword` | $0.35–0.6 per 1,000 | paging or extra fields can force a pricier source |
 | Google / Bing top 10 | anyapi `google.search`, `bing.search` | ~$0.0005 / $0.00085 | for top 100, page `google.search` (≈$0.005) instead of `google.search_100` ($0.024) |
 | Google Trends | anyapi `google.trends` | $0.002 | GoAnyAPI charges per keyword |
-| Keyword search volume | dataforseo batch, or goanyapi per keyword | $0.06 queued / $0.09 live per ≤1,000 keywords; $0.003/keyword | collect keywords first |
+| Keyword search volume | Google Ads via `--via googleads`; paid routes are DataForSEO and GoAnyAPI | $0 direct; DataForSEO $0.06 queued / $0.09 live per ≤1,000 keywords; GoAnyAPI $0.003/keyword | Direct Google Ads requires Basic and local OAuth. Keep `closeVariants` with the returned metrics. |
 | Keyword ideas | dataforseo `keyword_suggestions/live` | $0.012 + $0.00012/keyword | start with `limit` 100 |
 | Bulk domain rank, referring domains | dataforseo `backlinks/bulk_*` | $0.024 + $0.000036/row, ≤1,000 domains | never query domains one by one |
 | One domain's backlink summary | goanyapi `backlink` or dataforseo `backlinks/summary/live` | $0.004 / ~$0.024 | GoAnyAPI dofollow counts are unreliable |

@@ -7,15 +7,18 @@ call(endpoint, body)           -> (raw result, charged USD, rows returned, ok)
 from __future__ import annotations
 
 import base64
+import json
 import os
 import re
 import time
+import urllib.error
 import urllib.parse
+import urllib.request
 import uuid
 from pathlib import Path
 
 from getcheapapi import lanes as L
-from getcheapapi.core import EXIT_NO_BALANCE, EXIT_UNAVAILABLE, NotServed, Refused, Stop, Unavailable, env, has_env, home, http, list_len, now, read_json, write_json
+from getcheapapi.core import EXIT_NO_BALANCE, EXIT_UNAVAILABLE, NotServed, Refused, Stop, Unavailable, env, has_env, home, http, key_source, list_len, now, read_json, write_json
 
 DAY = 86400
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -34,6 +37,9 @@ class Provider:
     @classmethod
     def configured(cls) -> bool:
         return has_env(*cls.keys)
+
+    def credential_source(self) -> str:
+        return key_source(*self.keys)
 
     def prepare(self, endpoint: str, body: dict) -> dict:
         return body
@@ -340,4 +346,120 @@ class Yir(Provider):
         return http("GET", f"{self.base}/v1/balance", self.auth)
 
 
-PROVIDERS: dict[str, type[Provider]] = {p.name: p for p in (AnyAPI, GoAnyAPI, DataForSEO, TwitterAPI, Yir)}
+class GoogleAds(Provider):
+    name, site = "googleads", "https://developers.google.com/google-ads/api/docs/oauth/single-user-authentication"
+    base = "https://googleads.googleapis.com/v26"
+    endpoint = "generateKeywordHistoricalMetrics"
+    # https://developers.google.com/google-ads/api/data/codes-formats#languages
+    languages = {
+        "ar": 1019, "bg": 1020, "bn": 1056, "ca": 1038, "cs": 1021, "da": 1009,
+        "de": 1001, "el": 1022, "en": 1000, "es": 1003, "et": 1043, "fa": 1064,
+        "fi": 1011, "fr": 1002, "gu": 1072, "he": 1027, "hi": 1023, "hr": 1039,
+        "hu": 1024, "id": 1025, "is": 1026, "it": 1004, "iw": 1027, "ja": 1005,
+        "kn": 1086, "ko": 1012, "lt": 1029, "lv": 1028, "ml": 1098, "mr": 1101,
+        "ms": 1102, "nl": 1010, "no": 1013, "pa": 1110, "pl": 1030, "pt": 1014,
+        "ro": 1032, "ru": 1031, "sk": 1033, "sl": 1034, "sr": 1035, "sv": 1015,
+        "ta": 1130, "te": 1131, "th": 1044, "tl": 1042, "tr": 1037, "uk": 1036,
+        "ur": 1041, "vi": 1040, "zh_cn": 1017, "zh_tw": 1018,
+    }
+
+    def __init__(self):
+        self._token = ""
+        self._token_expires = 0.0
+        self._next_request = 0.0
+        self._discovered_customer = ""
+
+    @staticmethod
+    def oauth_file() -> Path:
+        configured = os.environ.get("GOOGLE_ADS_OAUTH_FILE", "").strip()
+        return Path(configured).expanduser() if configured else home() / "google-ads-oauth.json"
+
+    @classmethod
+    def configured(cls) -> bool:
+        return cls.oauth_file().is_file()
+
+    def credential_source(self) -> str:
+        return str(self.oauth_file()) if self.configured() else "not configured"
+
+    def balance(self) -> dict:
+        return {"provider": self.name, "costPerCallUsd": 0, "quota": "Google Cloud Console"}
+
+    def request_body(self, endpoint: str, body: dict) -> dict:
+        if endpoint != self.endpoint:
+            raise Refused(f"googleads: supported endpoint is {self.endpoint}")
+        keywords = body.get("keywords")
+        if (not isinstance(keywords, list) or not 1 <= len(keywords) <= 10000
+                or any(not isinstance(term, str) or not term.strip() for term in keywords)):
+            raise Refused("googleads: keywords must contain 1 to 10000 non-empty strings")
+        location = str(body.get("location_code", 2840))
+        if not re.fullmatch(r"[1-9][0-9]*", location):
+            raise Refused("googleads: location_code must be a Google Ads geographic criterion ID")
+        language = self.languages.get(str(body.get("language_code", "en")).lower().replace("-", "_"))
+        if language is None:
+            raise Refused("googleads: language_code must be a supported Google Ads language code")
+        return {"keywords": keywords, "geoTargetConstants": [f"geoTargetConstants/{location}"],
+                "language": f"languageConstants/{language}", "keywordPlanNetwork": "GOOGLE_SEARCH"}
+
+    def estimate(self, endpoint, body, fresh=True):
+        self.request_body(endpoint, body)
+        return 0.0
+
+    def access_token(self) -> str:
+        if time.monotonic() < self._token_expires:
+            return self._token
+        fields = ("client_id", "client_secret", "refresh_token")
+        try:
+            credentials = read_json(self.oauth_file(), {})
+        except OSError:
+            raise Refused("googleads: could not read the local OAuth JSON file") from None
+        if not isinstance(credentials, dict) or not all(
+            isinstance(credentials.get(field), str) and credentials[field].strip() for field in fields
+        ):
+            raise Refused("googleads: configure an authorized-user OAuth JSON with a refresh token")
+        form = {field: credentials[field] for field in fields}
+        form["grant_type"] = "refresh_token"
+        req = urllib.request.Request("https://oauth2.googleapis.com/token", urllib.parse.urlencode(form).encode())
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                data = json.load(response)
+            token, expires_in = data["access_token"], int(data["expires_in"])
+        except urllib.error.HTTPError as exc:
+            raise NotServed(f"googleads: OAuth token refresh failed (HTTP {exc.code})") from None
+        except (KeyError, TypeError, ValueError):
+            raise NotServed("googleads: invalid OAuth token response") from None
+        if not isinstance(token, str) or not token or expires_in <= 0:
+            raise NotServed("googleads: invalid OAuth token response")
+        self._token = token
+        self._token_expires = time.monotonic() + max(0, expires_in - 60)
+        return token
+
+    @staticmethod
+    def customer_id(variable: str) -> str:
+        value = os.environ.get(variable, "").strip().replace("-", "")
+        if value and not re.fullmatch(r"[0-9]{10}", value):
+            raise Refused(f"googleads: {variable} must be a 10-digit Google Ads customer ID")
+        return value
+
+    def call(self, endpoint, body):
+        request = self.request_body(endpoint, body)
+        customer = self.customer_id("GOOGLE_ADS_CUSTOMER_ID") or self._discovered_customer
+        manager = self.customer_id("GOOGLE_ADS_LOGIN_CUSTOMER_ID")
+        if manager and not customer:
+            raise Refused("googleads: set GOOGLE_ADS_CUSTOMER_ID when using a manager account")
+        headers = {"Authorization": f"Bearer {self.access_token()}"}
+        if not customer:
+            names = http("GET", f"{self.base}/customers:listAccessibleCustomers", headers, timeout=40).get("resourceNames", [])
+            if len(names) != 1 or not re.fullmatch(r"customers/[0-9]{10}", names[0]):
+                raise Refused("googleads: set GOOGLE_ADS_CUSTOMER_ID to select an accessible Ads account")
+            customer = self._discovered_customer = names[0].split("/")[1]
+        if manager:
+            headers["login-customer-id"] = manager
+        delay = self._next_request - time.monotonic()
+        if delay > 0:
+            time.sleep(delay)
+        self._next_request = time.monotonic() + 1
+        result = http("POST", f"{self.base}/customers/{customer}:{endpoint}", headers, request, timeout=60)
+        return result, 0.0, len(result.get("results", [])), True
+
+
+PROVIDERS: dict[str, type[Provider]] = {p.name: p for p in (AnyAPI, GoAnyAPI, DataForSEO, TwitterAPI, Yir, GoogleAds)}

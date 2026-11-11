@@ -30,16 +30,29 @@ def test_each_dedupes_and_chunk_splits():
     assert [len(c["keywords"]) for c in calls] == [1000, 1000, 500]
 
 
-def test_keyword_volume_switches_provider_by_quantity(monkeypatch):
+def test_keyword_volume_switches_provider_by_quantity(monkeypatch, tmp_path):
     monkeypatch.setenv("GOANYAPI_API_KEY", "x")
     monkeypatch.setenv("DATAFORSEO_LOGIN", "x")
     monkeypatch.setenv("DATAFORSEO_PASSWORD", "x")
+    oauth_file = tmp_path / "google-ads-oauth.json"
+    oauth_file.write_text("{}", encoding="utf-8")
+    monkeypatch.setenv("GOOGLE_ADS_OAUTH_FILE", str(oauth_file))
     cap = router.capability("keyword.volume")
     few = router.plan(cap, [{"keywords": [f"k{i}" for i in range(5)]}], {})
     many = router.plan(cap, [{"keywords": [f"k{i}" for i in range(50)]}], {})
     assert router.choose(few).provider == "goanyapi"
     assert router.choose(many).provider == "dataforseo"
     assert router.choose(many).usd == pytest.approx(0.09)
+    direct = router.plan(cap, [{"keywords": ["car", "cars"]}], {}, only="googleads")
+    assert router.choose(direct).usd == 0
+    assert {option.provider for option in direct} == {"googleads"}
+
+
+def test_keyword_volume_reports_nested_keywords_as_invalid_input():
+    cap = router.capability("keyword.volume")
+    options = router.plan(cap, [{"keywords": [{"term": "car"}]}], {}, only="googleads")
+    with pytest.raises(Stop, match="keywords must be a flat list"):
+        router.choose(options)
 
 
 def test_keyless_routes_are_priced_but_never_chosen():
