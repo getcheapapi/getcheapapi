@@ -78,7 +78,7 @@ function writePages() {
 }
 
 // Pages kept as plain HTML in their own folder: /<slug>/ in English, /<code>/<slug>/ once translated.
-const PAGES = ['serp-api-pricing', 'twitter-api-pricing', 'reddit-api-pricing'];
+const PAGES = ['serp-api-pricing', 'twitter-api-pricing', 'reddit-api-pricing', 'privacy'];
 const pageFile = (code, slug) => join(SITE, code === 'en' ? '' : code, slug, 'index.html');
 const pageFiles = (langs) => langs.flatMap(([c]) => PAGES.map((p) => pageFile(c, p))).filter(existsSync);
 const pagePath = (code, slug) => `${code === 'en' ? '' : `/${code}`}/${slug}/`;
