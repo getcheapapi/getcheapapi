@@ -54,7 +54,7 @@
   "fig2_aria": "图示：同一任务的五条路线报价，柱子由高到低；你的 Agent 只为最短的那根付钱。",
   "fig2_cap": "同一任务，五个价格 · 你的 Agent 只为最短的那根付钱",
   "c_h2": "开箱 15 类数据，还能加你自己的。",
-  "c_sub": "内置 AnyAPI、DataForSEO、GoAnyAPI、twitterapi.io 和 Yir 的路线。需要别的供应商或接口？在目录文件里加几行就行；觉得别人也用得上，就提一个 Pull Request。",
+  "c_sub": "内置 AnyAPI、DataForSEO、GoAnyAPI、Google Ads、twitterapi.io 和 Yir 的路线。需要别的供应商或接口？在目录文件里加几行就行；觉得别人也用得上，就提一个 Pull Request。",
   "c_disc": "Yir 由同一团队运营；README 和命令行里的部分供应商链接带有我们的推荐码。路线排序只看价格。",
   "c_caption": "Agent 可以请求的数据，以及提供这些数据的供应商",
   "c_th_cap": "数据",

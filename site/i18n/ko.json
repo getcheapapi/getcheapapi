@@ -54,7 +54,7 @@
   "fig2_aria": "그림: 같은 작업의 다섯 경로 견적을 높이가 줄어드는 막대로 표시. 에이전트는 가장 낮은 막대만큼 냅니다.",
   "fig2_cap": "같은 작업, 다섯 가격 · 에이전트는 가장 낮은 막대만큼 냄",
   "c_h2": "기본으로 15종의 데이터. 직접 추가도.",
-  "c_sub": "AnyAPI, DataForSEO, GoAnyAPI, twitterapi.io, Yir의 경로가 들어 있습니다. 다른 공급자나 엔드포인트가 필요하면 카탈로그에 몇 줄 추가하세요. 다른 사람에게도 유용하다면 Pull Request를 보내 주세요.",
+  "c_sub": "AnyAPI, DataForSEO, GoAnyAPI, Google Ads, twitterapi.io, Yir의 경로가 들어 있습니다. 다른 공급자나 엔드포인트가 필요하면 카탈로그에 몇 줄 추가하세요. 다른 사람에게도 유용하다면 Pull Request를 보내 주세요.",
   "c_disc": "Yir는 같은 팀이 운영하며, README와 CLI의 일부 공급자 링크에는 추천 코드가 붙어 있습니다. 경로 순위는 가격만으로 정해집니다.",
   "c_caption": "에이전트가 요청할 수 있는 데이터와 이를 파는 공급자",
   "c_th_cap": "데이터",

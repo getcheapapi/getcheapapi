@@ -54,7 +54,7 @@
   "fig2_aria": "Figura: el mismo trabajo cotizado en cinco rutas como barras de altura decreciente; tu agente paga la más corta.",
   "fig2_cap": "mismo trabajo, cinco precios · tu agente paga la barra más corta",
   "c_h2": "15 tipos de datos de serie. Añade los tuyos.",
-  "c_sub": "Incluye rutas de AnyAPI, DataForSEO, GoAnyAPI, twitterapi.io y Yir. ¿Necesitas otro proveedor o endpoint? Añádelo al catálogo en unas líneas y envía un pull request si a otros también les sirve.",
+  "c_sub": "Incluye rutas de AnyAPI, DataForSEO, GoAnyAPI, Google Ads, twitterapi.io y Yir. ¿Necesitas otro proveedor o endpoint? Añádelo al catálogo en unas líneas y envía un pull request si a otros también les sirve.",
   "c_disc": "Yir es del mismo equipo, y algunos enlaces de proveedores en el README y la CLI llevan nuestro código de referido. Las rutas se ordenan solo por precio.",
   "c_caption": "Datos que tu agente puede pedir y los proveedores que los venden",
   "c_th_cap": "Datos",

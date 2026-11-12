@@ -54,7 +54,7 @@
   "fig2_aria": "Figure: the same job priced by five routes as bars of decreasing height; your agent pays for the shortest.",
   "fig2_cap": "same job, five prices · your agent pays for the shortest bar",
   "c_h2": "15 kinds of data to start. Add your own.",
-  "c_sub": "Ships with routes across AnyAPI, DataForSEO, GoAnyAPI, twitterapi.io and Yir. Need another provider or endpoint? Add it to the catalog in a few lines, and send a pull request if others could use it too.",
+  "c_sub": "Ships with routes across AnyAPI, DataForSEO, GoAnyAPI, Google Ads, twitterapi.io and Yir. Need another provider or endpoint? Add it to the catalog in a few lines, and send a pull request if others could use it too.",
   "c_disc": "Yir is run by the same team, and some provider links in the README and CLI carry our referral code. Routes are ranked by price only.",
   "c_caption": "Data your agent can ask for, and the providers that sell it",
   "c_th_cap": "Data",
