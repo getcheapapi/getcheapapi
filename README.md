@@ -72,7 +72,7 @@ Fill in the keys you already have in `~/.getcheapapi/.env`. One provider is enou
 
 The agent quotes every route, picks the cheapest, and tells you what it spent.
 
-For official Google Ads monthly keyword estimates, run `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`. This route requires Basic access and a local OAuth file. [Google Ads setup and result format](skills/getcheapapi/references/providers.md#google-ads-keyword-planner)
+For official Google Ads monthly keyword estimates, run `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`; `keyword.ideas --via googleads` gives free keyword ideas the same way. This route requires Basic access and a local OAuth file. [Google Ads setup and result format](skills/getcheapapi/references/providers.md#google-ads-keyword-planner)
 
 ## What you can ask for
 
@@ -85,7 +85,7 @@ For official Google Ads monthly keyword estimates, run `getcheapapi run keyword.
 | `tiktok.search` | TikTok video search, about 20 videos a page | AnyAPI |
 | `google.trends` | Interest over time, up to 5 keywords | AnyAPI, GoAnyAPI |
 | `keyword.volume` | Monthly Google search volume for a keyword list | DataForSEO, GoAnyAPI. Google Ads is available via `--via googleads`. |
-| `keyword.ideas` | Keyword ideas around a seed | DataForSEO, GoAnyAPI |
+| `keyword.ideas` | Keyword ideas around seed keywords, a page or a site | DataForSEO, GoAnyAPI. Google Ads is available via `--via googleads`. |
 | `backlinks.summary` | Backlink overview of a domain | DataForSEO, GoAnyAPI |
 | `domain.rank` / `domain.dr` | Domain rank or Domain Rating for a list of domains | DataForSEO / GoAnyAPI |
 | `website.traffic` | Estimated monthly traffic history | GoAnyAPI |

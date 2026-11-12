@@ -60,11 +60,13 @@
   },
   "keyword.volume": {
     "description": "Monthly Google search volume for a list of keywords",
-    "input": {"keywords": "list of keywords", "location_code": "Google Ads location code (optional, 2840 = US)", "language_code": "optional, default en"},
+    "input": {"keywords": "list of keywords", "location_code": "Google Ads location code (optional, 2840 = US)", "language_code": "optional, default en",
+              "start_month": "googleads only: YYYY-MM, with end_month, to go past the default 12 months", "end_month": "googleads only: YYYY-MM"},
     "example": {"keywords": ["cheap serp api", "serpapi alternative"]},
     "routes": [
       {"provider": "googleads", "endpoint": "generateKeywordHistoricalMetrics", "explicit_only": true,
-       "body": {"keywords": "$keywords", "location_code": "$location_code=2840", "language_code": "$language_code=en"},
+       "body": {"keywords": "$keywords", "location_code": "$location_code=2840", "language_code": "$language_code=en",
+                "start_month": "$start_month?", "end_month": "$end_month?"},
        "chunk": {"field": "keywords", "size": 10000},
        "note": "official Google Ads, $0 via --via googleads; may merge close variants"},
       {"provider": "dataforseo", "endpoint": "keywords_data/google_ads/search_volume/live",
@@ -76,10 +78,18 @@
     ]
   },
   "keyword.ideas": {
-    "description": "Keyword ideas around a seed keyword",
-    "input": {"keyword": "seed keyword", "limit": "max ideas (optional, default 100)", "location_code": "optional, 2840 = US"},
+    "description": "Keyword ideas around a seed keyword (googleads also takes several seeds, a page URL or a whole site)",
+    "input": {"keyword": "seed keyword", "limit": "max ideas (optional, default 100)", "location_code": "optional, 2840 = US", "language_code": "optional, default en",
+              "keywords": "googleads only: up to 20 seed keywords", "url": "googleads only: page URL seed, alone or with keywords",
+              "site": "googleads only: bare domain seed, alone", "start_month": "googleads only: YYYY-MM, with end_month", "end_month": "googleads only: YYYY-MM",
+              "device": "googleads only: true adds total searches by device across all returned ideas"},
     "example": {"keyword": "serp api", "limit": 100},
     "routes": [
+      {"provider": "googleads", "endpoint": "generateKeywordIdeas", "explicit_only": true,
+       "body": {"keyword": "$keyword?", "keywords": "$keywords?", "url": "$url?", "site": "$site?", "limit": "$limit=100",
+                "location_code": "$location_code=2840", "language_code": "$language_code=en",
+                "start_month": "$start_month?", "end_month": "$end_month?", "device": "$device?"},
+       "note": "official Google Ads, $0 via --via googleads; ideas related to the seeds, not keywords a site ranks for"},
       {"provider": "dataforseo", "endpoint": "dataforseo_labs/google/keyword_suggestions/live",
        "body": {"keyword": "$keyword", "location_code": "$location_code=2840", "language_code": "$language_code=en", "limit": "$limit=100"},
        "note": "with search volume, CPC and difficulty"},

@@ -349,7 +349,9 @@ class Yir(Provider):
 class GoogleAds(Provider):
     name, site = "googleads", "https://developers.google.com/google-ads/api/docs/oauth/single-user-authentication"
     base = "https://googleads.googleapis.com/v26"
-    endpoint = "generateKeywordHistoricalMetrics"
+    endpoints = ("generateKeywordHistoricalMetrics", "generateKeywordIdeas")
+    month_names = ("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST",
+                   "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER")
     # https://developers.google.com/google-ads/api/data/codes-formats#languages
     languages = {
         "ar": 1019, "bg": 1020, "bn": 1056, "ca": 1038, "cs": 1021, "da": 1009,
@@ -385,20 +387,69 @@ class GoogleAds(Provider):
         return {"provider": self.name, "costPerCallUsd": 0, "quota": "Google Cloud Console"}
 
     def request_body(self, endpoint: str, body: dict) -> dict:
-        if endpoint != self.endpoint:
-            raise Refused(f"googleads: supported endpoint is {self.endpoint}")
-        keywords = body.get("keywords")
-        if (not isinstance(keywords, list) or not 1 <= len(keywords) <= 10000
-                or any(not isinstance(term, str) or not term.strip() for term in keywords)):
-            raise Refused("googleads: keywords must contain 1 to 10000 non-empty strings")
+        if endpoint not in self.endpoints:
+            raise Refused(f"googleads: supported endpoints are {', '.join(self.endpoints)}")
         location = str(body.get("location_code", 2840))
         if not re.fullmatch(r"[1-9][0-9]*", location):
             raise Refused("googleads: location_code must be a Google Ads geographic criterion ID")
         language = self.languages.get(str(body.get("language_code", "en")).lower().replace("-", "_"))
         if language is None:
             raise Refused("googleads: language_code must be a supported Google Ads language code")
-        return {"keywords": keywords, "geoTargetConstants": [f"geoTargetConstants/{location}"],
-                "language": f"languageConstants/{language}", "keywordPlanNetwork": "GOOGLE_SEARCH"}
+        request = {"geoTargetConstants": [f"geoTargetConstants/{location}"],
+                   "language": f"languageConstants/{language}", "keywordPlanNetwork": "GOOGLE_SEARCH"}
+        request |= self.month_range(body)
+        if endpoint == "generateKeywordIdeas":
+            if body.get("device") is True:  # Google totals all returned ideas per device; no per-keyword split
+                request["aggregateMetrics"] = {"aggregateMetricTypes": ["DEVICE"]}
+            return request | self.idea_seed(body)
+        return request | {"keywords": self.terms(body.get("keywords"), 10000)}
+
+    @staticmethod
+    def terms(keywords, most: int) -> list[str]:
+        if (not isinstance(keywords, list) or not 1 <= len(keywords) <= most
+                or any(not isinstance(term, str) or not term.strip() for term in keywords)):
+            raise Refused(f"googleads: keywords must contain 1 to {most} non-empty strings")
+        return keywords
+
+    def idea_seed(self, body: dict) -> dict:
+        keywords = body.get("keywords") or ([body["keyword"]] if body.get("keyword") else None)
+        url, site = body.get("url"), body.get("site")
+        if site and (keywords or url):
+            raise Refused("googleads: site cannot be combined with keywords or url")
+        if url is not None and not (isinstance(url, str) and re.fullmatch(r"https?://\S+", url)):
+            raise Refused("googleads: url must start with http:// or https://")
+        if site is not None and not (isinstance(site, str) and re.fullmatch(r"[A-Za-z0-9.-]+\.[A-Za-z]{2,}", site)):
+            raise Refused("googleads: site must be a bare domain such as example.com")
+        limit = body.get("limit", 100)
+        if not isinstance(limit, int) or not 1 <= limit <= 10000:
+            raise Refused("googleads: limit must be an integer from 1 to 10000")
+        page = {"pageSize": limit}
+        if site:
+            return page | {"siteSeed": {"site": site}}
+        if keywords and url:
+            return page | {"keywordAndUrlSeed": {"url": url, "keywords": self.terms(keywords, 20)}}
+        if keywords:
+            return page | {"keywordSeed": {"keywords": self.terms(keywords, 20)}}
+        if url:
+            return page | {"urlSeed": {"url": url}}
+        raise Refused("googleads: keyword ideas need keyword, keywords, url or site")
+
+    @staticmethod
+    def month_range(body: dict) -> dict:
+        """Optional month range, YYYY-MM, start and end together; Google's default is the last 12 months."""
+        options = {}
+        start, end = body.get("start_month"), body.get("end_month")
+        if start or end:
+            months = []
+            for value in (start, end):
+                match = re.fullmatch(r"(20[0-9]{2})-(0[1-9]|1[0-2])", str(value or ""))
+                if not match:
+                    raise Refused("googleads: start_month and end_month must both be YYYY-MM")
+                months.append({"year": int(match[1]), "month": GoogleAds.month_names[int(match[2]) - 1]})
+            if (start, end) != tuple(sorted((start, end))):
+                raise Refused("googleads: start_month must not be after end_month")
+            options["historicalMetricsOptions"] = {"yearMonthRange": {"start": months[0], "end": months[1]}}
+        return options
 
     def estimate(self, endpoint, body, fresh=True):
         self.request_body(endpoint, body)

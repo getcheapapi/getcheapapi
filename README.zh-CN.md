@@ -72,7 +72,7 @@ mkdir -p ~/.getcheapapi && curl -fsSL https://raw.githubusercontent.com/getcheap
 
 Agent 会给每条路线报价，选最便宜的执行，最后告诉你花了多少。
 
-需要 Google Ads 官方月搜索量估算时，运行 `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`。这条路线需要 Basic 权限和本地 OAuth 文件。[Google Ads 配置和结果格式](skills/getcheapapi/references/providers.md#google-ads-keyword-planner)
+需要 Google Ads 官方月搜索量估算时，运行 `getcheapapi run keyword.volume --via googleads --input @keywords.json --max-usd 0`；`keyword.ideas --via googleads` 用同样方式免费获取关键词拓展。这条路线需要 Basic 权限和本地 OAuth 文件。[Google Ads 配置和结果格式](skills/getcheapapi/references/providers.md#google-ads-keyword-planner)
 
 ## 能查什么
 
@@ -85,7 +85,7 @@ Agent 会给每条路线报价，选最便宜的执行，最后告诉你花了�
 | `tiktok.search` | TikTok 视频搜索，每页约 20 条 | AnyAPI |
 | `google.trends` | 热度随时间变化，最多 5 个关键词 | AnyAPI、GoAnyAPI |
 | `keyword.volume` | 一批关键词的 Google 月搜索量 | DataForSEO、GoAnyAPI。Google Ads 通过 `--via googleads` 选择。 |
-| `keyword.ideas` | 围绕种子词的关键词拓展 | DataForSEO、GoAnyAPI |
+| `keyword.ideas` | 围绕种子词、页面或整站的关键词拓展 | DataForSEO、GoAnyAPI。Google Ads 通过 `--via googleads` 选择。 |
 | `backlinks.summary` | 一个域名的外链概览 | DataForSEO、GoAnyAPI |
 | `domain.rank` / `domain.dr` | 一批域名的 Domain Rank 或 Domain Rating | DataForSEO / GoAnyAPI |
 | `website.traffic` | 网站月流量估算历史 | GoAnyAPI |

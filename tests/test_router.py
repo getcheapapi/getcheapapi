@@ -2,8 +2,8 @@
 import pytest
 
 from getcheapapi import core, providers, router
-from getcheapapi.core import Stop
-from getcheapapi.providers import DataForSEO, GoAnyAPI
+from getcheapapi.core import Refused, Stop
+from getcheapapi.providers import DataForSEO, GoAnyAPI, GoogleAds
 
 
 @pytest.fixture(autouse=True)
@@ -261,3 +261,41 @@ def test_yir_failover_is_off_unless_asked():
     assert providers.Yir.request({"model": "m", "prompt": "p"})["routing"] == {"fallback": False}
     asked = providers.Yir.request({"model": "m", "prompt": "p", "routing": {"fallback": True, "preference": "speed"}})
     assert asked["routing"] == {"fallback": True, "preference": "speed"}
+
+
+def test_googleads_keyword_ideas_seeds():
+    ads = GoogleAds()
+    body = ads.request_body("generateKeywordIdeas", {"keyword": "ai photo", "limit": 50, "location_code": 2826})
+    assert body["keywordSeed"] == {"keywords": ["ai photo"]} and body["pageSize"] == 50
+    assert body["geoTargetConstants"] == ["geoTargetConstants/2826"]
+    assert ads.request_body("generateKeywordIdeas", {"site": "example.com"})["siteSeed"] == {"site": "example.com"}
+    both = ads.request_body("generateKeywordIdeas", {"keywords": ["a", "b"], "url": "https://example.com/x"})
+    assert both["keywordAndUrlSeed"] == {"url": "https://example.com/x", "keywords": ["a", "b"]}
+    for bad in ({}, {"site": "example.com", "keyword": "a"}, {"site": "https://example.com"},
+                {"keywords": [f"k{i}" for i in range(21)]}, {"url": "example.com"}, {"keyword": "a", "limit": 0}):
+        with pytest.raises(Refused):
+            ads.request_body("generateKeywordIdeas", bad)
+
+
+def test_googleads_month_range_and_device_split():
+    body = GoogleAds().request_body("generateKeywordHistoricalMetrics", {
+        "keywords": ["car"], "start_month": "2023-01", "end_month": "2026-10"})
+    assert body["historicalMetricsOptions"]["yearMonthRange"] == {
+        "start": {"year": 2023, "month": "JANUARY"}, "end": {"year": 2026, "month": "OCTOBER"}}
+    ideas = GoogleAds().request_body("generateKeywordIdeas", {"keyword": "car", "device": True})
+    assert ideas["aggregateMetrics"] == {"aggregateMetricTypes": ["DEVICE"]}
+    assert "historicalMetricsOptions" not in GoogleAds().request_body("generateKeywordHistoricalMetrics", {"keywords": ["car"]})
+    for months in ({"start_month": "2023-01"}, {"start_month": "2026-10", "end_month": "2023-01"}, {"start_month": "2023-1", "end_month": "2023-02"}):
+        with pytest.raises(Refused):
+            GoogleAds().request_body("generateKeywordHistoricalMetrics", {"keywords": ["car"], **months})
+
+
+def test_keyword_ideas_googleads_route_is_free_and_explicit(monkeypatch, tmp_path):
+    oauth_file = tmp_path / "google-ads-oauth.json"
+    oauth_file.write_text("{}", encoding="utf-8")
+    monkeypatch.setenv("GOOGLE_ADS_OAUTH_FILE", str(oauth_file))
+    cap = router.capability("keyword.ideas")
+    assert all(o.provider != "googleads" for o in router.plan(cap, [{"keyword": "car"}], {}))
+    direct = router.plan(cap, [{"site": "example.com", "device": True}], {}, only="googleads")
+    best = router.choose(direct)
+    assert best.usd == 0 and best.bodies[0]["site"] == "example.com" and best.bodies[0]["limit"] == 100

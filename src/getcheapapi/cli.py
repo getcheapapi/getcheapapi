@@ -264,7 +264,7 @@ def main() -> None:
     k = sub.add_parser("call", help="call one provider endpoint directly, with the same guards")
     k.add_argument("provider", choices=PROVIDERS)
     k.add_argument("endpoint", help="anyapi SKU, goanyapi id, dataforseo path after /v3/, twitterapi path, "
-                                   "yir image|video|audio, googleads generateKeywordHistoricalMetrics")
+                                   "yir image|video|audio, googleads generateKeywordHistoricalMetrics|generateKeywordIdeas")
     add_spend_flags(k)
     p = sub.add_parser("prices", help="refresh or show the local price cache")
     p.add_argument("action", choices=["refresh", "show"])
